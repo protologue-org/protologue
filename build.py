@@ -29,6 +29,10 @@ NEWSLETTER_URL = _read_opt("data/newsletter-url.txt")
 NEWSLETTER = bool(NEWSLETTER_EMBED)
 HF_URL = "https://huggingface.co/datasets/franklinpolymathic/protologue"
 GITHUB_URL = "https://github.com/protologue-org/protologue"
+# Zenodo concept DOI (resolves to the latest release), e.g. 10.5281/zenodo.1234567.
+# Leave data/doi.txt missing or empty until Zenodo has minted it.
+DOI = _read_opt("data/doi.txt")
+DOI_URL = f"https://doi.org/{DOI}" if DOI else ""
 
 esc = lambda s: html.escape(str(s), quote=True)
 
@@ -192,6 +196,8 @@ def set_jsonld(terms):
              "url": BASE + "/data/", "license": LICENSE_URL, "version": VERSION,
              "dateModified": UPDATED, "isAccessibleForFree": True,
              "creator": {"@id": BASE + "/#org"},
+             **({"identifier": {"@type": "PropertyValue", "propertyID": "DOI", "value": DOI, "url": DOI_URL},
+                 "sameAs": [DOI_URL]} if DOI else {}),
              "keywords": ["prompt engineering", "large language models", "taxonomy", "glossary",
                           "chain-of-thought", "retrieval-augmented generation", "AI agents"],
              "distribution": [
@@ -533,7 +539,8 @@ def about_page(terms):
 <p>Entries are grouped into branches by what the technique does, and linked by three relations taken from the SKOS standard for knowledge organization: <em>broader</em> (the technique is a kind of another), <em>narrower</em> (the inverse), and <em>related</em>.</p>
 <h2>Citing {NAME}</h2>
 <p>Each entry has a ready-made citation and BibTeX record. To cite the whole taxonomy:</p>
-<p class="cite-text">{PUBLISHER}. ({UPDATED[:4]}). {TITLE} (v{VERSION}). {BASE}/</p>
+<p class="cite-text">{PUBLISHER}. ({UPDATED[:4]}). {TITLE} (v{VERSION}). {DOI_URL or BASE + "/"}</p>
+{f'<p>The DOI <a href="{DOI_URL}">{DOI}</a> is archived on Zenodo and always resolves to the latest release.</p>' if DOI else ""}
 <h2>Reuse</h2>
 <p>All text and data are licensed under <a href="{LICENSE_URL}">Creative Commons Attribution 4.0</a>. You may copy, adapt, and redistribute them, including commercially and for training machine learning models, provided you credit {NAME} and link to the source. Machine-readable copies are on the <a href="/data/">data page</a>, and <a href="/llms.txt">llms.txt</a> describes the site for language models.</p>
 <h2>Corrections and new terms</h2>
@@ -554,7 +561,7 @@ def data_page(terms):
 <tr><td><a href="/data/protologue.skos.jsonld">protologue.skos.jsonld</a></td><td>SKOS, JSON-LD</td><td>Knowledge graphs and linked data</td></tr>
 <tr><td><a href="/data/protologue.ttl">protologue.ttl</a></td><td>SKOS, Turtle</td><td>RDF tools and triple stores</td></tr>
 <tr><td><a href="/llms-full.txt">llms-full.txt</a></td><td>Markdown</td><td>Loading the whole taxonomy into a model's context</td></tr>
-<tr><td><a href="{HF_URL}">Hugging Face</a></td><td>Dataset</td><td>Loading with the <code>datasets</code> library</td></tr>
+<tr><td><a href="{HF_URL}">Hugging Face</a></td><td>Dataset</td><td>Loading with the <code>datasets</code> library</td></tr>{f'<tr><td><a href="{DOI_URL}">Zenodo</a></td><td>Archived release</td><td>Citing a fixed version by DOI</td></tr>' if DOI else ""}
 </tbody>
 </table>
 <p>Each entry is also available individually at <code>/t/term-name.json</code> and <code>/t/term-name.md</code>.</p>
@@ -637,6 +644,7 @@ def main():
     L += ["## Optional", "",
           f"- [Data downloads]({BASE}/data/): JSON, CSV, SKOS JSON-LD and Turtle",
           f"- [Hugging Face dataset]({HF_URL}): the same data for the datasets library",
+          *([f"- [Zenodo archive]({DOI_URL}): DOI {DOI}, cite this for the whole taxonomy"] if DOI else []),
           f"- [About and citation]({BASE}/about/): editorial method, identifiers, license", ""]
     write("llms.txt", "\n".join(L))
     full = [f"# {TITLE}", "", f"Version {VERSION}, updated {UPDATED}. License: CC BY 4.0. Source: {BASE}/", ""]

@@ -1,5 +1,7 @@
 # Protologue
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23304106.svg)](https://doi.org/10.5281/zenodo.23304106)
+
 A sourced, citable taxonomy of prompting and LLM techniques, built as a static site for **protologue.com**.
 
 - 101 entries in 10 branches, each with a permanent ID (`PTL-0001`), a standalone definition, synonyms, broader/narrower/related links, and primary sources (all arXiv IDs and links checked on 2026-10-10).
@@ -36,6 +38,8 @@ python3 build.py
 - **Newsletter:** Beehiiv (protologue.beehiiv.com). The signup embed lives in `data/newsletter-embed.html`.
 
 - **MCP server:** `mcp/` is a Cloudflare Worker (`protologue-mcp`) at https://mcp.protologue.com/mcp, deployed automatically from this repo. It is listed in the official MCP registry as `com.protologue/protologue` (`mcp/server.json`). Registry ownership is proven by `static/.well-known/mcp-registry-auth`; to re-key, generate a new Ed25519 key and replace that file.
+
+- **Zenodo:** GitHub releases are archived on Zenodo automatically, and each one gets a DOI. Put the concept DOI (it resolves to the latest release) in `data/doi.txt`, and the site adds it to citations, structured data, the data page and llms.txt. Metadata comes from `.zenodo.json`.
 
 - **Hugging Face:** the dataset is mirrored at https://huggingface.co/datasets/franklinpolymathic/protologue (configs `terms` and `categories`). Update it when entries change.
 
