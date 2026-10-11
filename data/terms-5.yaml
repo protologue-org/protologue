@@ -1,0 +1,311 @@
+# Added in v1.1: Retrieval & Tool Use, Agents & Orchestration
+# Fields: id, term, category, definition (quotable, 1-2 sentences), body, aliases, broader, related, introduced, example, sources
+
+- id: embedding
+  term: Embedding
+  category: retrieval-tools
+  definition: An embedding is a fixed-length vector of numbers that represents a piece of text, or another input, so that inputs with similar meaning have vectors that are close together, typically measured by cosine similarity.
+  body: Embeddings are produced by an embedding model, which is usually separate from the generating model. They underpin semantic search, dense retrieval for RAG, clustering, deduplication, and the selection of similar few-shot examples. Quality depends on the embedding model and on how text is chunked, and embeddings capture topical similarity better than exact facts such as numbers, names, or negation.
+  aliases: [text embedding, vector embedding, embedding vector]
+  related: [dense-retrieval, vector-database, chunking, retrieval-augmented-generation, exemplar-selection]
+  introduced: 2019
+  sources:
+    - {title: "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks", authors: "Reimers and Gurevych", year: 2019, url: "https://arxiv.org/abs/1908.10084"}
+    - {title: "Dense Passage Retrieval for Open-Domain Question Answering", authors: "Karpukhin et al.", year: 2020, url: "https://arxiv.org/abs/2004.04906"}
+
+- id: vector-database
+  term: Vector Database
+  category: retrieval-tools
+  definition: A vector database stores embeddings alongside their source content and metadata and answers queries by finding the stored vectors nearest to a query vector, usually with approximate nearest-neighbor search.
+  body: Exact nearest-neighbor search becomes slow at millions of vectors, so vector databases use index structures such as HNSW graphs or quantized inverted indexes that trade a little recall for large speedups. Most also support metadata filtering and, increasingly, keyword search for hybrid retrieval. A vector index library such as FAISS provides the search without the database features.
+  aliases: [vector store, vector index, vector search]
+  related: [embedding, dense-retrieval, hybrid-search, retrieval-augmented-generation]
+  sources:
+    - {title: "Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs", authors: "Malkov and Yashunin", year: 2016, url: "https://arxiv.org/abs/1603.09320"}
+    - {title: "Billion-scale similarity search with GPUs", authors: "Johnson et al.", year: 2017, url: "https://arxiv.org/abs/1702.08734"}
+
+- id: chunking
+  term: Chunking
+  category: retrieval-tools
+  definition: Chunking is splitting documents into smaller passages before indexing them for retrieval, so that each retrieved unit is small enough to fit the context and focused enough to match a query.
+  body: Chunk size and overlap are the main levers. Chunks that are too large dilute the embedding and waste context, while chunks that are too small lose the surrounding meaning. Common strategies split by fixed token counts, by document structure such as headings and paragraphs, or by meaning. Research has found that retrieving finer units, such as self-contained propositions, can improve retrieval, and approaches such as contextual retrieval and late chunking restore context that splitting removes.
+  aliases: [document chunking, text splitting, passage segmentation, late chunking]
+  related: [embedding, contextual-retrieval, retrieval-augmented-generation, dense-retrieval]
+  sources:
+    - {title: "Dense X Retrieval: What Retrieval Granularity Should We Use?", authors: "Chen et al.", year: 2023, url: "https://arxiv.org/abs/2312.06648"}
+    - {title: "Late Chunking: Contextual Chunk Embeddings Using Long-Context Embedding Models", authors: "Günther et al.", year: 2024, url: "https://arxiv.org/abs/2409.04701"}
+
+- id: dense-retrieval
+  term: Dense Retrieval
+  category: retrieval-tools
+  definition: Dense retrieval finds relevant passages by embedding the query and every passage as dense vectors, usually with a dual encoder, and returning the passages whose vectors are most similar to the query's.
+  body: Because it matches on meaning rather than shared words, dense retrieval finds paraphrases and related concepts that keyword search misses. It can miss exact identifiers, rare names, and codes, which is why production systems often combine it with BM25 in hybrid search and refine results with a reranker.
+  aliases: [semantic search, embedding-based retrieval, DPR, bi-encoder retrieval]
+  related: [embedding, bm25, hybrid-search, reranking, vector-database]
+  introduced: 2020
+  sources:
+    - {title: "Dense Passage Retrieval for Open-Domain Question Answering", authors: "Karpukhin et al.", year: 2020, url: "https://arxiv.org/abs/2004.04906"}
+
+- id: bm25
+  term: BM25
+  category: retrieval-tools
+  definition: BM25 is a keyword ranking function that scores documents by how often the query's terms appear in them, weighted by how rare each term is across the collection and normalized for document length.
+  body: It is the standard sparse, lexical retrieval method and remains a strong baseline. It excels at exact matches, such as product codes, error messages, and names, where embedding search is weaker, and needs no training. It does not match synonyms or paraphrases, so it is usually paired with dense retrieval.
+  aliases: [Okapi BM25, sparse retrieval, keyword search, lexical search]
+  related: [dense-retrieval, hybrid-search, contextual-retrieval]
+  sources:
+    - {title: "The Probabilistic Relevance Framework: BM25 and Beyond", authors: "Robertson and Zaragoza", year: 2009, url: "https://doi.org/10.1561/1500000019"}
+
+- id: hybrid-search
+  term: Hybrid Search
+  category: retrieval-tools
+  definition: Hybrid search combines keyword retrieval, such as BM25, with dense embedding retrieval and merges the two result lists, so that a query benefits from both exact-term matching and semantic matching.
+  body: The lists are usually merged by reciprocal rank fusion, which scores each document by the sum of the reciprocals of its ranks in each list and needs no score calibration between systems. Hybrid retrieval followed by a reranker is a common default for RAG pipelines.
+  aliases: [hybrid retrieval, reciprocal rank fusion, RRF]
+  related: [bm25, dense-retrieval, reranking, contextual-retrieval, retrieval-augmented-generation]
+  sources:
+    - {title: "Reciprocal rank fusion outperforms condorcet and individual rank learning methods", authors: "Cormack et al.", year: 2009, url: "https://doi.org/10.1145/1571941.1572114"}
+    - {title: "Introducing Contextual Retrieval", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/news/contextual-retrieval"}
+
+- id: reranking
+  term: Reranking
+  category: retrieval-tools
+  definition: Reranking is a second retrieval stage in which a more accurate but slower model, typically a cross-encoder that reads the query and each candidate together, rescores the top results from a fast first-stage search and reorders them.
+  body: First-stage retrievers embed queries and documents separately to stay fast, which limits accuracy. A reranker sees both texts jointly, so it judges relevance more precisely, and applying it only to a few dozen candidates keeps cost manageable. Rerankers can also be LLMs prompted to judge or order passages.
+  aliases: [re-ranking, cross-encoder reranking, reranker]
+  related: [dense-retrieval, hybrid-search, colbert, retrieval-augmented-generation]
+  introduced: 2019
+  sources:
+    - {title: "Passage Re-ranking with BERT", authors: "Nogueira and Cho", year: 2019, url: "https://arxiv.org/abs/1901.04085"}
+
+- id: colbert
+  term: ColBERT
+  category: retrieval-tools
+  definition: ColBERT is a retrieval model that embeds every token of the query and of each passage separately and scores relevance by matching each query token to its most similar passage token, an approach called late interaction.
+  body: Late interaction sits between single-vector dense retrieval, which is fast but coarse, and cross-encoder reranking, which is accurate but slow. Passage token embeddings can be precomputed and indexed, so ColBERT keeps much of a cross-encoder's precision at search-engine speed, at the cost of larger indexes.
+  aliases: [late interaction, late-interaction retrieval, multi-vector retrieval]
+  related: [dense-retrieval, reranking, dspy]
+  introduced: 2020
+  sources:
+    - {title: "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT", authors: "Khattab and Zaharia", year: 2020, url: "https://arxiv.org/abs/2004.12832"}
+
+- id: query-rewriting
+  term: Query Rewriting
+  category: retrieval-tools
+  definition: Query rewriting uses a language model to reformulate a user's question into one or more queries better suited to the retriever before retrieval is run.
+  body: User questions are often ambiguous, conversational, or phrased differently from the documents that answer them. Rewriting can resolve references to earlier turns, split a question into sub-queries, add keywords, or expand the query with a generated pseudo-document. It is closely related to HyDE, which embeds a hypothetical answer instead of the question.
+  aliases: [query expansion, query reformulation, rewrite-retrieve-read, multi-query retrieval]
+  related: [hypothetical-document-embeddings, retrieval-augmented-generation, agentic-rag]
+  introduced: 2023
+  sources:
+    - {title: "Query Rewriting for Retrieval-Augmented Large Language Models", authors: "Ma et al.", year: 2023, url: "https://arxiv.org/abs/2305.14283"}
+    - {title: "Query2doc: Query Expansion with Large Language Models", authors: "Wang et al.", year: 2023, url: "https://arxiv.org/abs/2303.07678"}
+
+- id: contextual-retrieval
+  term: Contextual Retrieval
+  category: retrieval-tools
+  definition: Contextual retrieval is a RAG preprocessing technique in which a language model writes a short explanation of where each chunk fits in its source document and prepends it to the chunk before the chunk is embedded and indexed for keyword search.
+  body: Splitting removes context, so a chunk such as "revenue grew 3% over the previous quarter" no longer says which company or quarter it describes. Adding that context back improves both embedding and BM25 matching. Anthropic reported that contextual embeddings plus contextual BM25 cut the top-20 retrieval failure rate by 49% on its benchmarks, and by 67% with reranking added. Prompt caching keeps the cost of generating the context for every chunk low.
+  aliases: [contextual embeddings, contextual BM25, chunk contextualization]
+  related: [chunking, bm25, hybrid-search, reranking, prompt-caching]
+  introduced: 2024
+  sources:
+    - {title: "Introducing Contextual Retrieval", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/news/contextual-retrieval"}
+
+- id: graphrag
+  term: GraphRAG
+  category: retrieval-tools
+  definition: GraphRAG is a retrieval-augmented generation approach that uses a language model to extract an entity-and-relationship graph from a document collection, summarizes communities of related entities, and answers questions from those summaries.
+  body: Standard RAG retrieves a handful of passages, which works for questions answered in one place but fails on global questions about a whole corpus, such as its main themes. GraphRAG answers these by combining partial answers from many community summaries. Building the graph requires many LLM calls, so indexing is far more expensive than for embedding-based RAG.
+  aliases: [Graph RAG, knowledge-graph RAG]
+  broader: [retrieval-augmented-generation]
+  related: [agentic-rag]
+  introduced: 2024
+  sources:
+    - {title: "From Local to Global: A Graph RAG Approach to Query-Focused Summarization", authors: "Edge et al.", year: 2024, url: "https://arxiv.org/abs/2404.16130"}
+
+- id: agentic-rag
+  term: Agentic RAG
+  category: retrieval-tools
+  definition: Agentic RAG is retrieval-augmented generation in which an agent, rather than a fixed pipeline, decides whether to retrieve, what to search for, which sources or tools to use, and whether the evidence is sufficient, retrieving iteratively until it can answer.
+  body: A fixed pipeline retrieves once per question, so it fails on multi-hop questions and on queries that need reformulation. Agentic RAG handles them by planning, issuing follow-up searches, and reflecting on results, at the cost of more model calls, higher latency, and less predictable behavior. Self-RAG, corrective RAG, and active retrieval are earlier steps in the same direction.
+  aliases: [agent-based RAG, iterative retrieval]
+  broader: [retrieval-augmented-generation]
+  related: [ai-agent, react, query-rewriting, self-rag, corrective-rag]
+  introduced: 2025
+  sources:
+    - {title: "Agentic Retrieval-Augmented Generation: A Survey on Agentic RAG", authors: "Singh et al.", year: 2025, url: "https://arxiv.org/abs/2501.09136"}
+
+- id: corrective-rag
+  term: Corrective RAG
+  category: retrieval-tools
+  definition: Corrective RAG (CRAG) adds a lightweight evaluator that grades retrieved documents for relevance and, depending on the grade, uses them, discards them in favor of web search, or combines both before generation.
+  body: It targets the failure where poor retrieval silently produces a confident wrong answer. Retrieved documents are also decomposed into smaller strips and filtered so that only relevant parts reach the generator. The method plugs into existing RAG pipelines without retraining the generator.
+  aliases: [CRAG]
+  broader: [retrieval-augmented-generation]
+  related: [self-rag, agentic-rag, web-search-tool]
+  introduced: 2024
+  sources:
+    - {title: "Corrective Retrieval Augmented Generation", authors: "Yan et al.", year: 2024, url: "https://arxiv.org/abs/2401.15884"}
+
+- id: active-retrieval
+  term: Active Retrieval
+  category: retrieval-tools
+  definition: Active retrieval augmented generation decides during generation when and what to retrieve; in FLARE, the model drafts the next sentence and, if it contains low-confidence tokens, uses that draft as a search query and regenerates the sentence with the retrieved evidence.
+  body: Retrieving once before generation suits short answers but not long-form text whose information needs change as it is written. Triggering retrieval only on uncertainty limits extra calls to the points where the model is likely to be wrong.
+  aliases: [FLARE, forward-looking active retrieval]
+  broader: [retrieval-augmented-generation]
+  related: [log-probabilities, self-rag, agentic-rag]
+  introduced: 2023
+  sources:
+    - {title: "Active Retrieval Augmented Generation", authors: "Jiang et al.", year: 2023, url: "https://arxiv.org/abs/2305.06983"}
+
+- id: web-search-tool
+  term: Web Search Tool
+  category: retrieval-tools
+  definition: A web search tool lets a language model issue search queries, read the results, and ground its answer in current web content, usually returning citations to the pages it used.
+  body: Search is the main remedy for a model's knowledge cutoff and for questions about prices, news, and other changing facts. Early work trained a model to browse with a text-based browser and cite its sources. Today providers offer search as a built-in tool. Search results are untrusted input, so they are a vector for indirect prompt injection.
+  aliases: [web browsing, search grounding, grounding with search, browsing tool]
+  broader: [function-calling]
+  related: [knowledge-cutoff, citation-generation, retrieval-augmented-generation, indirect-prompt-injection]
+  introduced: 2021
+  sources:
+    - {title: "WebGPT: Browser-assisted question-answering with human feedback", authors: "Nakano et al.", year: 2021, url: "https://arxiv.org/abs/2112.09332"}
+    - {title: "Web search tool", authors: "Anthropic", year: 2025, url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool"}
+
+- id: code-execution-tool
+  term: Code Execution Tool
+  category: retrieval-tools
+  definition: A code execution tool gives a language model a sandboxed environment in which it can write and run code, such as Python or shell commands, and read the output, so that it can compute, analyze data, and check its own work.
+  body: Running code replaces error-prone mental arithmetic and lets the model iterate on errors, which is the same idea behind program-aided language models. Sandboxes typically have no network access and resource limits, because the code is model-written and may be influenced by untrusted input.
+  aliases: [code interpreter, code sandbox, Python tool]
+  broader: [function-calling]
+  related: [program-aided-language-models, program-of-thoughts, critic, coding-agent]
+  sources:
+    - {title: "Code execution tool", authors: "Anthropic", year: 2025, url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool"}
+    - {title: "PAL: Program-aided Language Models", authors: "Gao et al.", year: 2022, url: "https://arxiv.org/abs/2211.10435"}
+
+- id: citation-generation
+  term: Citation Generation
+  category: retrieval-tools
+  definition: Citation generation is having a model attach citations to the sources that support each claim in its answer, so readers can verify the answer and unsupported claims are easier to spot.
+  body: Citations are usually drawn from retrieved documents or search results, and some APIs return them as structured spans pointing into the source. Evaluations have found that models often cite sources that do not fully support the sentence they are attached to, so citation quality, both recall and precision, needs to be measured rather than assumed.
+  aliases: [attributed generation, source attribution, grounded citations]
+  related: [retrieval-augmented-generation, web-search-tool, hallucination]
+  introduced: 2023
+  sources:
+    - {title: "Enabling Large Language Models to Generate Text with Citations", authors: "Gao et al.", year: 2023, url: "https://arxiv.org/abs/2305.14627"}
+
+- id: multi-agent-system
+  term: Multi-Agent System
+  category: agents
+  definition: A multi-agent system is an application in which several LLM-based agents, each with its own role, instructions, tools, or context, interact by messaging, delegating, or debating to accomplish a task.
+  body: Splitting work across agents can parallelize research, keep each agent's context focused, and let specialized prompts handle different steps. It also multiplies token cost and adds coordination failures, such as agents duplicating work, losing information at handoffs, or reinforcing each other's mistakes. Common structures include orchestrator-workers, handoffs between specialists, and debate.
+  aliases: [multi-agent framework, MAS, agent team]
+  related: [ai-agent, orchestrator-workers, handoff, multi-agent-debate, agent2agent-protocol]
+  sources:
+    - {title: "Large Language Model based Multi-Agents: A Survey of Progress and Challenges", authors: "Guo et al.", year: 2024, url: "https://arxiv.org/abs/2402.01680"}
+
+- id: plan-and-execute
+  term: Plan-and-Execute
+  category: agents
+  definition: Plan-and-execute is an agent design in which a planner model first writes a complete multi-step plan and executor calls then carry out the steps, rather than deciding one action at a time after every observation as in ReAct.
+  body: Planning up front reduces repeated reasoning over the growing history, cuts tokens and latency, and lets independent steps run in parallel. ReWOO plans with placeholders for tool results, and LLMCompiler schedules tool calls as a dependency graph. The trade-off is adaptability, so designs usually add replanning when a step fails or returns something unexpected.
+  aliases: [planner-executor, plan-then-execute, ReWOO, LLMCompiler]
+  broader: [agentic-workflow]
+  related: [react, plan-and-solve-prompting, orchestrator-workers, parallelization]
+  introduced: 2023
+  sources:
+    - {title: "ReWOO: Decoupling Reasoning from Observations for Efficient Augmented Language Models", authors: "Xu et al.", year: 2023, url: "https://arxiv.org/abs/2305.18323"}
+    - {title: "An LLM Compiler for Parallel Function Calling", authors: "Kim et al.", year: 2023, url: "https://arxiv.org/abs/2312.04511"}
+
+- id: handoff
+  term: Handoff
+  category: agents
+  definition: A handoff is the transfer of an ongoing task or conversation from one agent to another that specializes in it, typically implemented as a tool the first agent can call to delegate control.
+  body: Handoffs let a triage agent route users to, for example, a billing or technical support agent, each with its own instructions and tools. Unlike orchestrator-workers, where control returns to the orchestrator, a handoff passes control along. What context is passed with it decides whether the receiving agent can continue without asking again.
+  aliases: [agent handoff, agent transfer, delegation]
+  related: [routing, orchestrator-workers, multi-agent-system]
+  sources:
+    - {title: "Handoffs", authors: "OpenAI", year: 2025, url: "https://openai.github.io/openai-agents-python/handoffs/"}
+
+- id: human-in-the-loop
+  term: Human-in-the-Loop
+  category: agents
+  definition: Human-in-the-loop is a design in which an AI system pauses at defined checkpoints for a person to approve, correct, or supply information before it continues, especially before consequential or irreversible actions.
+  body: Checkpoints trade autonomy for safety and accuracy. They are commonly placed before sending messages, spending money, deleting data, or deploying code, and when the agent is uncertain. Requiring confirmation for consequential actions is a key mitigation for prompt injection and excessive agency, because an attacker who steers the agent still cannot complete the action unseen.
+  aliases: [HITL, human approval, human oversight, human checkpoint]
+  related: [ai-agent, excessive-agency, computer-use-agent, evaluator-optimizer]
+  sources:
+    - {title: "Building effective agents", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/building-effective-agents"}
+    - {title: "LLM06:2025 Excessive Agency", authors: "OWASP Gen AI Security Project", year: 2025, url: "https://genai.owasp.org/llmrisk/llm062025-excessive-agency/"}
+
+- id: computer-use-agent
+  term: Computer-Use Agent
+  category: agents
+  definition: A computer-use agent operates a graphical computer interface the way a person does, by looking at screenshots and issuing mouse clicks, keystrokes, and scrolls, so it can work with software that has no API.
+  body: The agent loop alternates between a screenshot and an action until the task is done. Benchmarks such as OSWorld measure performance on real desktop tasks. Because these agents read arbitrary on-screen content, they are exposed to prompt injection from web pages and documents, so they are run in isolated environments with human confirmation for sensitive actions.
+  aliases: [computer use, GUI agent, browser agent, browser use]
+  broader: [ai-agent]
+  related: [multimodal-prompting, human-in-the-loop, indirect-prompt-injection]
+  introduced: 2024
+  sources:
+    - {title: "OSWorld: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments", authors: "Xie et al.", year: 2024, url: "https://arxiv.org/abs/2404.07972"}
+    - {title: "Computer use tool", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool"}
+
+- id: coding-agent
+  term: Coding Agent
+  category: agents
+  definition: A coding agent is an AI agent that works in a software repository by reading files, editing code, running commands and tests, and iterating on the results to complete programming tasks.
+  body: Research found that the interface matters as much as the model. Tools designed for a model, with concise file viewers, search, and editing commands that report errors, improved results over a raw shell. Coding agents are commonly evaluated on SWE-bench, which asks them to resolve real GitHub issues so that hidden tests pass.
+  aliases: [software engineering agent, agentic coding, AI coding assistant]
+  broader: [ai-agent]
+  related: [code-execution-tool, vibe-coding, function-calling]
+  introduced: 2024
+  sources:
+    - {title: "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering", authors: "Yang et al.", year: 2024, url: "https://arxiv.org/abs/2405.15793"}
+    - {title: "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?", authors: "Jimenez et al.", year: 2023, url: "https://arxiv.org/abs/2310.06770"}
+
+- id: vibe-coding
+  term: Vibe Coding
+  category: agents
+  definition: Vibe coding is building software by describing what you want to an AI model in natural language and accepting the code it generates, largely without reading or understanding that code.
+  body: Andrej Karpathy coined the term in February 2025 for throwaway projects where speed matters more than correctness. Collins English Dictionary named it its 2025 word of the year. The term is often used loosely for any AI-assisted programming, but its original sense, not reviewing the code, carries real risks of security flaws and unmaintainable software when applied to production systems.
+  related: [coding-agent, prompt-engineering]
+  introduced: 2025
+  sources:
+    - {title: "Post introducing \"vibe coding\"", authors: "Karpathy", year: 2025, url: "https://x.com/karpathy/status/1886192184808149383"}
+
+- id: agent2agent-protocol
+  term: Agent2Agent Protocol
+  category: agents
+  definition: The Agent2Agent (A2A) protocol is an open specification that lets AI agents built by different vendors and frameworks discover each other's capabilities, delegate tasks, and exchange results.
+  body: Google announced A2A in April 2025 and later contributed it to the Linux Foundation. It is designed to complement the Model Context Protocol. MCP connects an agent to tools and data, while A2A connects agents to other agents. Agents advertise what they can do in a machine-readable agent card.
+  aliases: [A2A, A2A protocol]
+  related: [model-context-protocol, multi-agent-system, handoff]
+  introduced: 2025
+  sources:
+    - {title: "Announcing the Agent2Agent Protocol (A2A)", authors: "Google", year: 2025, url: "https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/"}
+    - {title: "A2A Protocol", authors: "Linux Foundation A2A Project", year: 2025, url: "https://a2a-protocol.org/latest/"}
+
+- id: agent-skills
+  term: Agent Skills
+  category: agents
+  definition: Agent skills are packaged folders of instructions, scripts, and reference files, each anchored by a SKILL.md file with a name and description, that an agent loads only when a task calls for them.
+  body: Only each skill's short description sits in the agent's context at startup. The full instructions are read when relevant, and supporting files are opened only if needed, a pattern called progressive disclosure. This lets an agent carry many specialized procedures without filling its context window, and lets organizations package their own workflows for reuse.
+  aliases: [skills, SKILL.md, progressive disclosure]
+  related: [context-engineering, ai-agent, model-context-protocol, system-prompt]
+  introduced: 2025
+  sources:
+    - {title: "Equipping agents for the real world with Agent Skills", authors: "Anthropic", year: 2025, url: "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills"}
+
+- id: context-compaction
+  term: Context Compaction
+  category: agents
+  definition: Context compaction is summarizing an agent's or conversation's history when it nears the context limit and continuing with the summary in place of the full history, so that long tasks can run beyond one context window.
+  body: Good compaction keeps decisions, open problems, and key details while dropping redundant tool output. Overly aggressive summaries lose information the agent later needs. It is one of several long-horizon strategies in context engineering, alongside structured note-taking outside the context and delegating work to sub-agents with fresh contexts.
+  aliases: [compaction, conversation summarization, context summarization]
+  related: [context-engineering, context-window, agent-memory, context-rot]
+  introduced: 2025
+  sources:
+    - {title: "Effective context engineering for AI agents", authors: "Anthropic", year: 2025, url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"}

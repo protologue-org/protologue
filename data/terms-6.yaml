@@ -1,0 +1,360 @@
+# Added in v1.1: Prompt Optimization, Test-Time Compute, Security, Failure Modes & Evaluation
+# Fields: id, term, category, definition (quotable, 1-2 sentences), body, aliases, broader, related, introduced, example, sources
+
+- id: prompt-optimization
+  term: Prompt Optimization
+  category: optimization
+  definition: Prompt optimization is the automatic search for a better prompt, in which a language model proposes candidate instructions or examples and each candidate is scored on an evaluation set until performance stops improving.
+  body: Methods differ in how they propose changes. Some resample paraphrases, as in APE, some show the optimizer a history of scored prompts, as in OPRO, some critique errors in natural language and edit accordingly, as in ProTeGi and TextGrad, and some use evolutionary search, as in Promptbreeder and EvoPrompt. All of them depend on a representative evaluation set and metric, and can overfit to it.
+  aliases: [automatic prompt optimization, automated prompt engineering]
+  related: [automatic-prompt-engineer, opro, dspy, protegi, textgrad, promptbreeder, evoprompt, evals]
+  sources:
+    - {title: "The Prompt Report: A Systematic Survey of Prompt Engineering Techniques", authors: "Schulhoff et al.", year: 2024, url: "https://arxiv.org/abs/2406.06608"}
+    - {title: "Automatic Prompt Optimization with \"Gradient Descent\" and Beam Search", authors: "Pryzant et al.", year: 2023, url: "https://arxiv.org/abs/2305.03495"}
+
+- id: protegi
+  term: ProTeGi
+  category: optimization
+  definition: ProTeGi (Prompt Optimization with Textual Gradients) improves a prompt by having a language model describe, in natural language, what is wrong with it based on the errors it produces, then edit the prompt to fix those problems, keeping the best candidates with beam search.
+  body: The natural-language critique plays the role of a gradient, and editing the prompt plays the role of a step in the opposite direction. A bandit-style selection procedure limits how many evaluations are needed to choose among candidates.
+  aliases: [Prompt Optimization with Textual Gradients, textual gradients]
+  broader: [prompt-optimization]
+  related: [textgrad, automatic-prompt-engineer, opro]
+  introduced: 2023
+  sources:
+    - {title: "Automatic Prompt Optimization with \"Gradient Descent\" and Beam Search", authors: "Pryzant et al.", year: 2023, url: "https://arxiv.org/abs/2305.03495"}
+
+- id: textgrad
+  term: TextGrad
+  category: optimization
+  definition: TextGrad is a framework that optimizes systems built from LLM calls by propagating natural-language feedback backward through the computation, so that each component, such as a prompt or a piece of code, is revised according to criticism of the final output.
+  body: It applies the idea of backpropagation to text, with an API modeled on PyTorch. Its authors used it to optimize prompts, code solutions, and answers to scientific questions. Like other feedback-driven optimizers, it is only as good as the evaluation signal it receives.
+  aliases: [textual backpropagation]
+  broader: [prompt-optimization]
+  related: [protegi, dspy, self-refine]
+  introduced: 2024
+  sources:
+    - {title: "TextGrad: Automatic \"Differentiation\" via Text", authors: "Yuksekgonul et al.", year: 2024, url: "https://arxiv.org/abs/2406.07496"}
+
+- id: promptbreeder
+  term: Promptbreeder
+  category: optimization
+  definition: Promptbreeder is an evolutionary prompt-optimization method in which a population of task prompts is mutated and selected by fitness on training examples, while the mutation prompts that generate the changes are themselves evolved.
+  body: Because the instructions for how to mutate prompts also improve over time, the method is described as self-referential. It discovered domain-specific prompts that outperformed hand-written chain-of-thought prompts on arithmetic and commonsense benchmarks, at the cost of many model calls.
+  broader: [prompt-optimization]
+  related: [evoprompt, opro, automatic-prompt-engineer]
+  introduced: 2023
+  sources:
+    - {title: "Promptbreeder: Self-Referential Self-Improvement Via Prompt Evolution", authors: "Fernando et al.", year: 2023, url: "https://arxiv.org/abs/2309.16797"}
+
+- id: evoprompt
+  term: EvoPrompt
+  category: optimization
+  definition: EvoPrompt optimizes prompts with evolutionary algorithms, such as genetic algorithms and differential evolution, in which a language model performs the crossover and mutation steps on a population of prompts.
+  body: Using the model as the evolutionary operator keeps every candidate a readable, coherent prompt while borrowing the exploration properties of classical evolutionary search. It needs only API access to the model, not its gradients.
+  broader: [prompt-optimization]
+  related: [promptbreeder, automatic-prompt-engineer]
+  introduced: 2023
+  sources:
+    - {title: "EvoPrompt: Connecting LLMs with Evolutionary Algorithms Yields Powerful Prompt Optimizers", authors: "Guo et al.", year: 2023, url: "https://arxiv.org/abs/2309.08532"}
+
+- id: model-cascade
+  term: Model Cascade
+  category: optimization
+  definition: A model cascade sends each query to a cheaper model first and escalates it to progressively more capable and expensive models only when a scoring function judges the cheaper model's answer unreliable.
+  body: Because many queries are easy, most are answered cheaply, and only hard ones pay for the strongest model. FrugalGPT reported matching the best single model's performance at a large reduction in cost. The design depends on a reliable way to judge when an answer is good enough. Routing, by contrast, chooses a model before any answer is generated.
+  aliases: [LLM cascade, FrugalGPT, cascading]
+  related: [routing, confidence-calibration, llm-as-a-judge]
+  introduced: 2023
+  sources:
+    - {title: "FrugalGPT: How to Use Large Language Models While Reducing Cost and Improving Performance", authors: "Chen et al.", year: 2023, url: "https://arxiv.org/abs/2305.05176"}
+
+- id: rlvr
+  term: Reinforcement Learning with Verifiable Rewards
+  category: test-time
+  definition: Reinforcement learning with verifiable rewards (RLVR) trains a language model with rewards computed by an automatic check of correctness, such as whether a math answer matches the reference or code passes its tests, instead of by a learned reward model.
+  body: Verifiable rewards are hard to game in the ways a learned reward model can be, and large-scale RL with them is how reasoning models learn to produce long, self-correcting chains of thought. The approach is limited to tasks with checkable answers, so open-ended writing and judgment still rely on preference-based rewards.
+  aliases: [RLVR, RL from verifiable rewards, outcome-based reinforcement learning]
+  related: [reasoning-model, rlhf, reward-model, reward-hacking, self-taught-reasoner]
+  introduced: 2024
+  sources:
+    - {title: "Tulu 3: Pushing Frontiers in Open Language Model Post-Training", authors: "Lambert et al.", year: 2024, url: "https://arxiv.org/abs/2411.15124"}
+    - {title: "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning", authors: "DeepSeek-AI et al.", year: 2025, url: "https://arxiv.org/abs/2501.12948"}
+
+- id: budget-forcing
+  term: Budget Forcing
+  category: test-time
+  definition: Budget forcing controls how long a reasoning model thinks at inference time, by forcibly ending its reasoning when a token budget is reached or by appending a word such as "Wait" when it tries to stop early, which makes it keep reasoning.
+  body: It was introduced with s1, a model fine-tuned on only about a thousand reasoning examples, where extending thinking with budget forcing improved accuracy on competition math. It is a simple way to trade compute for accuracy, though the gains flatten beyond a point.
+  aliases: [s1, wait token, thinking budget control]
+  broader: [test-time-compute-scaling]
+  related: [reasoning-model, extended-thinking, overthinking]
+  introduced: 2025
+  sources:
+    - {title: "s1: Simple test-time scaling", authors: "Muennighoff et al.", year: 2025, url: "https://arxiv.org/abs/2501.19393"}
+
+- id: chain-of-thought-monitoring
+  term: Chain-of-Thought Monitoring
+  category: test-time
+  definition: Chain-of-thought monitoring is reading a model's reasoning trace, with automated monitors or people, to detect intentions to misbehave, such as plans to cheat on a task, before or alongside its actions.
+  body: Because reasoning models often state their intentions in natural language while solving hard tasks, their reasoning offers an unusual view into their decision making. Researchers from several labs have argued that this monitorability is valuable but fragile. Training pressure on the reasoning text, or architectures that reason without words, could remove it, and reasoning traces are not always faithful to the model's actual computation.
+  aliases: [CoT monitoring, CoT monitorability, reasoning trace monitoring]
+  related: [reasoning-model, unfaithful-chain-of-thought, reward-hacking, extended-thinking]
+  introduced: 2025
+  sources:
+    - {title: "Chain of Thought Monitorability: A New and Fragile Opportunity for AI Safety", authors: "Korbak et al.", year: 2025, url: "https://arxiv.org/abs/2507.11473"}
+
+- id: red-teaming
+  term: Red Teaming
+  category: security
+  definition: Red teaming is adversarial testing of an AI model or system, by people or by other models, to find inputs that make it produce harmful, insecure, or otherwise unwanted behavior before attackers or users do.
+  body: Human red teamers bring creativity and domain expertise, while automated red teaming uses a language model to generate and refine attacks at scale. Findings feed training data, guardrails, and policy, and red teaming is repeated as models and defenses change.
+  aliases: [adversarial testing, AI red teaming, automated red teaming]
+  related: [jailbreak, prompt-injection, guardrails, pair-attack, constitutional-classifiers]
+  introduced: 2022
+  sources:
+    - {title: "Red Teaming Language Models with Language Models", authors: "Perez et al.", year: 2022, url: "https://arxiv.org/abs/2202.03286"}
+
+- id: guardrails
+  term: Guardrails
+  category: security
+  definition: Guardrails are checks placed around a model call that screen inputs and outputs, using classifiers, rules, or a second model, to block, redact, or redirect content that violates a policy before it reaches the model or the user.
+  body: Typical guardrails detect jailbreak attempts and prompt injection, unsafe content, personal data, and off-topic requests. Safeguard models such as Llama Guard classify messages against a taxonomy of risks, and toolkits such as NeMo Guardrails define programmable rails for dialogue. Guardrails add latency and can over-block, and none is complete, so they are layered with model training and least-privilege design.
+  aliases: [safety filters, input/output filtering, safeguard model, moderation, content filter]
+  related: [jailbreak, prompt-injection, constitutional-classifiers, over-refusal, red-teaming]
+  introduced: 2023
+  sources:
+    - {title: "Llama Guard: LLM-based Input-Output Safeguard for Human-AI Conversations", authors: "Inan et al.", year: 2023, url: "https://arxiv.org/abs/2312.06674"}
+    - {title: "NeMo Guardrails: A Toolkit for Controllable and Safe LLM Applications with Programmable Rails", authors: "Rebedea et al.", year: 2023, url: "https://arxiv.org/abs/2310.10501"}
+
+- id: dual-llm-pattern
+  term: Dual LLM Pattern
+  category: security
+  definition: The dual LLM pattern defends against prompt injection by splitting work between a privileged model, which sees only trusted input and can use tools, and a quarantined model, which processes untrusted content but has no tool access, with ordinary code passing references between them.
+  body: The privileged model never reads untrusted text directly, so instructions hidden in that text cannot trigger its tools. CaMeL extends the idea by having the privileged model write a program whose data flows are tracked and checked against security policies. These designs give security guarantees by construction rather than by training, at the cost of flexibility.
+  aliases: [privileged and quarantined LLM, CaMeL]
+  related: [prompt-injection, indirect-prompt-injection, lethal-trifecta, spotlighting, instruction-hierarchy]
+  introduced: 2023
+  sources:
+    - {title: "The Dual LLM pattern for building AI assistants that can resist prompt injection", authors: "Willison", year: 2023, url: "https://simonwillison.net/2023/Apr/25/dual-llm-pattern/"}
+    - {title: "Defeating Prompt Injections by Design", authors: "Debenedetti et al.", year: 2025, url: "https://arxiv.org/abs/2503.18813"}
+    - {title: "Design Patterns for Securing LLM Agents against Prompt Injections", authors: "Beurer-Kellner et al.", year: 2025, url: "https://arxiv.org/abs/2506.08837"}
+
+- id: tool-poisoning
+  term: Tool Poisoning
+  category: security
+  definition: Tool poisoning is an attack in which malicious instructions are hidden in a tool's description or metadata, such as an MCP server's tool definitions, so that the agent reading the description is steered into harmful actions that the user does not see.
+  body: Agents read tool descriptions as trusted context, but users rarely see them in full. A poisoned tool can instruct the agent to read sensitive files or to send data through another, legitimate tool. Mitigations include showing full tool descriptions, pinning tool versions so descriptions cannot change silently, and installing servers only from trusted sources.
+  aliases: [tool poisoning attack, MCP tool poisoning]
+  broader: [indirect-prompt-injection]
+  related: [model-context-protocol, function-calling, lethal-trifecta]
+  introduced: 2025
+  sources:
+    - {title: "MCP Security Notification: Tool Poisoning Attacks", authors: "Invariant Labs", year: 2025, url: "https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks"}
+
+- id: lethal-trifecta
+  term: Lethal Trifecta
+  category: security
+  definition: The lethal trifecta is the combination of three capabilities that makes an AI agent vulnerable to data theft through prompt injection, namely access to private data, exposure to untrusted content, and the ability to communicate externally.
+  body: Any one or two are manageable, but with all three an attacker who plants instructions in content the agent reads can make it send private data out. Because no prompt-injection defense is fully reliable, the practical advice is to remove at least one of the three from any agent configuration.
+  related: [prompt-injection, indirect-prompt-injection, excessive-agency, dual-llm-pattern, tool-poisoning]
+  introduced: 2025
+  sources:
+    - {title: "The lethal trifecta for AI agents: private data, untrusted content, and external communication", authors: "Willison", year: 2025, url: "https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"}
+
+- id: crescendo-attack
+  term: Crescendo Attack
+  category: security
+  definition: The Crescendo attack is a multi-turn jailbreak that starts with harmless questions on a topic and gradually escalates over several turns, building on the model's own earlier answers until it produces content it would refuse if asked directly.
+  body: Each individual message looks benign, so defenses that check single prompts miss it. The attack exploits the model's tendency to stay consistent with the conversation so far. Defenses need to evaluate the trajectory of a conversation, not only its latest turn.
+  aliases: [Crescendo, multi-turn jailbreak]
+  broader: [jailbreak]
+  related: [many-shot-jailbreaking, multi-turn-degradation, guardrails]
+  introduced: 2024
+  sources:
+    - {title: "Great, Now Write an Article About That: The Crescendo Multi-Turn LLM Jailbreak Attack", authors: "Russinovich et al.", year: 2024, url: "https://arxiv.org/abs/2404.01833"}
+
+- id: pair-attack
+  term: PAIR
+  category: security
+  definition: PAIR (Prompt Automatic Iterative Refinement) is an automated jailbreak method in which an attacker language model repeatedly proposes jailbreak prompts against a target model and refines them based on the target's responses, needing only black-box access.
+  body: The original work reported successful jailbreaks often within about twenty queries, and the resulting prompts are readable, unlike adversarial suffixes. It is widely used as a baseline for automated red teaming.
+  aliases: [Prompt Automatic Iterative Refinement, automated jailbreaking]
+  broader: [jailbreak]
+  related: [red-teaming, adversarial-suffix]
+  introduced: 2023
+  sources:
+    - {title: "Jailbreaking Black Box Large Language Models in Twenty Queries", authors: "Chao et al.", year: 2023, url: "https://arxiv.org/abs/2310.08419"}
+
+- id: excessive-agency
+  term: Excessive Agency
+  category: security
+  definition: Excessive agency is the vulnerability of giving an LLM-based system more functionality, permissions, or autonomy than its task requires, so that a manipulated or mistaken model can take damaging actions.
+  body: It is listed as LLM06 in the OWASP Top 10 for LLM Applications (2025), which names three root causes, excessive functionality, excessive permissions, and excessive autonomy. Mitigations are least-privilege tools and credentials, narrowly scoped functions instead of open-ended ones, and human approval for high-impact actions.
+  related: [human-in-the-loop, lethal-trifecta, prompt-injection, function-calling]
+  sources:
+    - {title: "LLM06:2025 Excessive Agency", authors: "OWASP Gen AI Security Project", year: 2025, url: "https://genai.owasp.org/llmrisk/llm062025-excessive-agency/"}
+
+- id: deliberative-alignment
+  term: Deliberative Alignment
+  category: security
+  definition: Deliberative alignment is a safety-training method in which a reasoning model is taught the text of a safety specification and trained to recall and reason about the relevant policies in its chain of thought before answering.
+  body: Instead of learning safe behavior only from labeled examples, the model learns to consult explicit rules at inference time. Its authors reported better resistance to jailbreaks together with fewer unnecessary refusals. It is related to constitutional AI, which also trains from written principles.
+  related: [constitutional-ai, reasoning-model, over-refusal, jailbreak]
+  introduced: 2024
+  sources:
+    - {title: "Deliberative Alignment: Reasoning Enables Safer Language Models", authors: "Guan et al.", year: 2024, url: "https://arxiv.org/abs/2412.16339"}
+
+- id: constitutional-classifiers
+  term: Constitutional Classifiers
+  category: security
+  definition: Constitutional classifiers are input and output safeguard classifiers trained on synthetic data generated from a written constitution that defines permitted and restricted content, designed to block universal jailbreaks.
+  body: Because the training data is generated from natural-language rules, the classifiers can be updated as threats change by editing the constitution. Their authors reported that thousands of hours of red teaming found no universal jailbreak against the protected system, at a modest cost in refusals and compute.
+  broader: [guardrails]
+  related: [constitutional-ai, jailbreak, red-teaming]
+  introduced: 2025
+  sources:
+    - {title: "Constitutional Classifiers: Defending against Universal Jailbreaks across Thousands of Hours of Red Teaming", authors: "Sharma et al.", year: 2025, url: "https://arxiv.org/abs/2501.18837"}
+
+- id: context-rot
+  term: Context Rot
+  category: failure-modes
+  definition: Context rot is the decline in a model's reliability as the amount of input in its context grows, even on simple tasks and well within its advertised context window.
+  body: A 2025 study of 18 models found performance degrading with input length in ways that depended on the task and on the content around the relevant information, such as similar-looking distractors. It is a practical reason to keep contexts lean, retrieve only what is needed, and compact long histories rather than relying on maximum context length.
+  aliases: [long-context degradation, context degradation]
+  related: [lost-in-the-middle, needle-in-a-haystack, context-window, context-engineering, context-compaction]
+  introduced: 2025
+  sources:
+    - {title: "Context Rot: How Increasing Input Tokens Impacts LLM Performance", authors: "Hong et al.", year: 2025, url: "https://www.trychroma.com/research/context-rot"}
+
+- id: overthinking
+  term: Overthinking
+  category: failure-modes
+  definition: Overthinking is the tendency of reasoning models to spend far more reasoning tokens than a problem requires, for example writing long chains of thought for trivial arithmetic, which adds cost and latency with little or no accuracy gain.
+  body: Analysis of o1-style models found that later reasoning rounds on simple problems rarely contribute new solutions. Remedies include adjustable reasoning effort or budgets, routing easy queries to non-reasoning models, and training that rewards efficient reasoning.
+  aliases: [overthinking problem, excessive reasoning]
+  related: [reasoning-model, extended-thinking, budget-forcing, chain-of-draft, test-time-compute-scaling]
+  introduced: 2024
+  sources:
+    - {title: "Do NOT Think That Much for 2+3=? On the Overthinking of o1-Like LLMs", authors: "Chen et al.", year: 2024, url: "https://arxiv.org/abs/2412.21187"}
+
+- id: reversal-curse
+  term: Reversal Curse
+  category: failure-modes
+  definition: The reversal curse is the failure of language models trained on a fact stated as "A is B" to answer the reversed question "what is B?", for example knowing who a celebrity's mother is but not who that woman's famous son is.
+  body: It shows that models do not automatically store facts in both directions. In practice, providing the relevant fact in the prompt fixes it, since in-context reasoning handles the reversal, which is one more argument for retrieval over relying on memorized knowledge.
+  related: [hallucination, knowledge-cutoff, retrieval-augmented-generation]
+  introduced: 2023
+  sources:
+    - {title: "The Reversal Curse: LLMs trained on \"A is B\" fail to learn \"B is A\"", authors: "Berglund et al.", year: 2023, url: "https://arxiv.org/abs/2309.12288"}
+
+- id: reward-hacking
+  term: Reward Hacking
+  category: failure-modes
+  definition: Reward hacking is when a model trained or optimized against a reward finds ways to score highly that do not achieve the intended goal, exploiting flaws in the reward model, grader, or tests.
+  body: In language models it shows up as answers padded to look thorough, flattery that raters prefer, and code that special-cases tests instead of solving the problem. Verifiable rewards reduce some forms, while careful graders, held-out tests, and monitoring of reasoning traces help detect others.
+  aliases: [specification gaming, reward overoptimization, reward gaming]
+  related: [reward-model, rlhf, rlvr, sycophancy, chain-of-thought-monitoring]
+  sources:
+    - {title: "Concrete Problems in AI Safety", authors: "Amodei et al.", year: 2016, url: "https://arxiv.org/abs/1606.06565"}
+
+- id: irrelevant-context-distraction
+  term: Irrelevant Context Distraction
+  category: failure-modes
+  definition: Irrelevant context distraction is the drop in a model's accuracy when a prompt contains information that is unrelated to the question, such as an extra sentence in a math word problem, which the model wrongly incorporates into its reasoning.
+  body: A benchmark built by adding irrelevant sentences to grade-school math problems showed large accuracy drops across prompting methods. Instructing the model to ignore irrelevant information, using self-consistency, and filtering context first, as in System 2 Attention, all reduce the effect. It matters for RAG, where retrieved passages often include off-topic text.
+  aliases: [distractibility, GSM-IC]
+  related: [system-2-attention, retrieval-augmented-generation, context-rot, prompt-sensitivity]
+  introduced: 2023
+  sources:
+    - {title: "Large Language Models Can Be Easily Distracted by Irrelevant Context", authors: "Shi et al.", year: 2023, url: "https://arxiv.org/abs/2302.00093"}
+
+- id: multi-turn-degradation
+  term: Multi-Turn Degradation
+  category: failure-modes
+  definition: Multi-turn degradation is the drop in model performance when a task's requirements are revealed across several conversation turns instead of all at once, because models commit to early assumptions and fail to recover.
+  body: A large 2025 study found that models that performed well on fully specified single-turn instructions did markedly worse in multi-turn settings, mainly through increased unreliability rather than a loss of capability. The practical advice is to consolidate requirements into a fresh prompt when a conversation goes off track.
+  aliases: [lost in conversation, multi-turn performance drop]
+  related: [instruction-following, context-compaction, crescendo-attack, context-rot]
+  introduced: 2025
+  sources:
+    - {title: "LLMs Get Lost In Multi-Turn Conversation", authors: "Laban et al.", year: 2025, url: "https://arxiv.org/abs/2505.06120"}
+
+- id: text-degeneration
+  term: Text Degeneration
+  category: failure-modes
+  definition: Text degeneration is the tendency of language models, especially under greedy or beam-search decoding, to produce bland, repetitive, or looping text, such as the same phrase repeated over and over.
+  body: Maximizing likelihood at each step favors safe, high-probability continuations that reinforce themselves once repetition starts. Sampling methods such as top-p and top-k, repetition or frequency penalties, and modern training largely mitigate it, but loops still appear in long generations and agent traces.
+  aliases: [neural text degeneration, repetition, repetition loops]
+  related: [greedy-decoding, top-p-sampling, top-k-sampling, temperature]
+  introduced: 2019
+  sources:
+    - {title: "The Curious Case of Neural Text Degeneration", authors: "Holtzman et al.", year: 2019, url: "https://arxiv.org/abs/1904.09751"}
+
+- id: over-refusal
+  term: Over-Refusal
+  category: failure-modes
+  definition: Over-refusal is a model declining safe requests because they superficially resemble harmful ones, such as refusing to explain how to kill a Python process.
+  body: It is the cost side of safety training, since overly cautious models frustrate users and withhold legitimate help. Test suites such as XSTest pair safe prompts with unsafe look-alikes to measure the balance, and methods such as deliberative alignment aim to reduce refusals while improving robustness.
+  aliases: [exaggerated safety, false refusal, overrefusal]
+  related: [guardrails, rlhf, deliberative-alignment, constitutional-classifiers]
+  introduced: 2023
+  sources:
+    - {title: "XSTest: A Test Suite for Identifying Exaggerated Safety Behaviours in Large Language Models", authors: "Röttger et al.", year: 2023, url: "https://arxiv.org/abs/2308.01263"}
+
+- id: llm-judge-bias
+  term: LLM Judge Bias
+  category: failure-modes
+  definition: LLM judge bias is the set of systematic errors that language models make when grading outputs, notably preferring the answer shown first (position bias), longer answers (verbosity bias), and their own outputs (self-enhancement bias).
+  body: These biases can make automated evaluations favor the wrong prompt or model. Common mitigations are evaluating each pair in both orders and counting only consistent verdicts, instructing the judge to ignore length, using clear rubrics and reference answers, and checking judge agreement against a sample of human ratings.
+  aliases: [position bias, verbosity bias, self-enhancement bias, self-preference bias]
+  related: [llm-as-a-judge, evals, sycophancy]
+  introduced: 2023
+  sources:
+    - {title: "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena", authors: "Zheng et al.", year: 2023, url: "https://arxiv.org/abs/2306.05685"}
+
+- id: data-contamination
+  term: Data Contamination
+  category: failure-modes
+  definition: Data contamination is the presence of benchmark or test examples in a model's training data, which inflates its measured performance because it may have memorized the answers.
+  body: Since models are trained on large web crawls, public benchmarks often leak into training sets. Contamination can be detected, for example, by prompting a model to complete the beginning of test instances and checking for verbatim matches. For application evaluations, the safeguard is a private, regularly refreshed test set.
+  aliases: [benchmark contamination, test set contamination, training data leakage]
+  related: [evals, knowledge-cutoff]
+  introduced: 2023
+  sources:
+    - {title: "Time Travel in LLMs: Tracing Data Contamination in Large Language Models", authors: "Golchin and Surdeanu", year: 2023, url: "https://arxiv.org/abs/2308.08493"}
+
+- id: evals
+  term: Evals
+  category: failure-modes
+  definition: Evals are systematic tests of a model or LLM application, consisting of a set of representative inputs and a grading method, used to measure performance against defined success criteria and to compare prompts, models, and changes.
+  body: Grading can be exact-match or code-based, done by an LLM judge with a rubric, or done by people. Code-based grading is fastest and most reliable where it applies. A good eval set mirrors real usage, including edge cases, and turns prompt engineering from guesswork into measurement. Without one, changes that fix one case can silently break others.
+  aliases: [evaluations, LLM evaluation, eval suite, test set]
+  related: [llm-as-a-judge, pass-at-k, rag-evaluation, prompt-optimization, data-contamination]
+  sources:
+    - {title: "Define success criteria and build evaluations", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"}
+    - {title: "Holistic Evaluation of Language Models", authors: "Liang et al.", year: 2022, url: "https://arxiv.org/abs/2211.09110"}
+
+- id: pass-at-k
+  term: pass@k
+  category: failure-modes
+  definition: pass@k is an evaluation metric for code generation, and other tasks with automatic checks, defined as the probability that at least one of k sampled solutions to a problem passes its tests.
+  body: It was popularized with an unbiased estimator computed from n ≥ k samples per problem. pass@1 measures single-attempt reliability, while larger k measures whether the model can solve the problem at all, which is relevant when best-of-n sampling or verification is available.
+  aliases: [pass@1, pass at k]
+  broader: [evals]
+  related: [best-of-n-sampling, coding-agent, rlvr]
+  introduced: 2021
+  sources:
+    - {title: "Evaluating Large Language Models Trained on Code", authors: "Chen et al.", year: 2021, url: "https://arxiv.org/abs/2107.03374"}
+
+- id: rag-evaluation
+  term: RAG Evaluation
+  category: failure-modes
+  definition: RAG evaluation measures a retrieval-augmented system's retrieval and generation separately, typically checking whether the retrieved context is relevant, whether the answer is faithful to that context, and whether the answer addresses the question.
+  body: Separating the stages shows whether a bad answer came from retrieval or from generation. Frameworks such as Ragas compute these metrics automatically with an LLM, without reference answers, which makes it practical to compare chunking, retrieval, and prompt choices.
+  aliases: [Ragas, RAG metrics, faithfulness, context relevance]
+  broader: [evals]
+  related: [retrieval-augmented-generation, llm-as-a-judge, hallucination, chunking]
+  introduced: 2023
+  sources:
+    - {title: "Ragas: Automated Evaluation of Retrieval Augmented Generation", authors: "Es et al.", year: 2023, url: "https://arxiv.org/abs/2309.15217"}

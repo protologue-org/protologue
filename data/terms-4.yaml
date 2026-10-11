@@ -1,0 +1,244 @@
+# Added in v1.1: Foundations, Reasoning, Self-Critique & Verification
+# Fields: id, term, category, definition (quotable, 1-2 sentences), body, aliases, broader, related, introduced, example, sources
+
+- id: large-language-model
+  term: Large Language Model
+  category: foundations
+  definition: A large language model (LLM) is a neural network, usually a Transformer with billions of parameters, trained on very large text corpora to predict the next token, which lets it generate text and perform many tasks from a prompt.
+  body: The defining property is that a single model, without task-specific training, can translate, summarize, answer questions, write code, and follow instructions, with the task specified in the prompt. Most deployed LLMs are base models that have been further instruction-tuned and preference-tuned to behave as assistants. Their capabilities and their failure modes, such as hallucination and prompt sensitivity, both follow from next-token prediction over the prompt.
+  aliases: [LLM, language model]
+  broader: [foundation-model]
+  related: [token, prompt, base-model, in-context-learning]
+  sources:
+    - {title: "A Survey of Large Language Models", authors: "Zhao et al.", year: 2023, url: "https://arxiv.org/abs/2303.18223"}
+    - {title: "Language Models are Few-Shot Learners", authors: "Brown et al.", year: 2020, url: "https://arxiv.org/abs/2005.14165"}
+
+- id: foundation-model
+  term: Foundation Model
+  category: foundations
+  definition: A foundation model is a model trained on broad data at scale, usually with self-supervision, that can be adapted to a wide range of downstream tasks by prompting or fine-tuning.
+  body: The term was introduced in 2021 by researchers at Stanford to describe models such as BERT, GPT-3, and CLIP that serve as a common base for many applications. Large language models are the most prominent kind, but the term also covers image, audio, and multimodal models. Because many systems are built on the same few foundation models, their strengths and flaws are inherited widely.
+  aliases: [frontier model, general-purpose model]
+  related: [large-language-model, base-model, fine-tuning]
+  introduced: 2021
+  sources:
+    - {title: "On the Opportunities and Risks of Foundation Models", authors: "Bommasani et al.", year: 2021, url: "https://arxiv.org/abs/2108.07258"}
+
+- id: base-model
+  term: Base Model
+  category: foundations
+  definition: A base model is a language model after pretraining but before instruction tuning or preference tuning, so it continues text in the style of its training data rather than following instructions.
+  body: Asked a question, a base model may answer it, continue with more questions, or produce something unrelated, because it only predicts plausible continuations. Prompting one effectively means framing the task as a document to complete, for example with few-shot examples or the start of the desired output. Chat assistants are derived from base models through instruction tuning and RLHF, which is why they are often called instruct or chat models.
+  aliases: [pretrained model, base LLM, completion model]
+  broader: [large-language-model]
+  related: [instruction-tuning, rlhf, few-shot-prompting, chat-template]
+  example: "A completion-style prompt for a base model: \"Q: What is the capital of France?\\nA: Paris\\nQ: What is the capital of Japan?\\nA:\""
+  sources:
+    - {title: "Training language models to follow instructions with human feedback", authors: "Ouyang et al.", year: 2022, url: "https://arxiv.org/abs/2203.02155"}
+    - {title: "Language Models are Few-Shot Learners", authors: "Brown et al.", year: 2020, url: "https://arxiv.org/abs/2005.14165"}
+
+- id: fine-tuning
+  term: Fine-Tuning
+  category: foundations
+  definition: Fine-tuning is the further training of a pretrained model on a smaller, task- or domain-specific dataset so that its weights adapt to that task or domain.
+  body: Fine-tuning complements prompting. Prompting changes only the input, while fine-tuning changes the model, which can teach a consistent format, style, or specialized skill that is hard to obtain from instructions alone, at the cost of training data, compute, and a separate model to maintain. Parameter-efficient methods such as LoRA update only a small number of added weights, and instruction tuning is the fine-tuning step that turns a base model into an assistant.
+  aliases: [model fine-tuning, transfer learning]
+  related: [base-model, instruction-tuning, low-rank-adaptation, prompt-tuning]
+  introduced: 2018
+  sources:
+    - {title: "Universal Language Model Fine-tuning for Text Classification", authors: "Howard and Ruder", year: 2018, url: "https://arxiv.org/abs/1801.06146"}
+    - {title: "LoRA: Low-Rank Adaptation of Large Language Models", authors: "Hu et al.", year: 2021, url: "https://arxiv.org/abs/2106.09685"}
+
+- id: reward-model
+  term: Reward Model
+  category: foundations
+  definition: A reward model is a model trained to score a language model's outputs according to human or AI preferences, usually from pairwise comparisons, so that the score can serve as a training signal or a ranking criterion.
+  body: In RLHF, people compare pairs of responses, a reward model learns to predict which one they prefer, and the language model is then optimized against it. Reward models are also used at inference time to pick the best of several sampled responses. A model that scores only the final answer is an outcome reward model, in contrast to a process reward model, which scores each reasoning step. Optimizing too hard against an imperfect reward model leads to reward hacking.
+  aliases: [preference model, outcome reward model, ORM]
+  related: [rlhf, process-reward-model, best-of-n-sampling, reward-hacking]
+  introduced: 2022
+  sources:
+    - {title: "Training language models to follow instructions with human feedback", authors: "Ouyang et al.", year: 2022, url: "https://arxiv.org/abs/2203.02155"}
+    - {title: "Let's Verify Step by Step", authors: "Lightman et al.", year: 2023, url: "https://arxiv.org/abs/2305.20050"}
+
+- id: chat-template
+  term: Chat Template
+  category: foundations
+  definition: A chat template is the model-specific format that converts a list of role-tagged messages, such as system, user, and assistant turns, into the exact token sequence with special control tokens that the model was fine-tuned on.
+  body: Hosted chat APIs apply the template for you, but when running open-weight models directly, using the wrong template, or none, can noticeably degrade instruction following because the model sees input unlike its training data. Templates also determine how system prompts, tool calls, and tool results are marked, and where the model expects to begin its reply.
+  aliases: [prompt format, chat format, conversation template]
+  related: [system-prompt, base-model, instruction-tuning, delimiters]
+  sources:
+    - {title: "Chat templates", authors: "Hugging Face", year: 2023, url: "https://huggingface.co/docs/transformers/en/chat_templating"}
+
+- id: top-k-sampling
+  term: Top-k Sampling
+  category: foundations
+  definition: Top-k sampling is a decoding method that, at each step, restricts sampling to the k most probable next tokens and renormalizes their probabilities.
+  body: It removes the long tail of unlikely tokens that can derail generation, while keeping some variety. Because k is fixed, it can be too restrictive when many tokens are plausible and too permissive when only one is, which motivated top-p (nucleus) sampling. Many APIs expose top-k alongside temperature and top-p.
+  aliases: [top-k]
+  related: [temperature, top-p-sampling, greedy-decoding]
+  introduced: 2018
+  sources:
+    - {title: "Hierarchical Neural Story Generation", authors: "Fan et al.", year: 2018, url: "https://arxiv.org/abs/1805.04833"}
+    - {title: "The Curious Case of Neural Text Degeneration", authors: "Holtzman et al.", year: 2019, url: "https://arxiv.org/abs/1904.09751"}
+
+- id: greedy-decoding
+  term: Greedy Decoding
+  category: foundations
+  definition: Greedy decoding generates text by always choosing the single most probable next token, which makes output deterministic for a given prompt and model.
+  body: It is the limit of sampling as temperature approaches zero and is often used when consistency matters, as in extraction or classification. For open-ended text it tends to produce bland or repetitive output, and for reasoning tasks sampling several answers and voting, as in self-consistency, usually beats a single greedy answer.
+  aliases: [argmax decoding, temperature 0]
+  related: [temperature, top-k-sampling, top-p-sampling, self-consistency, text-degeneration]
+  sources:
+    - {title: "The Curious Case of Neural Text Degeneration", authors: "Holtzman et al.", year: 2019, url: "https://arxiv.org/abs/1904.09751"}
+
+- id: log-probabilities
+  term: Log Probabilities
+  category: foundations
+  definition: Log probabilities (logprobs) are the logarithms of the probabilities a model assigned to each token it generated, and optionally to the most likely alternatives, exposing how confident the model was at each step.
+  body: Applications use logprobs to score classification labels, estimate confidence, flag likely hallucinations, rank candidate completions, and build autocomplete. They describe token-level likelihood, not factual correctness, so a fluent but wrong answer can still have high probability. Not every API or model exposes them.
+  aliases: [logprobs, token probabilities]
+  related: [token, confidence-calibration, temperature]
+  sources:
+    - {title: "Using logprobs", authors: "OpenAI", year: 2023, url: "https://developers.openai.com/cookbook/examples/using_logprobs"}
+    - {title: "Language Models (Mostly) Know What They Know", authors: "Kadavath et al.", year: 2022, url: "https://arxiv.org/abs/2207.05221"}
+
+- id: multimodal-prompting
+  term: Multimodal Prompting
+  category: foundations
+  definition: Multimodal prompting is prompting a model with more than one kind of input, such as images, documents, audio, or video together with text, so the model reasons over all of them.
+  body: Text-prompting techniques largely carry over, but some practices are specific to non-text inputs. Provider guidance recommends placing images before the question, labeling multiple images so they can be referred to, and sending legible, uncompressed images. Models remain weaker at precise counting, small text, and spatial coordinates, so high-stakes visual answers need checking.
+  aliases: [vision prompting, image prompting, visual prompting]
+  broader: [prompt]
+  related: [context-window, large-language-model]
+  introduced: 2023
+  example: "Image 1: [receipt photo]. Image 2: [receipt photo]. List the total on each receipt and say which is larger."
+  sources:
+    - {title: "The Dawn of LMMs: Preliminary Explorations with GPT-4V(ision)", authors: "Yang et al.", year: 2023, url: "https://arxiv.org/abs/2309.17421"}
+    - {title: "Vision", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/build-with-claude/vision"}
+
+- id: knowledge-cutoff
+  term: Knowledge Cutoff
+  category: foundations
+  definition: A model's knowledge cutoff is the date after which its training data contains little or no information, so it does not know about later events unless they are supplied in the prompt or retrieved.
+  body: Questions about recent events, prices, or current officeholders are answered from stale knowledge unless the system adds search or retrieval. Research has found that a model's effective cutoff can differ from its reported one, and can differ across topics, because web data from earlier years is overrepresented and deduplication is imperfect. Stating the current date in the system prompt helps the model reason about what it might not know.
+  aliases: [training cutoff, training data cutoff]
+  related: [retrieval-augmented-generation, web-search-tool, hallucination]
+  sources:
+    - {title: "Dated Data: Tracing Knowledge Cutoffs in Large Language Models", authors: "Cheng et al.", year: 2024, url: "https://arxiv.org/abs/2403.12958"}
+
+- id: instruction-following
+  term: Instruction Following
+  category: foundations
+  definition: Instruction following is a model's ability to carry out explicit instructions in a prompt, including constraints on content, length, format, and style, rather than only answering the underlying question.
+  body: It is the main capability added by instruction tuning and RLHF, and it degrades with long or conflicting instruction lists, long contexts, and multi-turn conversations. Benchmarks such as IFEval measure it with instructions whose compliance can be checked automatically, for example a minimum word count or a required keyword.
+  aliases: [instruction adherence, instruction compliance]
+  related: [instruction-tuning, rlhf, system-prompt, instruction-hierarchy]
+  example: "Answer in exactly three bullet points, each under 15 words, and do not use the word \"very\"."
+  sources:
+    - {title: "Instruction-Following Evaluation for Large Language Models", authors: "Zhou et al.", year: 2023, url: "https://arxiv.org/abs/2311.07911"}
+    - {title: "Training language models to follow instructions with human feedback", authors: "Ouyang et al.", year: 2022, url: "https://arxiv.org/abs/2203.02155"}
+
+- id: decomposed-prompting
+  term: Decomposed Prompting
+  category: reasoning
+  definition: Decomposed prompting breaks a complex task into simpler sub-tasks, each delegated to its own prompt, model call, or symbolic function, with a controller prompt that decides which handler to call next.
+  body: Each sub-task handler can be optimized, given its own examples, or replaced with code, and handlers can call further decompositions recursively. Compared with a single chain-of-thought prompt, this modularity helps on tasks with steps that models do poorly in one pass, such as long-input processing or symbolic manipulation.
+  aliases: [DecomP, modular prompting]
+  related: [least-to-most-prompting, prompt-chaining, orchestrator-workers, program-aided-language-models]
+  introduced: 2022
+  sources:
+    - {title: "Decomposed Prompting: A Modular Approach for Solving Complex Tasks", authors: "Khot et al.", year: 2022, url: "https://arxiv.org/abs/2210.02406"}
+
+- id: complexity-based-prompting
+  term: Complexity-Based Prompting
+  category: reasoning
+  definition: Complexity-based prompting selects chain-of-thought exemplars that contain more reasoning steps, and at inference votes only among the sampled reasoning chains with the most steps.
+  body: The method rests on the finding that demonstrations with longer, more complex reasoning improve multi-step reasoning more than simpler ones. It combines exemplar selection with a variant of self-consistency in which votes from the most complex chains count.
+  broader: [chain-of-thought]
+  related: [exemplar-selection, self-consistency, auto-cot]
+  introduced: 2022
+  sources:
+    - {title: "Complexity-Based Prompting for Multi-Step Reasoning", authors: "Fu et al.", year: 2022, url: "https://arxiv.org/abs/2210.00720"}
+
+- id: chain-of-draft
+  term: Chain of Draft
+  category: reasoning
+  definition: Chain of Draft is a variant of chain-of-thought prompting in which the model writes only a minimal draft of each reasoning step, a few words rather than full sentences, to reach an answer with far fewer tokens.
+  body: The authors report accuracy comparable to standard chain-of-thought on arithmetic, commonsense, and symbolic tasks while using a small fraction of the output tokens, which lowers cost and latency. It is most useful where reasoning helps but verbose explanations are not needed.
+  aliases: [CoD, concise chain-of-thought]
+  broader: [chain-of-thought]
+  related: [prompt-compression, skeleton-of-thought, overthinking]
+  introduced: 2025
+  example: "Think step by step, but keep only a minimum draft for each step, five words at most. Give the answer after ####."
+  sources:
+    - {title: "Chain of Draft: Thinking Faster by Writing Less", authors: "Xu et al.", year: 2025, url: "https://arxiv.org/abs/2502.18600"}
+
+- id: self-correction
+  term: Self-Correction
+  category: verification
+  definition: Self-correction is the general practice of having a language model review and revise its own output, either from its own judgment alone (intrinsic self-correction) or using external feedback such as tool results, tests, or retrieved evidence.
+  body: Research has found that intrinsic self-correction does not reliably improve reasoning accuracy and can make answers worse, because the model often cannot tell which of its answers are wrong. Self-correction works best when the critique is grounded in something the model cannot fake, such as running code, executing a search, or checking against a reference.
+  aliases: [intrinsic self-correction, self-revision]
+  related: [self-refine, reflexion, critic, chain-of-verification, evaluator-optimizer]
+  introduced: 2023
+  sources:
+    - {title: "Large Language Models Cannot Self-Correct Reasoning Yet", authors: "Huang et al.", year: 2023, url: "https://arxiv.org/abs/2310.01798"}
+
+- id: self-verification
+  term: Self-Verification
+  category: verification
+  definition: Self-verification is a technique in which a model, after producing candidate answers with chain-of-thought, checks each one by working backward, predicting the original conditions of the problem from the answer, and keeps the answer that is most consistent.
+  body: It turns verification into a separate prediction task rather than asking the model whether it is right, which reduces the tendency to approve its own mistakes. It applies most naturally to arithmetic and logical problems whose conditions can be masked and recovered.
+  aliases: [backward verification]
+  related: [self-consistency, chain-of-verification, self-correction]
+  introduced: 2022
+  sources:
+    - {title: "Large Language Models are Better Reasoners with Self-Verification", authors: "Weng et al.", year: 2022, url: "https://arxiv.org/abs/2212.09561"}
+
+- id: critic
+  term: CRITIC
+  category: verification
+  definition: CRITIC is a self-correction framework in which a model checks its output using external tools, such as web search or a code interpreter, critiques it based on what the tools return, and then revises it.
+  body: Grounding the critique in tool feedback addresses the main weakness of intrinsic self-correction. The original work showed improvements on question answering, program synthesis, and reducing toxic output, and the same verify-then-revise loop is common in agent systems.
+  aliases: [tool-interactive critiquing]
+  broader: [self-correction]
+  related: [self-refine, function-calling, code-execution-tool, chain-of-verification]
+  introduced: 2023
+  sources:
+    - {title: "CRITIC: Large Language Models Can Self-Correct with Tool-Interactive Critiquing", authors: "Gou et al.", year: 2023, url: "https://arxiv.org/abs/2305.11738"}
+
+- id: chain-of-density
+  term: Chain of Density
+  category: verification
+  definition: Chain of Density is a summarization prompt that has the model write a summary and then repeatedly rewrite it, adding a few missing important entities each time without making it longer, to produce progressively denser summaries.
+  body: Each round forces compression and fusion of content, so later summaries carry more information per word. The authors found human readers preferred summaries partway through the chain, denser than a plain summary but not maximally dense, which makes the number of rounds a tunable trade-off between informativeness and readability.
+  aliases: [CoD summarization]
+  broader: [self-refine]
+  related: [prompt-chaining]
+  introduced: 2023
+  sources:
+    - {title: "From Sparse to Dense: GPT-4 Summarization with Chain of Density Prompting", authors: "Adams et al.", year: 2023, url: "https://arxiv.org/abs/2309.04269"}
+
+- id: confidence-calibration
+  term: Confidence Calibration
+  category: verification
+  definition: Confidence calibration is the degree to which a model's expressed or implied confidence matches how often it is actually right; a well-calibrated model that says it is 80% sure is correct about 80% of the time.
+  body: Confidence can be read from token probabilities, by asking the model to state a confidence (verbalized confidence), or by sampling several answers and measuring agreement. Studies have found pretrained models fairly well calibrated on suitably formatted multiple-choice questions, and that for instruction-tuned models verbalized confidence can be better calibrated than token probabilities. Calibration lets an application abstain or escalate when the model is unsure. It is different from few-shot calibration, which corrects label bias in prompts.
+  aliases: [calibration, verbalized confidence, uncertainty estimation]
+  related: [log-probabilities, hallucination, selfcheckgpt, few-shot-calibration]
+  sources:
+    - {title: "Language Models (Mostly) Know What They Know", authors: "Kadavath et al.", year: 2022, url: "https://arxiv.org/abs/2207.05221"}
+    - {title: "Just Ask for Calibration: Strategies for Eliciting Calibrated Confidence Scores from Language Models Fine-Tuned with Human Feedback", authors: "Tian et al.", year: 2023, url: "https://arxiv.org/abs/2305.14975"}
+
+- id: selfcheckgpt
+  term: SelfCheckGPT
+  category: verification
+  definition: SelfCheckGPT detects hallucinations by sampling several responses to the same prompt and checking whether each claim in the main response is supported by the others, on the principle that facts the model knows are reproduced consistently while fabrications vary.
+  body: It needs no external knowledge base and works with black-box models, which makes it a practical first check. Its limitation is that consistent errors, which the model repeats confidently every time, are not caught, so it complements rather than replaces retrieval-based fact-checking.
+  aliases: [sampling-based hallucination detection, consistency-based hallucination detection]
+  related: [hallucination, self-consistency, confidence-calibration, chain-of-verification]
+  introduced: 2023
+  sources:
+    - {title: "SelfCheckGPT: Zero-Resource Black-Box Hallucination Detection for Generative Large Language Models", authors: "Manakul et al.", year: 2023, url: "https://arxiv.org/abs/2303.08896"}
