@@ -1,5 +1,7 @@
 # Protologue
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23304106.svg)](https://doi.org/10.5281/zenodo.23304106)
+
 A sourced, citable taxonomy of prompting and LLM techniques, built as a static site for **protologue.com**.
 
 - 101 entries in 10 branches, each with a permanent ID (`PTL-0001`), a standalone definition, synonyms, broader/narrower/related links, and primary sources (all arXiv IDs and links checked on 2026-10-10).
