@@ -1,0 +1,7 @@
+{
+  "name": "protologue-mcp",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-10",
+  "routes": [{ "pattern": "mcp.protologue.com", "custom_domain": true }],
+  "observability": { "enabled": true }
+}

@@ -273,6 +273,36 @@ def signup(variant="full"):
   <p class="signup-note">Delivered through Beehiiv. Unsubscribe from any issue.</p>
 </section>"""
 
+MCP_URL = "https://mcp.protologue.com/mcp"
+
+def mcp_page(terms):
+    body = f"""<article class="prose">
+<h1>Use Protologue from AI agents</h1>
+<p class="lede">Protologue runs a free, read-only <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> (MCP) server, so assistants and agents can look up sourced definitions while they work instead of guessing.</p>
+<h2>Endpoint</h2>
+<p class="cite-text">{MCP_URL}</p>
+<p>Streamable HTTP transport, no sign-in or API key. Results come from the same data as this site, including each entry's permanent identifier, primary sources and a ready-made citation.</p>
+<h2>Tools</h2>
+<table class="files">
+<thead><tr><th scope="col">Tool</th><th scope="col">What it does</th></tr></thead>
+<tbody>
+<tr><td><code>search_terms</code></td><td>Find techniques by name, synonym or keyword</td></tr>
+<tr><td><code>get_term</code></td><td>Full sourced entry for one technique, with citation</td></tr>
+<tr><td><code>get_related</code></td><td>Broader, narrower and related techniques</td></tr>
+<tr><td><code>list_categories</code></td><td>The {len(set(t["category"] for t in terms))} branches and their techniques</td></tr>
+</tbody>
+</table>
+<h2>Connect it</h2>
+<p><strong>Claude:</strong> Settings, then Connectors, then Add custom connector. Paste the endpoint and choose no sign-in.</p>
+<p><strong>Claude Code:</strong> <code>claude mcp add --transport http protologue {MCP_URL}</code></p>
+<p><strong>Cursor, VS Code and other MCP clients:</strong> add a server entry of type <code>http</code> (or <code>streamable-http</code>) with the URL above.</p>
+<h2>Using results</h2>
+<p>Content is licensed <a href="{LICENSE_URL}">CC BY 4.0</a>. When an answer uses a Protologue definition, cite it with the returned citation and link to the entry's URL.</p>
+</article>"""
+    return page(path="/mcp/", title=f"MCP server for AI agents | {NAME}",
+                description="Connect AI assistants and agents to Protologue's free MCP server to look up sourced definitions of prompting and LLM techniques.",
+                body=body)
+
 def newsletter_page():
     body = f"""<article class="prose">
 <h1>The Protologue newsletter</h1>
@@ -334,7 +364,7 @@ def page(*, path, title, description, body, jsonld=None, extra_head="", canonica
 </main>
 <footer class="site">
   <p>{NAME} v{VERSION}, updated {UPDATED}. Text and data are licensed <a href="{LICENSE_URL}" rel="license">CC BY 4.0</a>; reuse freely with attribution.</p>
-  <p><a href="/llms.txt">llms.txt</a> <a href="/data/protologue.json">JSON</a> <a href="/data/protologue.csv">CSV</a> <a href="/data/protologue.skos.jsonld">SKOS</a> <a href="/sitemap.xml">Sitemap</a></p>
+  <p><a href="/llms.txt">llms.txt</a> <a href="/data/protologue.json">JSON</a> <a href="/data/protologue.csv">CSV</a> <a href="/data/protologue.skos.jsonld">SKOS</a> <a href="/mcp/">MCP server</a> <a href="/sitemap.xml">Sitemap</a></p>
 </footer>
 <script src="/assets/site.js?v={ASSET_V}" defer></script>
 </body>
@@ -557,6 +587,7 @@ def main():
     write("index.html", home(cats, terms, by_id))
     write("terms/index.html", az_page(terms))
     write("about/index.html", about_page(terms))
+    write("mcp/index.html", mcp_page(terms))
     if NEWSLETTER:
         write("newsletter/index.html", newsletter_page())
     write("data/index.html", data_page(terms))
@@ -598,6 +629,8 @@ def main():
         for t in sorted([t for t in terms if t["category"] == c["id"]], key=lambda t: t["term"].lower()):
             L.append(f"- [{t['term']}]({BASE}/t/{t['id']}.md): {t['definition']}")
         L.append("")
+    L += ["## For agents", "",
+          f"- [MCP server]({BASE}/mcp/): read-only Model Context Protocol endpoint at {MCP_URL} with tools search_terms, get_term, get_related and list_categories", ""]
     L += ["## Optional", "",
           f"- [Data downloads]({BASE}/data/): JSON, CSV, SKOS JSON-LD and Turtle",
           f"- [About and citation]({BASE}/about/): editorial method, identifiers, license", ""]
@@ -610,7 +643,7 @@ def main():
     write("llms-full.txt", "\n".join(full))
 
     # sitemap
-    urls = ["/", "/terms/", "/about/", "/data/"] + (["/newsletter/"] if NEWSLETTER else []) + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
+    urls = ["/", "/terms/", "/about/", "/data/", "/mcp/"] + (["/newsletter/"] if NEWSLETTER else []) + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f"<url><loc>{BASE}{u}</loc><lastmod>{UPDATED}</lastmod></url>" for u in urls]
     sm.append("</urlset>")

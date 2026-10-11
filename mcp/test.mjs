@@ -1,0 +1,32 @@
+// Local test: runs the Worker handler against the locally built data export.
+import { readFileSync } from "node:fs";
+import { handle } from "./src/index.js";
+const data = readFileSync(new URL("../site/data/protologue.json", import.meta.url), "utf8");
+const fetchImpl = async () => new Response(data, { headers: { "Content-Type": "application/json" } });
+const call = async (body) => {
+  const r = await handle(new Request("https://mcp.protologue.com/mcp", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream" }, body: JSON.stringify(body) }), { fetchImpl });
+  return [r.status, r.status === 202 ? null : await r.json()];
+};
+let fails = 0; const check = (c, m) => { if (!c) { fails++; console.log("FAIL", m); } else console.log("ok  ", m); };
+let [s, j] = await call({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "1" } } });
+check(s === 200 && j.result.protocolVersion === "2025-06-18" && j.result.capabilities.tools, "initialize");
+[s] = await call({ jsonrpc: "2.0", method: "notifications/initialized" }); check(s === 202, "notification -> 202");
+[s, j] = await call({ jsonrpc: "2.0", id: 2, method: "tools/list" }); check(j.result.tools.length === 4, "tools/list");
+[s, j] = await call({ jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "search_terms", arguments: { query: "chain of thought", limit: 3 } } });
+check(j.result.structuredContent.results[0].term === "Chain-of-Thought Prompting", "search chain of thought -> " + j.result.structuredContent.results.map(r=>r.term).join(", "));
+[s, j] = await call({ jsonrpc: "2.0", id: 4, method: "tools/call", params: { name: "get_term", arguments: { term: "RAG" } } });
+check(j.result.structuredContent?.id === "PTL-0055" || j.result.structuredContent?.term === "Retrieval-Augmented Generation", "get_term RAG alias -> " + j.result.structuredContent?.term);
+[s, j] = await call({ jsonrpc: "2.0", id: 5, method: "tools/call", params: { name: "get_term", arguments: { term: "PTL-0058" } } });
+check(j.result.structuredContent.term === "ReAct" && j.result.structuredContent.citation.includes("protologue.com/t/react/"), "get_term by code");
+[s, j] = await call({ jsonrpc: "2.0", id: 6, method: "tools/call", params: { name: "get_term", arguments: { term: "zero shot chain of thought" } } });
+check(j.result.structuredContent?.term === "Zero-shot Chain-of-Thought", "get_term hyphen-insensitive");
+[s, j] = await call({ jsonrpc: "2.0", id: 7, method: "tools/call", params: { name: "get_term", arguments: { term: "quantum prompting" } } });
+check(!j.result.structuredContent && j.result.content[0].text.includes("No Protologue entry"), "get_term not found");
+[s, j] = await call({ jsonrpc: "2.0", id: 8, method: "tools/call", params: { name: "get_related", arguments: { term: "chain-of-thought" } } });
+check(j.result.structuredContent.narrower.length >= 5, "get_related narrower=" + j.result.structuredContent.narrower.length);
+[s, j] = await call({ jsonrpc: "2.0", id: 9, method: "tools/call", params: { name: "list_categories", arguments: {} } });
+check(j.result.structuredContent.categories.length === 10, "list_categories");
+[s, j] = await call({ jsonrpc: "2.0", id: 10, method: "bogus" }); check(j.error.code === -32601, "unknown method");
+const g = await handle(new Request("https://mcp.protologue.com/mcp"), { fetchImpl }); check(g.status === 405, "GET /mcp 405");
+const l = await handle(new Request("https://mcp.protologue.com/"), { fetchImpl }); check(l.status === 200, "landing page");
+process.exit(fails ? 1 : 0);
