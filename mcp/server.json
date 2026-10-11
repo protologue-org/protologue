@@ -1,0 +1,19 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.protologue/protologue",
+  "title": "Protologue",
+  "description": "Sourced, citable definitions of prompting and LLM techniques, with relations and primary sources.",
+  "version": "1.0.0",
+  "websiteUrl": "https://protologue.com/mcp/",
+  "repository": {
+    "url": "https://github.com/protologue-org/protologue",
+    "source": "github",
+    "subfolder": "mcp"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.protologue.com/mcp"
+    }
+  ]
+}
