@@ -26,44 +26,16 @@ pip install pyyaml
 python3 build.py
 ```
 
-## Deploy on Cloudflare (domain stays registered at GoDaddy)
+## How it's deployed
 
-### 1. Move DNS for protologue.com to Cloudflare
+- **Source:** github.com/protologue-org/protologue (this repository).
+- **Hosting:** Cloudflare Pages project `protologue-site`, connected to this repo. Every push to `main` rebuilds and deploys protologue.com automatically.
+  - Build command: `pip install -r requirements.txt && python3 build.py`
+  - Output directory: `site`
+- **Domain:** protologue.com (DNS on Cloudflare; registration at GoDaddy). AI crawlers are allowed in Cloudflare and in `static/robots.txt`.
+- **Newsletter:** Beehiiv (protologue.beehiiv.com). The signup embed lives in `data/newsletter-embed.html`.
 
-1. Create a free Cloudflare account and choose **Add a domain**. Enter `protologue.com` and pick the Free plan.
-2. During onboarding Cloudflare asks how to treat AI crawlers. **Choose to allow them.** If you miss the question, check afterwards (see step 4). Blocking AI crawlers would defeat the purpose of this site.
-3. Cloudflare shows two nameservers, such as `xxx.ns.cloudflare.com`.
-4. In GoDaddy, go to **My Products → protologue.com → DNS → Nameservers → Change nameservers → I'll use my own nameservers**. Paste the two Cloudflare nameservers and save. If DNSSEC is on at GoDaddy, turn it off first; you can re-enable it in Cloudflare later.
-5. Wait for Cloudflare to email that the domain is active. This usually takes minutes but can take up to 24 hours.
-
-### 2. Create the site (pick one)
-
-**A. Fastest: upload the built folder, no Git**
-
-Go to **Workers & Pages → Create → Pages → Upload assets**. Name the project `protologue` and drag in the `site/` folder.
-
-**B. Recommended for ongoing edits: connect a GitHub repo**
-
-Push this folder to GitHub, then go to **Workers & Pages → Create → Pages → Connect to Git** and use these settings:
-
-- Build command: `pip install -r requirements.txt && python3 build.py`
-- Build output directory: `site`
-
-Every push to the repo then rebuilds the site.
-
-**C. Command line**
-
-Run `npx wrangler deploy` from this folder. It uses `wrangler.jsonc`.
-
-### 3. Attach the domain
-
-In the project, open **Custom domains** and add both `protologue.com` and `www.protologue.com`. Then add a **Redirect Rule** that sends `www.protologue.com/*` to `https://protologue.com/${1}` with a 301. Every page already declares `https://protologue.com/...` as its canonical URL.
-
-### 4. Settings that matter for AI citation
-
-- **Security → Bots:** leave "Block AI bots" off. Bot Fight Mode can also challenge crawlers, so keep it off unless you see abuse.
-- **AI Crawl Control:** if offered, set AI crawlers to **Allow**. Do not enable a Cloudflare-managed robots.txt that disallows AI use. This site ships its own `robots.txt`, which explicitly allows GPTBot, ClaudeBot, PerplexityBot, Google-Extended and others.
-- Leave caching at the defaults. `_headers` already marks assets as long-lived and data files as open to cross-origin requests.
+Proposed changes arrive as pull requests; merging one publishes it.
 
 ## Growing citations after launch
 
