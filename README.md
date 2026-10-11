@@ -35,6 +35,8 @@ python3 build.py
 - **Domain:** protologue.com (DNS on Cloudflare; registration at GoDaddy). AI crawlers are allowed in Cloudflare and in `static/robots.txt`.
 - **Newsletter:** Beehiiv (protologue.beehiiv.com). The signup embed lives in `data/newsletter-embed.html`.
 
+- **MCP server:** `mcp/` is a Cloudflare Worker (`protologue-mcp`) at https://mcp.protologue.com/mcp, deployed automatically from this repo. It is listed in the official MCP registry as `com.protologue/protologue` (`mcp/server.json`). Registry ownership is proven by `static/.well-known/mcp-registry-auth`; to re-key, generate a new Ed25519 key and replace that file.
+
 Proposed changes arrive as pull requests; merging one publishes it.
 
 ## Growing citations after launch
