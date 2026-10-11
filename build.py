@@ -27,6 +27,8 @@ def _read_opt(rel):
 NEWSLETTER_EMBED = _read_opt("data/newsletter-embed.html")
 NEWSLETTER_URL = _read_opt("data/newsletter-url.txt")
 NEWSLETTER = bool(NEWSLETTER_EMBED)
+HF_URL = "https://huggingface.co/datasets/franklinpolymathic/protologue"
+GITHUB_URL = "https://github.com/protologue-org/protologue"
 
 esc = lambda s: html.escape(str(s), quote=True)
 
@@ -175,7 +177,7 @@ def set_jsonld(terms):
         "@graph": [
             {"@type": "Organization", "@id": BASE + "/#org", "name": PUBLISHER, "url": BASE + "/",
              "logo": BASE + "/assets/logo.png",
-             "sameAs": [NEWSLETTER_URL] if NEWSLETTER_URL else []},
+             "sameAs": [u for u in (NEWSLETTER_URL, HF_URL, GITHUB_URL) if u]},
             {"@type": "WebSite", "@id": BASE + "/#website", "publisher": {"@id": BASE + "/#org"}, "url": BASE + "/", "name": NAME,
              "description": TITLE, "license": LICENSE_URL,
              "potentialAction": {"@type": "SearchAction",
@@ -552,6 +554,7 @@ def data_page(terms):
 <tr><td><a href="/data/protologue.skos.jsonld">protologue.skos.jsonld</a></td><td>SKOS, JSON-LD</td><td>Knowledge graphs and linked data</td></tr>
 <tr><td><a href="/data/protologue.ttl">protologue.ttl</a></td><td>SKOS, Turtle</td><td>RDF tools and triple stores</td></tr>
 <tr><td><a href="/llms-full.txt">llms-full.txt</a></td><td>Markdown</td><td>Loading the whole taxonomy into a model's context</td></tr>
+<tr><td><a href="{HF_URL}">Hugging Face</a></td><td>Dataset</td><td>Loading with the <code>datasets</code> library</td></tr>
 </tbody>
 </table>
 <p>Each entry is also available individually at <code>/t/term-name.json</code> and <code>/t/term-name.md</code>.</p>
@@ -633,6 +636,7 @@ def main():
           f"- [MCP server]({BASE}/mcp/): read-only Model Context Protocol endpoint at {MCP_URL} with tools search_terms, get_term, get_related and list_categories", ""]
     L += ["## Optional", "",
           f"- [Data downloads]({BASE}/data/): JSON, CSV, SKOS JSON-LD and Turtle",
+          f"- [Hugging Face dataset]({HF_URL}): the same data for the datasets library",
           f"- [About and citation]({BASE}/about/): editorial method, identifiers, license", ""]
     write("llms.txt", "\n".join(L))
     full = [f"# {TITLE}", "", f"Version {VERSION}, updated {UPDATED}. License: CC BY 4.0. Source: {BASE}/", ""]
