@@ -51,7 +51,7 @@
   category: foundations
   definition: A token is the basic unit of text a language model reads and writes, typically a word, word fragment, or character sequence produced by a subword tokenizer such as byte-pair encoding.
   body: Context limits, pricing, and generation speed are all measured in tokens. Because tokenization splits text unevenly, character-level tasks such as counting letters or reversing strings are harder for models than they appear, and the same content can cost different numbers of tokens in different languages.
-  aliases: [subword, BPE token]
+  aliases: [subword, BPE token, tokenizer, tokenization]
   related: [context-window]
   sources:
     - {title: "Neural Machine Translation of Rare Words with Subword Units", authors: "Sennrich et al.", year: 2015, url: "https://arxiv.org/abs/1508.07909"}
@@ -92,7 +92,7 @@
   category: foundations
   definition: Few-shot prompting includes a small number of input-output examples in the prompt so the model can infer the task and the desired format from demonstrations.
   body: Popularized by the GPT-3 paper, it allows a model to perform new tasks without any weight updates. Results are sensitive to which examples are chosen, their order, and their label balance, which spawned a body of work on exemplar selection and calibration.
-  aliases: [k-shot prompting, in-context examples]
+  aliases: [k-shot prompting, in-context examples, one-shot prompting]
   broader: [in-context-learning]
   related: [zero-shot-prompting, exemplar-selection, exemplar-ordering, many-shot-in-context-learning]
   introduced: 2020
