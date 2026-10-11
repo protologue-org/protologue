@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use Protologue, please cite it as below."
+type: dataset
+title: "Protologue: A Taxonomy of Prompting and LLM Techniques"
+authors:
+  - name: "Protologue"
+    website: "https://protologue.com/"
+version: "1.0.0"
+date-released: "2026-10-11"
+license: CC-BY-4.0
+url: "https://protologue.com/"
+repository-code: "https://github.com/protologue-org/protologue"
+abstract: >-
+  An openly licensed, sourced reference for the vocabulary of prompting
+  and large language model techniques. Each entry has a permanent
+  identifier, a standalone definition, synonyms, broader, narrower and
+  related links, and the primary source that introduced the technique.
+keywords:
+  - prompt engineering
+  - large language models
+  - taxonomy
+  - glossary
+  - SKOS
