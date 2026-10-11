@@ -29,6 +29,7 @@ NEWSLETTER_URL = _read_opt("data/newsletter-url.txt")
 NEWSLETTER = bool(NEWSLETTER_EMBED)
 HF_URL = "https://huggingface.co/datasets/franklinpolymathic/protologue"
 GITHUB_URL = "https://github.com/protologue-org/protologue"
+KAGGLE_URL = "https://www.kaggle.com/datasets/protologue/protologue"
 # Zenodo concept DOI (resolves to the latest release), e.g. 10.5281/zenodo.1234567.
 # Leave data/doi.txt missing or empty until Zenodo has minted it.
 DOI = _read_opt("data/doi.txt")
@@ -181,7 +182,7 @@ def set_jsonld(terms):
         "@graph": [
             {"@type": "Organization", "@id": BASE + "/#org", "name": PUBLISHER, "url": BASE + "/",
              "logo": BASE + "/assets/logo.png",
-             "sameAs": [u for u in (NEWSLETTER_URL, HF_URL, GITHUB_URL) if u]},
+             "sameAs": [u for u in (NEWSLETTER_URL, HF_URL, KAGGLE_URL, GITHUB_URL) if u]},
             {"@type": "WebSite", "@id": BASE + "/#website", "publisher": {"@id": BASE + "/#org"}, "url": BASE + "/", "name": NAME,
              "description": TITLE, "license": LICENSE_URL,
              "potentialAction": {"@type": "SearchAction",
@@ -561,7 +562,7 @@ def data_page(terms):
 <tr><td><a href="/data/protologue.skos.jsonld">protologue.skos.jsonld</a></td><td>SKOS, JSON-LD</td><td>Knowledge graphs and linked data</td></tr>
 <tr><td><a href="/data/protologue.ttl">protologue.ttl</a></td><td>SKOS, Turtle</td><td>RDF tools and triple stores</td></tr>
 <tr><td><a href="/llms-full.txt">llms-full.txt</a></td><td>Markdown</td><td>Loading the whole taxonomy into a model's context</td></tr>
-<tr><td><a href="{HF_URL}">Hugging Face</a></td><td>Dataset</td><td>Loading with the <code>datasets</code> library</td></tr>{f'<tr><td><a href="{DOI_URL}">Zenodo</a></td><td>Archived release</td><td>Citing a fixed version by DOI</td></tr>' if DOI else ""}
+<tr><td><a href="{HF_URL}">Hugging Face</a></td><td>Dataset</td><td>Loading with the <code>datasets</code> library</td></tr><tr><td><a href="{KAGGLE_URL}">Kaggle</a></td><td>Dataset</td><td>Kaggle notebooks and competitions</td></tr>{f'<tr><td><a href="{DOI_URL}">Zenodo</a></td><td>Archived release</td><td>Citing a fixed version by DOI</td></tr>' if DOI else ""}
 </tbody>
 </table>
 <p>Each entry is also available individually at <code>/t/term-name.json</code> and <code>/t/term-name.md</code>.</p>
@@ -644,6 +645,7 @@ def main():
     L += ["## Optional", "",
           f"- [Data downloads]({BASE}/data/): JSON, CSV, SKOS JSON-LD and Turtle",
           f"- [Hugging Face dataset]({HF_URL}): the same data for the datasets library",
+          f"- [Kaggle dataset]({KAGGLE_URL}): the same data for Kaggle notebooks",
           *([f"- [Zenodo archive]({DOI_URL}): DOI {DOI}, cite this for the whole taxonomy"] if DOI else []),
           f"- [About and citation]({BASE}/about/): editorial method, identifiers, license", ""]
     write("llms.txt", "\n".join(L))

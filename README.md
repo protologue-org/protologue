@@ -43,6 +43,8 @@ python3 build.py
 
 - **Hugging Face:** the dataset is mirrored at https://huggingface.co/datasets/franklinpolymathic/protologue (configs `terms` and `categories`). Update it when entries change.
 
+- **Kaggle:** mirrored at https://www.kaggle.com/datasets/protologue/protologue (the four files from `site/data/`). Upload a new version when entries change.
+
 Proposed changes arrive as pull requests; merging one publishes it.
 
 ## Growing citations after launch
