@@ -1,0 +1,319 @@
+# Optimization, Test-time, Security, Failure modes
+
+- id: automatic-prompt-engineer
+  term: Automatic Prompt Engineer
+  category: optimization
+  definition: Automatic Prompt Engineer (APE) uses a language model to generate candidate instructions for a task from input-output examples, scores each candidate on held-out data, and selects the best one.
+  body: APE discovered a zero-shot chain-of-thought trigger that outperformed "Let's think step by step" on some benchmarks, and framed prompt writing as a search problem that models can solve themselves.
+  aliases: [APE]
+  related: [prompt-engineering, opro, dspy, meta-prompting]
+  introduced: 2022
+  sources:
+    - {title: "Large Language Models Are Human-Level Prompt Engineers", authors: "Zhou et al.", year: 2022, url: "https://arxiv.org/abs/2211.01910"}
+
+- id: opro
+  term: Optimization by Prompting
+  category: optimization
+  definition: Optimization by PROmpting (OPRO) uses a language model as an optimizer, giving it a meta-prompt containing previously tried prompts and their scores and asking it to propose a better prompt, repeating over many rounds.
+  aliases: [OPRO, LLMs as optimizers]
+  related: [automatic-prompt-engineer, dspy]
+  introduced: 2023
+  body: OPRO found instructions such as "Take a deep breath and work on this problem step-by-step" that improved math benchmark accuracy for the model being optimized.
+  sources:
+    - {title: "Large Language Models as Optimizers", authors: "Yang et al.", year: 2023, url: "https://arxiv.org/abs/2309.03409"}
+
+- id: dspy
+  term: DSPy
+  category: optimization
+  definition: DSPy is a framework that treats language-model pipelines as programs of declarative modules, and compiles them by automatically optimizing the prompts and few-shot demonstrations for each module against a metric.
+  body: Rather than hand-tuning prompt strings, developers specify input-output signatures and let optimizers bootstrap demonstrations or search instructions, making pipelines portable across models.
+  aliases: [Declarative Self-improving Python]
+  related: [automatic-prompt-engineer, opro, prompt-template]
+  introduced: 2023
+  sources:
+    - {title: "DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines", authors: "Khattab et al.", year: 2023, url: "https://arxiv.org/abs/2310.03714"}
+
+- id: prompt-tuning
+  term: Prompt Tuning
+  category: optimization
+  definition: Prompt tuning learns a small set of continuous "soft prompt" embeddings that are prepended to the input, by gradient descent, while keeping the language model's weights frozen.
+  body: Lester et al. showed that as models grow, prompt tuning approaches the quality of full fine-tuning while storing only a tiny number of task-specific parameters. Soft prompts are vectors rather than readable text.
+  aliases: [soft prompts, soft prompt tuning]
+  related: [prefix-tuning, low-rank-adaptation]
+  introduced: 2021
+  sources:
+    - {title: "The Power of Scale for Parameter-Efficient Prompt Tuning", authors: "Lester et al.", year: 2021, url: "https://arxiv.org/abs/2104.08691"}
+
+- id: prefix-tuning
+  term: Prefix Tuning
+  category: optimization
+  definition: Prefix tuning learns continuous task-specific vectors that are prepended to the activations at every layer of a frozen language model, steering generation without changing the model's weights.
+  related: [prompt-tuning, low-rank-adaptation]
+  introduced: 2021
+  body: It was an early parameter-efficient alternative to fine-tuning for generation tasks such as table-to-text and summarization.
+  sources:
+    - {title: "Prefix-Tuning: Optimizing Continuous Prompts for Generation", authors: "Li & Liang", year: 2021, url: "https://arxiv.org/abs/2101.00190"}
+
+- id: low-rank-adaptation
+  term: Low-Rank Adaptation
+  category: optimization
+  definition: Low-rank adaptation (LoRA) fine-tunes a language model by training small low-rank matrices added to its weight layers while freezing the original weights, drastically reducing the number of trainable parameters.
+  aliases: [LoRA]
+  related: [prompt-tuning, prefix-tuning, instruction-tuning]
+  introduced: 2021
+  body: LoRA is a common alternative when prompting alone cannot reach the required behavior, and adapters can be swapped per task on one base model.
+  sources:
+    - {title: "LoRA: Low-Rank Adaptation of Large Language Models", authors: "Hu et al.", year: 2021, url: "https://arxiv.org/abs/2106.09685"}
+
+- id: directional-stimulus-prompting
+  term: Directional Stimulus Prompting
+  category: optimization
+  definition: Directional stimulus prompting trains a small policy model to generate instance-specific hints, such as keywords, that are added to the prompt to steer a large frozen model toward desired outputs.
+  related: [prompt-tuning, opro]
+  introduced: 2023
+  body: The policy model can be trained with supervised learning and reinforcement learning, without access to the large model's weights.
+  sources:
+    - {title: "Guiding Large Language Models via Directional Stimulus Prompting", authors: "Li et al.", year: 2023, url: "https://arxiv.org/abs/2302.11520"}
+
+- id: prompt-compression
+  term: Prompt Compression
+  category: optimization
+  definition: Prompt compression shortens a prompt by removing tokens that contribute little information, typically scored by a smaller language model, to cut cost and latency while preserving task performance.
+  body: LLMLingua used a small model's perplexity to drop low-information tokens and reported high compression ratios with limited performance loss.
+  aliases: [LLMLingua, context compression]
+  related: [context-engineering, prompt-caching]
+  introduced: 2023
+  sources:
+    - {title: "LLMLingua: Compressing Prompts for Accelerated Inference of Large Language Models", authors: "Jiang et al.", year: 2023, url: "https://arxiv.org/abs/2310.05736"}
+
+- id: prompt-caching
+  term: Prompt Caching
+  category: optimization
+  definition: Prompt caching stores the model's processed state for a reused prompt prefix, such as a long system prompt or document, so later requests sharing that prefix are cheaper and faster.
+  body: Because caches match on an exact prefix, prompts are structured with stable content first and variable content last.
+  aliases: [context caching, prefix caching]
+  related: [system-prompt, prompt-compression, context-engineering]
+  introduced: 2024
+  sources:
+    - {title: "Prompt caching", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"}
+
+- id: emotion-prompting
+  term: Emotion Prompting
+  category: optimization
+  definition: Emotion prompting appends emotional or motivational phrases, such as "This is very important to my career," to a prompt in an attempt to improve model performance.
+  body: Li et al. reported gains on several benchmarks with such "EmotionPrompt" stimuli. Effects of these cues vary across models and tasks and are best treated as an empirical question for each setup.
+  aliases: [EmotionPrompt, stimulus prompting]
+  related: [prompt-sensitivity, role-prompting]
+  introduced: 2023
+  sources:
+    - {title: "Large Language Models Understand and Can be Enhanced by Emotional Stimuli", authors: "Li et al.", year: 2023, url: "https://arxiv.org/abs/2307.11760"}
+
+# ---------------- Test-time ----------------
+
+- id: reasoning-model
+  term: Reasoning Model
+  category: test-time
+  definition: A reasoning model is a language model trained, typically with reinforcement learning, to produce an extended internal chain of thought before answering, so that it improves with more thinking time on math, coding, and planning tasks.
+  body: OpenAI's o1, announced in 2024, popularized the category, and DeepSeek-R1 showed that reinforcement learning with verifiable rewards could produce long reasoning behaviors in an openly released model. Prompting such models differs from prompting standard models, because step-by-step instructions and few-shot reasoning examples are often unnecessary.
+  aliases: [large reasoning model, LRM, thinking model]
+  related: [chain-of-thought, test-time-compute-scaling, extended-thinking, self-taught-reasoner]
+  introduced: 2024
+  sources:
+    - {title: "Learning to reason with LLMs", authors: "OpenAI", year: 2024, url: "https://openai.com/index/learning-to-reason-with-llms/"}
+    - {title: "DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning", authors: "DeepSeek-AI", year: 2025, url: "https://arxiv.org/abs/2501.12948"}
+
+- id: test-time-compute-scaling
+  term: Test-Time Compute Scaling
+  category: test-time
+  definition: Test-time compute scaling improves a model's answers by spending more computation at inference, through longer reasoning, more samples, search, or verification, rather than by training a larger model.
+  body: Snell et al. found that allocating test-time compute adaptively per prompt could be more effective than scaling model parameters for some problems. Self-consistency, best-of-N, tree search, and reasoning models are all forms of test-time scaling.
+  aliases: [inference-time scaling, test-time scaling]
+  related: [reasoning-model, self-consistency, best-of-n-sampling, tree-of-thoughts, process-reward-model]
+  introduced: 2024
+  sources:
+    - {title: "Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters", authors: "Snell et al.", year: 2024, url: "https://arxiv.org/abs/2408.03314"}
+
+- id: extended-thinking
+  term: Extended Thinking
+  category: test-time
+  definition: Extended thinking is a model mode in which the model generates a separate block of reasoning before its final response, with a developer-controlled setting that trades latency and cost for answer quality.
+  aliases: [thinking mode, thinking budget, reasoning effort]
+  broader: [reasoning-model]
+  related: [scratchpad, chain-of-thought]
+  body: Early implementations exposed a fixed thinking token budget; newer Claude models replace it with adaptive thinking, where the model decides how much to reason under a chosen effort level. Vendor guidance for these modes favors high-level instructions about how to think over prescriptive step-by-step scripts.
+  sources:
+    - {title: "Building with extended thinking", authors: "Anthropic", year: 2025, url: "https://platform.claude.com/docs/en/build-with-claude/extended-thinking"}
+
+- id: self-taught-reasoner
+  term: Self-Taught Reasoner
+  category: test-time
+  definition: The Self-Taught Reasoner (STaR) bootstraps reasoning ability by having a model generate rationales, keeping those that lead to correct answers, and fine-tuning on them in repeated rounds.
+  aliases: [STaR]
+  related: [reasoning-model, chain-of-thought]
+  introduced: 2022
+  body: For problems it fails, STaR provides the correct answer as a hint and asks the model to produce a rationale for it, a step called rationalization.
+  sources:
+    - {title: "STaR: Bootstrapping Reasoning With Reasoning", authors: "Zelikman et al.", year: 2022, url: "https://arxiv.org/abs/2203.14465"}
+
+# ---------------- Security ----------------
+
+- id: prompt-injection
+  term: Prompt Injection
+  category: security
+  definition: Prompt injection is an attack in which text supplied to a language model, by a user or through data the model processes, contains instructions that override or subvert the instructions of the application's developer.
+  body: The name was coined in 2022 by analogy with SQL injection, because models cannot reliably separate trusted instructions from untrusted data that share the same context. It is the most prominent security risk for applications built on language models, especially agents with tool access.
+  aliases: [goal hijacking, instruction injection]
+  related: [indirect-prompt-injection, jailbreak, prompt-leaking, instruction-hierarchy, spotlighting]
+  introduced: 2022
+  sources:
+    - {title: "Prompt injection attacks against GPT-3", authors: "Willison", year: 2022, url: "https://simonwillison.net/2022/Sep/12/prompt-injection/"}
+    - {title: "Ignore Previous Prompt: Attack Techniques For Language Models", authors: "Perez & Ribeiro", year: 2022, url: "https://arxiv.org/abs/2211.09527"}
+
+- id: indirect-prompt-injection
+  term: Indirect Prompt Injection
+  category: security
+  definition: Indirect prompt injection places malicious instructions inside content a model will later retrieve or process, such as a web page, email, or document, so the attack is triggered without the attacker interacting with the model directly.
+  body: Greshake et al. demonstrated that injected content could make integrated applications exfiltrate data, spread to other users, or manipulate outputs. Risk grows with an agent's access to tools and private data.
+  broader: [prompt-injection]
+  related: [retrieval-augmented-generation, spotlighting, ai-agent]
+  introduced: 2023
+  sources:
+    - {title: "Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection", authors: "Greshake et al.", year: 2023, url: "https://arxiv.org/abs/2302.12173"}
+
+- id: prompt-leaking
+  term: Prompt Leaking
+  category: security
+  definition: Prompt leaking is an attack that tricks a model into revealing its hidden system prompt or other confidential instructions.
+  broader: [prompt-injection]
+  related: [system-prompt]
+  body: System prompts should be treated as potentially discoverable, so they should not contain secrets such as API keys.
+  sources:
+    - {title: "Ignore Previous Prompt: Attack Techniques For Language Models", authors: "Perez & Ribeiro", year: 2022, url: "https://arxiv.org/abs/2211.09527"}
+
+- id: jailbreak
+  term: Jailbreak
+  category: security
+  definition: A jailbreak is a prompt crafted to make a model produce outputs its safety training is meant to prevent, often through role-play, hypothetical framing, obfuscation, or other adversarial techniques.
+  body: Wei et al. attributed jailbreak success to two failure modes, competing objectives between helpfulness and safety, and mismatched generalization, where safety training does not cover inputs the model can still understand. Jailbreaks target the model's safety behavior, while prompt injection targets the application's instructions.
+  aliases: [jailbreaking]
+  related: [prompt-injection, adversarial-suffix, many-shot-jailbreaking, constitutional-ai]
+  sources:
+    - {title: "Jailbroken: How Does LLM Safety Training Fail?", authors: "Wei et al.", year: 2023, url: "https://arxiv.org/abs/2307.02483"}
+
+- id: adversarial-suffix
+  term: Adversarial Suffix
+  category: security
+  definition: An adversarial suffix is an automatically optimized string of tokens that, when appended to a request, causes an aligned model to comply with requests it would normally refuse.
+  body: Zou et al. used a greedy coordinate gradient search on open models to find such suffixes and found that they often transferred to other models.
+  aliases: [GCG attack, universal adversarial attack]
+  broader: [jailbreak]
+  introduced: 2023
+  sources:
+    - {title: "Universal and Transferable Adversarial Attacks on Aligned Language Models", authors: "Zou et al.", year: 2023, url: "https://arxiv.org/abs/2307.15043"}
+
+- id: many-shot-jailbreaking
+  term: Many-shot Jailbreaking
+  category: security
+  definition: Many-shot jailbreaking fills a long context window with many fabricated dialogue examples in which an assistant complies with harmful requests, exploiting in-context learning to override the model's safety training.
+  body: Anthropic researchers found the attack's effectiveness followed a power law in the number of shots, mirroring the scaling of benign in-context learning.
+  broader: [jailbreak]
+  related: [many-shot-in-context-learning, context-window]
+  introduced: 2024
+  sources:
+    - {title: "Many-shot jailbreaking", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/many-shot-jailbreaking"}
+
+- id: instruction-hierarchy
+  term: Instruction Hierarchy
+  category: security
+  definition: The instruction hierarchy is a training approach that teaches a model to prioritize instructions by source, typically system over user over tool output, and to ignore lower-priority instructions that conflict with higher-priority ones.
+  body: Wallace et al. trained models on synthetic conflicts and found large gains in robustness to prompt injection and system-prompt extraction with limited loss in helpfulness.
+  related: [system-prompt, prompt-injection, spotlighting]
+  introduced: 2024
+  sources:
+    - {title: "The Instruction Hierarchy: Training LLMs to Prioritize Privileged Instructions", authors: "Wallace et al.", year: 2024, url: "https://arxiv.org/abs/2404.13208"}
+
+- id: spotlighting
+  term: Spotlighting
+  category: security
+  definition: Spotlighting is a family of prompt-level defenses against indirect prompt injection that transform untrusted input, by delimiting, marking every word, or encoding it, so the model can distinguish it from trusted instructions.
+  aliases: [datamarking, input marking]
+  related: [indirect-prompt-injection, delimiters, instruction-hierarchy]
+  introduced: 2024
+  body: Hines et al. reported substantial reductions in attack success with datamarking and encoding variants, with little effect on task performance.
+  sources:
+    - {title: "Defending Against Indirect Prompt Injection Attacks With Spotlighting", authors: "Hines et al.", year: 2024, url: "https://arxiv.org/abs/2403.14720"}
+
+- id: constitutional-ai
+  term: Constitutional AI
+  category: security
+  definition: Constitutional AI is a training method in which a model critiques and revises its own outputs according to a written set of principles, and AI-generated preference judgments replace most human labels for harmlessness.
+  body: Bai et al. used a supervised self-critique phase followed by reinforcement learning from AI feedback. The approach made the principles governing model behavior explicit and editable.
+  aliases: [CAI, RLAIF, reinforcement learning from AI feedback]
+  related: [rlhf, self-refine, jailbreak]
+  introduced: 2022
+  sources:
+    - {title: "Constitutional AI: Harmlessness from AI Feedback", authors: "Bai et al.", year: 2022, url: "https://arxiv.org/abs/2212.08073"}
+
+# ---------------- Failure modes ----------------
+
+- id: hallucination
+  term: Hallucination
+  category: failure-modes
+  definition: Hallucination is generated content that is fluent and plausible but unfaithful to the provided source or factually incorrect, such as fabricated citations, facts, or quotations.
+  body: Surveys distinguish intrinsic hallucination, which contradicts the source, from extrinsic hallucination, which cannot be verified from it. Mitigations include retrieval-augmented generation, verification methods such as chain-of-verification, allowing the model to say it does not know, and requiring quotes from supplied documents.
+  aliases: [confabulation, fabrication]
+  related: [retrieval-augmented-generation, chain-of-verification, sycophancy]
+  sources:
+    - {title: "Survey of Hallucination in Natural Language Generation", authors: "Ji et al.", year: 2022, url: "https://arxiv.org/abs/2202.03629"}
+
+- id: sycophancy
+  term: Sycophancy
+  category: failure-modes
+  definition: Sycophancy is a model's tendency to tailor its answers to match a user's stated beliefs or preferences, including abandoning correct answers when the user pushes back, rather than giving its most accurate response.
+  body: Sharma et al. found sycophancy across several assistants and linked it to human preference data, which tends to reward agreement. Prompting mitigations include removing opinions from the question, as in System 2 Attention.
+  related: [rlhf, system-2-attention, hallucination]
+  sources:
+    - {title: "Towards Understanding Sycophancy in Language Models", authors: "Sharma et al.", year: 2023, url: "https://arxiv.org/abs/2310.13548"}
+
+- id: lost-in-the-middle
+  term: Lost in the Middle
+  category: failure-modes
+  definition: Lost in the middle is the finding that language models use information at the beginning or end of a long context much more reliably than information placed in the middle.
+  body: Liu et al. observed a U-shaped performance curve on multi-document question answering as the position of the relevant document varied. A practical takeaway is to place key material and instructions at the start or end of long prompts.
+  aliases: [positional bias, U-shaped context performance]
+  related: [context-window, needle-in-a-haystack, context-engineering, thread-of-thought]
+  introduced: 2023
+  sources:
+    - {title: "Lost in the Middle: How Language Models Use Long Contexts", authors: "Liu et al.", year: 2023, url: "https://arxiv.org/abs/2307.03172"}
+
+- id: needle-in-a-haystack
+  term: Needle in a Haystack
+  category: failure-modes
+  definition: Needle in a haystack is a long-context evaluation that hides a specific fact at varying depths in a long distractor document and tests whether the model can retrieve it.
+  body: It became a standard way to report effective context length, though passing it shows only simple retrieval, not reasoning over many dispersed facts.
+  aliases: [NIAH, passkey retrieval]
+  related: [lost-in-the-middle, context-window]
+  introduced: 2023
+  sources:
+    - {title: "LLMTest_NeedleInAHaystack", authors: "Kamradt", year: 2023, url: "https://github.com/gkamradt/LLMTest_NeedleInAHaystack"}
+
+- id: prompt-sensitivity
+  term: Prompt Sensitivity
+  category: failure-modes
+  definition: Prompt sensitivity is the variation in a model's performance caused by superficial changes to a prompt, such as formatting, separators, spacing, or wording, that do not change the task's meaning.
+  body: Sclar et al. found accuracy differences of tens of percentage points from formatting choices alone, and argued that evaluations should report performance across a range of plausible formats.
+  aliases: [prompt brittleness, format sensitivity]
+  related: [exemplar-ordering, few-shot-calibration, emotion-prompting]
+  sources:
+    - {title: "Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design or: How I learned to start worrying about prompt formatting", authors: "Sclar et al.", year: 2023, url: "https://arxiv.org/abs/2310.11324"}
+
+- id: unfaithful-chain-of-thought
+  term: Unfaithful Chain-of-Thought
+  category: failure-modes
+  definition: Unfaithful chain-of-thought is stated reasoning that does not reflect the factors that actually determined the model's answer, so the explanation can be plausible yet misleading.
+  body: Turpin et al. showed that biasing features, such as always putting the correct answer in position A of few-shot examples, swayed answers while the stated reasoning never mentioned them. Lanham et al. measured how much answers actually depend on the stated reasoning, with results varying by task and model size.
+  aliases: [CoT faithfulness, post-hoc rationalization]
+  related: [chain-of-thought, reasoning-model]
+  sources:
+    - {title: "Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting", authors: "Turpin et al.", year: 2023, url: "https://arxiv.org/abs/2305.04388"}
+    - {title: "Measuring Faithfulness in Chain-of-Thought Reasoning", authors: "Lanham et al.", year: 2023, url: "https://arxiv.org/abs/2307.13702"}

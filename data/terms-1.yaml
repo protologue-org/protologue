@@ -1,0 +1,519 @@
+# Foundations, Exemplars, Reasoning
+# Fields: id, term, category, definition (quotable, 1-2 sentences), body, aliases, broader, related, introduced, example, sources
+
+- id: prompt
+  term: Prompt
+  category: foundations
+  definition: A prompt is the complete input text, and optionally other media, that is given to a language model to condition its output, including instructions, context, examples, and the user's request.
+  body: In chat-based systems the prompt is assembled from several parts, such as a system prompt, the prior conversation turns, retrieved documents, and tool results. The model produces its output by predicting tokens conditioned on this entire input, so every part of the prompt can influence the response, not only the final question.
+  aliases: [input, context]
+  related: [system-prompt, context-window, prompt-template, context-engineering]
+  sources:
+    - {title: "Language Models are Few-Shot Learners", authors: "Brown et al.", year: 2020, url: "https://arxiv.org/abs/2005.14165"}
+    - {title: "The Prompt Report: A Systematic Survey of Prompt Engineering Techniques", authors: "Schulhoff et al.", year: 2024, url: "https://arxiv.org/abs/2406.06608"}
+
+- id: prompt-engineering
+  term: Prompt Engineering
+  category: foundations
+  definition: Prompt engineering is the practice of designing, testing, and iteratively refining prompts so that a language model reliably produces the desired output for a task.
+  body: It covers the wording of instructions, the choice and ordering of examples, output formatting constraints, and the decomposition of a task across multiple calls. As models and tooling matured, much of this work broadened into context engineering, which treats the whole information environment around a model call as the object being designed.
+  aliases: [prompt design]
+  related: [prompt, context-engineering, automatic-prompt-engineer]
+  sources:
+    - {title: "The Prompt Report: A Systematic Survey of Prompt Engineering Techniques", authors: "Schulhoff et al.", year: 2024, url: "https://arxiv.org/abs/2406.06608"}
+    - {title: "Prompt engineering overview", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"}
+
+- id: system-prompt
+  term: System Prompt
+  category: foundations
+  definition: A system prompt is a privileged instruction block, placed before the conversation, that sets a model's role, rules, tone, and constraints for every subsequent turn.
+  body: Chat APIs typically expose the system prompt as a separate message role. Models trained with an instruction hierarchy are taught to give system instructions precedence over conflicting user or tool content, which makes the system prompt the main lever for operator control and a frequent target of prompt-leaking attacks.
+  aliases: [system message, developer message, system instruction]
+  broader: [prompt]
+  related: [instruction-hierarchy, role-prompting, prompt-leaking]
+  sources:
+    - {title: "Training language models to follow instructions with human feedback", authors: "Ouyang et al.", year: 2022, url: "https://arxiv.org/abs/2203.02155"}
+    - {title: "The Instruction Hierarchy: Training LLMs to Prioritize Privileged Instructions", authors: "Wallace et al.", year: 2024, url: "https://arxiv.org/abs/2404.13208"}
+
+- id: context-window
+  term: Context Window
+  category: foundations
+  definition: The context window is the maximum number of tokens a language model can attend to in a single call, covering both the prompt and the generated output.
+  body: Anything outside the context window is invisible to the model unless it is re-inserted. Larger windows allow whole documents or codebases to be included, but research shows models do not use all positions equally well, which motivates retrieval, summarization, and careful placement of key information.
+  aliases: [context length, context size]
+  related: [token, lost-in-the-middle, needle-in-a-haystack, context-engineering]
+  sources:
+    - {title: "Attention Is All You Need", authors: "Vaswani et al.", year: 2017, url: "https://arxiv.org/abs/1706.03762"}
+    - {title: "Lost in the Middle: How Language Models Use Long Contexts", authors: "Liu et al.", year: 2023, url: "https://arxiv.org/abs/2307.03172"}
+
+- id: token
+  term: Token
+  category: foundations
+  definition: A token is the basic unit of text a language model reads and writes, typically a word, word fragment, or character sequence produced by a subword tokenizer such as byte-pair encoding.
+  body: Context limits, pricing, and generation speed are all measured in tokens. Because tokenization splits text unevenly, character-level tasks such as counting letters or reversing strings are harder for models than they appear, and the same content can cost different numbers of tokens in different languages.
+  aliases: [subword, BPE token]
+  related: [context-window]
+  sources:
+    - {title: "Neural Machine Translation of Rare Words with Subword Units", authors: "Sennrich et al.", year: 2015, url: "https://arxiv.org/abs/1508.07909"}
+
+- id: temperature
+  term: Temperature
+  category: foundations
+  definition: Temperature is a sampling parameter that rescales a model's output probabilities before a token is chosen; lower values make outputs more deterministic and higher values make them more varied.
+  body: At temperature zero the model approximately always picks its most likely token (greedy decoding). Techniques that rely on diverse samples, such as self-consistency and best-of-N, deliberately use a nonzero temperature, while extraction and classification tasks usually use a low one.
+  aliases: [sampling temperature]
+  related: [top-p-sampling, self-consistency, best-of-n-sampling]
+  sources:
+    - {title: "The Curious Case of Neural Text Degeneration", authors: "Holtzman et al.", year: 2019, url: "https://arxiv.org/abs/1904.09751"}
+
+- id: top-p-sampling
+  term: Top-p Sampling
+  category: foundations
+  definition: Top-p sampling, also called nucleus sampling, draws each next token only from the smallest set of candidates whose cumulative probability exceeds a threshold p.
+  body: It was proposed to avoid both the repetitive text produced by greedy or beam decoding and the incoherent text produced by sampling from the full distribution. It is usually combined with temperature.
+  aliases: [nucleus sampling]
+  related: [temperature]
+  introduced: 2019
+  sources:
+    - {title: "The Curious Case of Neural Text Degeneration", authors: "Holtzman et al.", year: 2019, url: "https://arxiv.org/abs/1904.09751"}
+
+- id: zero-shot-prompting
+  term: Zero-shot Prompting
+  category: foundations
+  definition: Zero-shot prompting asks a model to perform a task from an instruction alone, without any worked examples in the prompt.
+  body: Zero-shot performance improved dramatically with instruction tuning and preference training, which taught models to follow natural-language task descriptions. It is the default for most modern chat use, with examples added only when the format or judgment required is hard to describe.
+  related: [few-shot-prompting, instruction-tuning, zero-shot-chain-of-thought]
+  sources:
+    - {title: "Language Models are Few-Shot Learners", authors: "Brown et al.", year: 2020, url: "https://arxiv.org/abs/2005.14165"}
+    - {title: "Finetuned Language Models Are Zero-Shot Learners", authors: "Wei et al.", year: 2021, url: "https://arxiv.org/abs/2109.01652"}
+
+- id: few-shot-prompting
+  term: Few-shot Prompting
+  category: foundations
+  definition: Few-shot prompting includes a small number of input-output examples in the prompt so the model can infer the task and the desired format from demonstrations.
+  body: Popularized by the GPT-3 paper, it allows a model to perform new tasks without any weight updates. Results are sensitive to which examples are chosen, their order, and their label balance, which spawned a body of work on exemplar selection and calibration.
+  aliases: [k-shot prompting, in-context examples]
+  broader: [in-context-learning]
+  related: [zero-shot-prompting, exemplar-selection, exemplar-ordering, many-shot-in-context-learning]
+  introduced: 2020
+  example: |
+    Classify sentiment.
+    Review: "Arrived broken." -> negative
+    Review: "Works perfectly." -> positive
+    Review: "Battery died in a day." ->
+  sources:
+    - {title: "Language Models are Few-Shot Learners", authors: "Brown et al.", year: 2020, url: "https://arxiv.org/abs/2005.14165"}
+
+- id: instruction-tuning
+  term: Instruction Tuning
+  category: foundations
+  definition: Instruction tuning is fine-tuning a pretrained language model on many tasks phrased as natural-language instructions, so that it follows unseen instructions zero-shot.
+  body: The FLAN work showed that tuning on dozens of instruction-formatted datasets substantially improved zero-shot performance on held-out tasks. Combined with reinforcement learning from human feedback, it produced the instruction-following chat models that most prompting techniques now target.
+  aliases: [instruction fine-tuning, supervised fine-tuning, SFT]
+  related: [zero-shot-prompting, rlhf]
+  introduced: 2021
+  sources:
+    - {title: "Finetuned Language Models Are Zero-Shot Learners", authors: "Wei et al.", year: 2021, url: "https://arxiv.org/abs/2109.01652"}
+    - {title: "Training language models to follow instructions with human feedback", authors: "Ouyang et al.", year: 2022, url: "https://arxiv.org/abs/2203.02155"}
+
+- id: rlhf
+  term: Reinforcement Learning from Human Feedback
+  category: foundations
+  definition: Reinforcement learning from human feedback (RLHF) trains a language model to produce outputs people prefer, by learning a reward model from human comparisons and optimizing the model against it.
+  body: InstructGPT showed that RLHF made a much smaller model preferred over a far larger base model. RLHF shapes how models respond to prompts, including their helpfulness and refusals, and is linked to failure modes such as sycophancy. Direct preference optimization is a widely used simpler alternative.
+  aliases: [RLHF, preference tuning]
+  related: [instruction-tuning, direct-preference-optimization, constitutional-ai, sycophancy]
+  introduced: 2022
+  sources:
+    - {title: "Training language models to follow instructions with human feedback", authors: "Ouyang et al.", year: 2022, url: "https://arxiv.org/abs/2203.02155"}
+
+- id: direct-preference-optimization
+  term: Direct Preference Optimization
+  category: foundations
+  definition: Direct preference optimization (DPO) aligns a language model to human preferences by training directly on preferred-versus-rejected response pairs, without fitting a separate reward model or running reinforcement learning.
+  body: DPO reframes the RLHF objective as a simple classification-style loss over preference pairs. It became a common alternative to RLHF because it is stable and cheap to run.
+  aliases: [DPO]
+  broader: [rlhf]
+  introduced: 2023
+  sources:
+    - {title: "Direct Preference Optimization: Your Language Model is Secretly a Reward Model", authors: "Rafailov et al.", year: 2023, url: "https://arxiv.org/abs/2305.18290"}
+
+- id: prompt-template
+  term: Prompt Template
+  category: foundations
+  definition: A prompt template is a reusable prompt with placeholder variables that are filled in at run time, separating the fixed instructions from the per-request data.
+  body: Templates make prompts testable and versionable, and they are the unit optimized by frameworks such as DSPy. Keeping untrusted data in clearly delimited slots also supports defenses against prompt injection.
+  aliases: [prompt scaffold]
+  broader: [prompt]
+  related: [delimiters, dspy, spotlighting]
+  sources:
+    - {title: "The Prompt Report: A Systematic Survey of Prompt Engineering Techniques", authors: "Schulhoff et al.", year: 2024, url: "https://arxiv.org/abs/2406.06608"}
+
+- id: delimiters
+  term: Delimiters
+  category: foundations
+  definition: Delimiters are explicit markers, such as XML-style tags, triple quotes, or headings, that separate the parts of a prompt so the model can tell instructions, data, and examples apart.
+  body: Vendor guidance recommends delimiters to reduce ambiguity, make outputs easier to parse, and lower the chance that content inside a document is mistaken for an instruction. Tags can also be requested in the output for reliable extraction.
+  aliases: [XML tags, separators]
+  related: [prompt-template, structured-outputs, spotlighting]
+  sources:
+    - {title: "Prompting best practices", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"}
+    - {title: "Prompt engineering", authors: "OpenAI", year: 2024, url: "https://developers.openai.com/api/docs/guides/prompt-engineering"}
+
+- id: prefill
+  term: Prefill
+  category: foundations
+  definition: Prefill is the technique of writing the first part of the model's response yourself, so that the model continues from that text and is steered into a specific format or direction.
+  body: Starting the assistant turn with an opening brace pushes the model toward JSON output, and starting with a heading or a character's name can enforce structure or persona. Support is model-specific and declining. Anthropic's documentation states that prefilling the final assistant turn is not supported on Claude 4.6 models and later, and recommends explicit instructions or structured outputs instead.
+  aliases: [response prefilling, output priming, assistant prefill]
+  related: [structured-outputs, delimiters]
+  sources:
+    - {title: "Prompting best practices", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"}
+
+- id: role-prompting
+  term: Role Prompting
+  category: foundations
+  definition: Role prompting assigns the model a persona or professional role, such as "You are an experienced tax accountant," to shape its tone, vocabulary, and focus.
+  body: Role prompts reliably change style and framing. Evidence that they improve factual accuracy is mixed, with some studies finding gains in reasoning tasks and a large evaluation finding that adding personas to system prompts did not consistently improve performance.
+  aliases: [persona prompting, role-play prompting]
+  related: [system-prompt]
+  sources:
+    - {title: "Better Zero-Shot Reasoning with Role-Play Prompting", authors: "Kong et al.", year: 2023, url: "https://arxiv.org/abs/2308.07702"}
+    - {title: "When \"A Helpful Assistant\" Is Not Really Helpful: Personas in System Prompts Do Not Improve Performances of Large Language Models", authors: "Zheng et al.", year: 2023, url: "https://arxiv.org/abs/2311.10054"}
+
+# ---------------- Exemplars ----------------
+
+- id: in-context-learning
+  term: In-Context Learning
+  category: exemplars
+  definition: In-context learning (ICL) is a language model's ability to perform a task by conditioning on instructions or demonstrations in its prompt, without any update to its weights.
+  body: Identified as an emergent capability of large pretrained models in the GPT-3 paper, ICL underlies few-shot prompting. Studies show that models often rely more on the format and label space of demonstrations than on whether the demonstration labels are correct.
+  aliases: [ICL]
+  related: [few-shot-prompting, demonstration-label-sensitivity, many-shot-in-context-learning]
+  introduced: 2020
+  sources:
+    - {title: "Language Models are Few-Shot Learners", authors: "Brown et al.", year: 2020, url: "https://arxiv.org/abs/2005.14165"}
+
+- id: demonstration-label-sensitivity
+  term: Demonstration Label Sensitivity
+  category: exemplars
+  definition: Demonstration label sensitivity refers to how much a model's few-shot performance depends on whether the example labels are correct; research found that randomly replacing labels often hurts performance only slightly.
+  body: Min et al. showed that demonstrations mainly supply the label space, the input distribution, and the format of the task. This suggests few-shot examples work largely by specifying what the task looks like rather than by teaching the input-label mapping.
+  aliases: [role of demonstrations]
+  broader: [in-context-learning]
+  related: [few-shot-prompting, exemplar-selection]
+  sources:
+    - {title: "Rethinking the Role of Demonstrations: What Makes In-Context Learning Work?", authors: "Min et al.", year: 2022, url: "https://arxiv.org/abs/2202.12837"}
+
+- id: exemplar-selection
+  term: Exemplar Selection
+  category: exemplars
+  definition: Exemplar selection is the choice of which demonstrations to include in a few-shot prompt, commonly by retrieving the examples most semantically similar to the current input.
+  body: Liu et al. showed that retrieving nearest-neighbor examples by embedding similarity outperformed random selection. Selection can also target diversity, difficulty, or the model's uncertainty, as in active prompting.
+  aliases: [demonstration selection, dynamic few-shot, kNN prompting]
+  broader: [few-shot-prompting]
+  related: [exemplar-ordering, active-prompting, retrieval-augmented-generation]
+  sources:
+    - {title: "What Makes Good In-Context Examples for GPT-3?", authors: "Liu et al.", year: 2021, url: "https://arxiv.org/abs/2101.06804"}
+
+- id: exemplar-ordering
+  term: Exemplar Ordering
+  category: exemplars
+  definition: Exemplar ordering is the arrangement of demonstrations within a few-shot prompt, which can swing accuracy from near state-of-the-art to near chance for the same set of examples.
+  body: Lu et al. documented this order sensitivity and proposed selecting performant orderings using a probe set generated by the model itself. The effect is a key reason few-shot results should be reported across several permutations.
+  aliases: [demonstration order, order sensitivity]
+  broader: [few-shot-prompting]
+  related: [exemplar-selection, few-shot-calibration, prompt-sensitivity]
+  sources:
+    - {title: "Fantastically Ordered Prompts and Where to Find Them: Overcoming Few-Shot Prompt Order Sensitivity", authors: "Lu et al.", year: 2021, url: "https://arxiv.org/abs/2104.08786"}
+
+- id: few-shot-calibration
+  term: Few-shot Calibration
+  category: exemplars
+  definition: Few-shot calibration corrects a model's systematic biases toward particular answers, such as the most frequent or most recent label in the examples, by adjusting output probabilities measured on a content-free input.
+  body: Zhao et al. identified majority-label bias, recency bias, and common-token bias in few-shot prompting, and proposed contextual calibration, which estimates the bias from an input such as "N/A" and rescales predictions to neutralize it.
+  aliases: [contextual calibration, calibrate before use]
+  broader: [few-shot-prompting]
+  related: [exemplar-ordering, prompt-sensitivity]
+  sources:
+    - {title: "Calibrate Before Use: Improving Few-Shot Performance of Language Models", authors: "Zhao et al.", year: 2021, url: "https://arxiv.org/abs/2102.09690"}
+
+- id: many-shot-in-context-learning
+  term: Many-shot In-Context Learning
+  category: exemplars
+  definition: Many-shot in-context learning places hundreds or thousands of demonstrations in a long-context prompt, often yielding large gains over few-shot prompting.
+  body: Agarwal et al. found consistent improvements as the number of shots grew into the hundreds, and introduced variants that use model-generated rationales or unlabeled problems. The same scaling behavior underlies the many-shot jailbreaking attack.
+  aliases: [many-shot ICL, long-context ICL]
+  broader: [in-context-learning]
+  related: [few-shot-prompting, many-shot-jailbreaking, context-window]
+  introduced: 2024
+  sources:
+    - {title: "Many-Shot In-Context Learning", authors: "Agarwal et al.", year: 2024, url: "https://arxiv.org/abs/2404.11018"}
+
+- id: active-prompting
+  term: Active Prompting
+  category: exemplars
+  definition: Active prompting selects which questions to annotate with chain-of-thought exemplars by choosing those on which the model is most uncertain, measured by disagreement across sampled answers.
+  body: Borrowing from active learning, it focuses human annotation effort on the examples most informative for the model, rather than on a fixed or random set.
+  aliases: [Active-Prompt]
+  broader: [exemplar-selection]
+  related: [chain-of-thought, self-consistency]
+  introduced: 2023
+  sources:
+    - {title: "Active Prompting with Chain-of-Thought for Large Language Models", authors: "Diao et al.", year: 2023, url: "https://arxiv.org/abs/2302.12246"}
+
+# ---------------- Reasoning ----------------
+
+- id: chain-of-thought
+  term: Chain-of-Thought Prompting
+  category: reasoning
+  definition: Chain-of-thought (CoT) prompting elicits a sequence of intermediate reasoning steps from a language model before its final answer, which improves performance on multi-step arithmetic, commonsense, and symbolic reasoning tasks.
+  body: Wei et al. introduced CoT by including worked examples with step-by-step reasoning in a few-shot prompt, and found the benefit emerged mainly in large models. It is the root of a large family of techniques, including zero-shot CoT, self-consistency, and tree of thoughts, and of the extended reasoning trained into modern reasoning models.
+  aliases: [CoT, step-by-step reasoning]
+  related: [zero-shot-chain-of-thought, self-consistency, tree-of-thoughts, scratchpad, reasoning-model, unfaithful-chain-of-thought]
+  introduced: 2022
+  example: |
+    Q: Roger has 5 balls. He buys 2 cans of 3 balls each. How many balls does he have?
+    A: He starts with 5. Two cans of 3 is 6. 5 + 6 = 11. The answer is 11.
+  sources:
+    - {title: "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models", authors: "Wei et al.", year: 2022, url: "https://arxiv.org/abs/2201.11903"}
+
+- id: zero-shot-chain-of-thought
+  term: Zero-shot Chain-of-Thought
+  category: reasoning
+  definition: Zero-shot chain-of-thought prompting triggers step-by-step reasoning without examples by appending a cue such as "Let's think step by step" to the question.
+  body: Kojima et al. showed this single phrase produced large accuracy gains on arithmetic and logic benchmarks. The method uses a second prompt to extract the final answer from the generated reasoning.
+  aliases: [zero-shot CoT, "let's think step by step"]
+  broader: [chain-of-thought]
+  related: [zero-shot-prompting, plan-and-solve-prompting]
+  introduced: 2022
+  sources:
+    - {title: "Large Language Models are Zero-Shot Reasoners", authors: "Kojima et al.", year: 2022, url: "https://arxiv.org/abs/2205.11916"}
+
+- id: scratchpad
+  term: Scratchpad
+  category: reasoning
+  definition: A scratchpad is a region of model output reserved for intermediate computation, which the model writes before its final answer so that multi-step calculations can be carried out explicitly.
+  body: Nye et al. trained models to emit intermediate steps for tasks like long addition and program execution, an important precursor to chain-of-thought prompting. In practice the term also refers to private reasoning sections that are hidden from end users.
+  aliases: [intermediate computation]
+  related: [chain-of-thought, extended-thinking]
+  introduced: 2021
+  sources:
+    - {title: "Show Your Work: Scratchpads for Intermediate Computation with Language Models", authors: "Nye et al.", year: 2021, url: "https://arxiv.org/abs/2112.00114"}
+
+- id: auto-cot
+  term: Automatic Chain-of-Thought
+  category: reasoning
+  definition: Automatic chain-of-thought (Auto-CoT) builds chain-of-thought demonstrations without manual writing, by clustering questions for diversity and generating a reasoning chain for a representative of each cluster with zero-shot CoT.
+  aliases: [Auto-CoT]
+  broader: [chain-of-thought]
+  related: [zero-shot-chain-of-thought, exemplar-selection]
+  introduced: 2022
+  body: Diversity across clusters limits the damage from mistakes in any single generated chain, and the approach matched manually written CoT exemplars on several benchmarks.
+  sources:
+    - {title: "Automatic Chain of Thought Prompting in Large Language Models", authors: "Zhang et al.", year: 2022, url: "https://arxiv.org/abs/2210.03493"}
+
+- id: self-consistency
+  term: Self-Consistency
+  category: reasoning
+  definition: Self-consistency samples multiple chain-of-thought reasoning paths for the same question and returns the answer that appears most often, rather than relying on a single greedy decode.
+  body: Wang et al. found this majority vote substantially improved chain-of-thought accuracy on arithmetic and commonsense benchmarks. It trades extra inference cost for reliability and is an early form of test-time compute scaling.
+  aliases: [majority voting, CoT-SC]
+  broader: [chain-of-thought]
+  related: [universal-self-consistency, best-of-n-sampling, test-time-compute-scaling, temperature]
+  introduced: 2022
+  sources:
+    - {title: "Self-Consistency Improves Chain of Thought Reasoning in Language Models", authors: "Wang et al.", year: 2022, url: "https://arxiv.org/abs/2203.11171"}
+
+- id: universal-self-consistency
+  term: Universal Self-Consistency
+  category: reasoning
+  definition: Universal self-consistency extends self-consistency to free-form outputs by asking the model itself to select the most consistent response among several samples, instead of counting exact-match answers.
+  broader: [self-consistency]
+  related: [llm-as-a-judge]
+  introduced: 2023
+  body: This makes sampling-and-selecting usable for tasks such as summarization and open-ended question answering, where answers rarely match word for word.
+  sources:
+    - {title: "Universal Self-Consistency for Large Language Model Generation", authors: "Chen et al.", year: 2023, url: "https://arxiv.org/abs/2311.17311"}
+
+- id: least-to-most-prompting
+  term: Least-to-Most Prompting
+  category: reasoning
+  definition: Least-to-most prompting first asks the model to break a complex problem into simpler subproblems, then solves them in order, feeding each answer into the next.
+  body: Zhou et al. showed it generalizes to problems harder than those in the examples, a weakness of standard chain-of-thought, with strong results on compositional generalization benchmarks.
+  aliases: [problem decomposition]
+  related: [chain-of-thought, plan-and-solve-prompting, self-ask, prompt-chaining]
+  introduced: 2022
+  sources:
+    - {title: "Least-to-Most Prompting Enables Complex Reasoning in Large Language Models", authors: "Zhou et al.", year: 2022, url: "https://arxiv.org/abs/2205.10625"}
+
+- id: plan-and-solve-prompting
+  term: Plan-and-Solve Prompting
+  category: reasoning
+  definition: Plan-and-solve prompting is a zero-shot method that instructs the model to first devise a plan dividing the task into subtasks and then carry out the plan step by step.
+  body: It targets missing-step and calculation errors seen in zero-shot chain-of-thought, with an extended version that asks the model to extract relevant variables and compute carefully.
+  aliases: [PS prompting, PS+]
+  broader: [zero-shot-chain-of-thought]
+  related: [least-to-most-prompting]
+  introduced: 2023
+  sources:
+    - {title: "Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models", authors: "Wang et al.", year: 2023, url: "https://arxiv.org/abs/2305.04091"}
+
+- id: step-back-prompting
+  term: Step-Back Prompting
+  category: reasoning
+  definition: Step-back prompting has the model first answer a more general, abstract question about the underlying principle, then use that answer to reason about the original specific question.
+  body: For a physics question, the step-back question might ask which law applies. Zheng et al. reported gains on science, multi-hop, and knowledge-intensive question answering.
+  aliases: [abstraction prompting]
+  related: [chain-of-thought, generated-knowledge-prompting]
+  introduced: 2023
+  sources:
+    - {title: "Take a Step Back: Evoking Reasoning via Abstraction in Large Language Models", authors: "Zheng et al.", year: 2023, url: "https://arxiv.org/abs/2310.06117"}
+
+- id: tree-of-thoughts
+  term: Tree of Thoughts
+  category: reasoning
+  definition: Tree of Thoughts (ToT) lets a model explore multiple reasoning branches as a search tree, evaluating partial solutions and backtracking, rather than committing to a single left-to-right chain of thought.
+  body: Yao et al. combined model-generated candidate thoughts, model self-evaluation of states, and breadth- or depth-first search, producing large gains on tasks such as the Game of 24 that require planning or lookahead.
+  aliases: [ToT]
+  broader: [chain-of-thought]
+  related: [graph-of-thoughts, self-consistency, test-time-compute-scaling]
+  introduced: 2023
+  sources:
+    - {title: "Tree of Thoughts: Deliberate Problem Solving with Large Language Models", authors: "Yao et al.", year: 2023, url: "https://arxiv.org/abs/2305.10601"}
+
+- id: graph-of-thoughts
+  term: Graph of Thoughts
+  category: reasoning
+  definition: Graph of Thoughts (GoT) models a language model's reasoning as an arbitrary graph, in which thoughts can be combined, refined, and looped back on, generalizing chain and tree structures.
+  broader: [tree-of-thoughts]
+  related: [chain-of-thought]
+  introduced: 2023
+  body: Aggregation of several partial solutions into one, such as merging sorted sublists, is the key operation GoT adds over tree-shaped search.
+  sources:
+    - {title: "Graph of Thoughts: Solving Elaborate Problems with Large Language Models", authors: "Besta et al.", year: 2023, url: "https://arxiv.org/abs/2308.09687"}
+
+- id: skeleton-of-thought
+  term: Skeleton-of-Thought
+  category: reasoning
+  definition: Skeleton-of-thought first asks the model for a brief outline of its answer, then expands each outline point in parallel, reducing end-to-end generation latency.
+  related: [parallelization, prompt-chaining]
+  introduced: 2023
+  body: Because the points are expanded independently, it suits list-like answers better than tightly sequential reasoning.
+  sources:
+    - {title: "Skeleton-of-Thought: Prompting LLMs for Efficient Parallel Generation", authors: "Ning et al.", year: 2023, url: "https://arxiv.org/abs/2307.15337"}
+
+- id: analogical-prompting
+  term: Analogical Prompting
+  category: reasoning
+  definition: Analogical prompting asks the model to recall or generate relevant example problems and their solutions on its own before solving the target problem, removing the need for hand-written exemplars.
+  related: [few-shot-prompting, generated-knowledge-prompting]
+  introduced: 2023
+  body: Inspired by how people draw on analogous past experience, the self-generated examples are tailored to each problem rather than fixed for the whole task.
+  sources:
+    - {title: "Large Language Models as Analogical Reasoners", authors: "Yasunaga et al.", year: 2023, url: "https://arxiv.org/abs/2310.01714"}
+
+- id: self-discover
+  term: Self-Discover
+  category: reasoning
+  definition: Self-Discover has the model compose a task-specific reasoning structure by selecting, adapting, and combining general reasoning modules, such as critical thinking or step-by-step analysis, before solving instances of the task.
+  related: [chain-of-thought, meta-prompting]
+  introduced: 2024
+  body: The structure is discovered once per task and then reused, so it costs far fewer inference calls than sampling-heavy methods like self-consistency.
+  sources:
+    - {title: "Self-Discover: Large Language Models Self-Compose Reasoning Structures", authors: "Zhou et al.", year: 2024, url: "https://arxiv.org/abs/2402.03620"}
+
+- id: contrastive-chain-of-thought
+  term: Contrastive Chain-of-Thought
+  category: reasoning
+  definition: Contrastive chain-of-thought adds both valid and deliberately invalid reasoning demonstrations to a prompt, so the model learns which mistakes to avoid as well as what correct reasoning looks like.
+  broader: [chain-of-thought]
+  introduced: 2023
+  body: The invalid demonstrations can be generated automatically by perturbing correct reasoning chains.
+  sources:
+    - {title: "Contrastive Chain-of-Thought Prompting", authors: "Chia et al.", year: 2023, url: "https://arxiv.org/abs/2311.09277"}
+
+- id: thread-of-thought
+  term: Thread of Thought
+  category: reasoning
+  definition: Thread of Thought is a prompting strategy for long, chaotic contexts that asks the model to walk through the context in manageable parts, summarizing and analyzing each before answering.
+  broader: [chain-of-thought]
+  related: [lost-in-the-middle, system-2-attention]
+  introduced: 2023
+  body: A typical trigger asks the model to go through the context step by step, summarizing and analyzing as it goes.
+  sources:
+    - {title: "Thread of Thought Unraveling Chaotic Contexts", authors: "Zhou et al.", year: 2023, url: "https://arxiv.org/abs/2311.08734"}
+
+- id: system-2-attention
+  term: System 2 Attention
+  category: reasoning
+  definition: System 2 Attention (S2A) first prompts the model to rewrite the input so that it keeps only the relevant, unbiased content, then answers using the rewritten context.
+  body: Weston and Sukhbaatar showed this reduces the influence of irrelevant or opinionated text in the prompt, improving factuality and reducing sycophancy toward opinions stated in the question.
+  aliases: [S2A]
+  related: [thread-of-thought, sycophancy, rephrase-and-respond]
+  introduced: 2023
+  sources:
+    - {title: "System 2 Attention (is something you might need too)", authors: "Weston & Sukhbaatar", year: 2023, url: "https://arxiv.org/abs/2311.11829"}
+
+- id: rephrase-and-respond
+  term: Rephrase and Respond
+  category: reasoning
+  definition: Rephrase and Respond (RaR) asks the model to rephrase and expand the user's question in its own words before answering, reducing misunderstandings caused by ambiguous phrasing.
+  aliases: [RaR]
+  related: [system-2-attention]
+  introduced: 2023
+  body: The rephrasing can be done in the same response or by one model for another, as a two-step variant.
+  sources:
+    - {title: "Rephrase and Respond: Let Large Language Models Ask Better Questions for Themselves", authors: "Deng et al.", year: 2023, url: "https://arxiv.org/abs/2311.04205"}
+
+- id: self-ask
+  term: Self-Ask
+  category: reasoning
+  definition: Self-ask prompting has the model explicitly pose and answer follow-up sub-questions before answering a multi-hop question, a format that can plug a search engine in to answer each sub-question.
+  related: [least-to-most-prompting, react]
+  introduced: 2022
+  body: Press et al. used it to study the compositionality gap, the tendency of models to answer each sub-question correctly yet fail the composed question.
+  sources:
+    - {title: "Measuring and Narrowing the Compositionality Gap in Language Models", authors: "Press et al.", year: 2022, url: "https://arxiv.org/abs/2210.03350"}
+
+- id: maieutic-prompting
+  term: Maieutic Prompting
+  category: reasoning
+  definition: Maieutic prompting generates a tree of recursive explanations for and against an answer, then infers the most logically consistent answer from the relations among them.
+  related: [self-consistency, chain-of-verification]
+  introduced: 2022
+  body: Named after the Socratic method, it is designed to tolerate individual explanations that are wrong or inconsistent.
+  sources:
+    - {title: "Maieutic Prompting: Logically Consistent Reasoning with Recursive Explanations", authors: "Jung et al.", year: 2022, url: "https://arxiv.org/abs/2205.11822"}
+
+- id: generated-knowledge-prompting
+  term: Generated Knowledge Prompting
+  category: reasoning
+  definition: Generated knowledge prompting first asks the model to produce relevant facts about a question, then supplies those generated facts as context when answering it.
+  related: [step-back-prompting, retrieval-augmented-generation]
+  introduced: 2021
+  body: It acts like retrieval from the model's own parametric knowledge, and improved commonsense reasoning benchmarks in the original study.
+  sources:
+    - {title: "Generated Knowledge Prompting for Commonsense Reasoning", authors: "Liu et al.", year: 2021, url: "https://arxiv.org/abs/2110.08387"}
+
+- id: program-aided-language-models
+  term: Program-Aided Language Models
+  category: reasoning
+  definition: Program-aided language models (PAL) have the model write a program, typically Python, that expresses its reasoning, and then delegate the actual computation to an interpreter.
+  body: Offloading arithmetic and logic to code removes calculation errors from the model's output, and PAL outperformed much larger chain-of-thought models on math word problems.
+  aliases: [PAL]
+  related: [program-of-thoughts, chain-of-thought, function-calling]
+  introduced: 2022
+  sources:
+    - {title: "PAL: Program-aided Language Models", authors: "Gao et al.", year: 2022, url: "https://arxiv.org/abs/2211.10435"}
+
+- id: program-of-thoughts
+  term: Program of Thoughts
+  category: reasoning
+  definition: Program of Thoughts (PoT) prompting expresses numerical reasoning as executable code, separating computation, done by an interpreter, from reasoning, done by the model.
+  aliases: [PoT]
+  related: [program-aided-language-models, chain-of-thought]
+  introduced: 2022
+  body: Developed concurrently with PAL, it showed strong gains on financial and math question answering.
+  sources:
+    - {title: "Program of Thoughts Prompting: Disentangling Computation from Reasoning for Numerical Reasoning Tasks", authors: "Chen et al.", year: 2022, url: "https://arxiv.org/abs/2211.12588"}

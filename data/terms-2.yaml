@@ -1,0 +1,295 @@
+# Verification, Retrieval & Tools, Agents
+
+- id: self-refine
+  term: Self-Refine
+  category: verification
+  definition: Self-Refine is an iterative method in which the same model generates an output, critiques it with specific feedback, and revises it, repeating until a stopping condition is met.
+  body: It requires no extra training or separate models. Madaan et al. reported improvements across tasks such as code optimization, dialogue, and math reasoning, though later work found that unaided self-correction of reasoning can fail without external signals.
+  aliases: [iterative refinement, self-critique]
+  related: [reflexion, evaluator-optimizer, chain-of-verification]
+  introduced: 2023
+  sources:
+    - {title: "Self-Refine: Iterative Refinement with Self-Feedback", authors: "Madaan et al.", year: 2023, url: "https://arxiv.org/abs/2303.17651"}
+    - {title: "Large Language Models Cannot Self-Correct Reasoning Yet", authors: "Huang et al.", year: 2023, url: "https://arxiv.org/abs/2310.01798"}
+
+- id: reflexion
+  term: Reflexion
+  category: verification
+  definition: Reflexion is an agent technique in which, after a failed attempt, the model writes a verbal reflection on what went wrong and stores it in memory to guide its next attempt.
+  body: It is reinforcement through language rather than weight updates, and uses feedback signals such as unit-test results or environment rewards. Shinn et al. reported large gains on coding and sequential decision-making benchmarks.
+  related: [self-refine, react, agent-memory]
+  introduced: 2023
+  sources:
+    - {title: "Reflexion: Language Agents with Verbal Reinforcement Learning", authors: "Shinn et al.", year: 2023, url: "https://arxiv.org/abs/2303.11366"}
+
+- id: chain-of-verification
+  term: Chain-of-Verification
+  category: verification
+  definition: Chain-of-Verification (CoVe) reduces hallucination by having the model draft an answer, plan verification questions about its claims, answer those questions independently, and then produce a corrected final answer.
+  body: Answering the verification questions without seeing the original draft keeps the model from simply repeating its own errors.
+  aliases: [CoVe]
+  related: [hallucination, self-refine, maieutic-prompting]
+  introduced: 2023
+  sources:
+    - {title: "Chain-of-Verification Reduces Hallucination in Large Language Models", authors: "Dhuliawala et al.", year: 2023, url: "https://arxiv.org/abs/2309.11495"}
+
+- id: llm-as-a-judge
+  term: LLM-as-a-Judge
+  category: verification
+  definition: LLM-as-a-judge is the use of a strong language model to grade, score, or compare the outputs of models against criteria, as a scalable substitute for human evaluation.
+  body: Zheng et al. found strong model judges agreed with human preferences at rates comparable to agreement between humans, while documenting biases toward the first-listed answer, longer answers, and the judge's own outputs.
+  aliases: [model-graded evaluation, LLM evaluator, autorater]
+  related: [universal-self-consistency, evaluator-optimizer, process-reward-model]
+  introduced: 2023
+  sources:
+    - {title: "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena", authors: "Zheng et al.", year: 2023, url: "https://arxiv.org/abs/2306.05685"}
+
+- id: multi-agent-debate
+  term: Multi-Agent Debate
+  category: verification
+  definition: Multi-agent debate has several model instances propose answers, read each other's reasoning, and revise their answers over multiple rounds until they converge.
+  body: Du et al. found that debate improved mathematical reasoning and factual accuracy over single-model answers.
+  aliases: [LLM debate, society of minds]
+  related: [mixture-of-agents, self-consistency]
+  introduced: 2023
+  sources:
+    - {title: "Improving Factuality and Reasoning in Language Models through Multiagent Debate", authors: "Du et al.", year: 2023, url: "https://arxiv.org/abs/2305.14325"}
+
+- id: mixture-of-agents
+  term: Mixture-of-Agents
+  category: verification
+  definition: Mixture-of-Agents (MoA) arranges language models in layers, where each model receives all outputs from the previous layer as auxiliary input and an aggregator synthesizes a final response.
+  aliases: [MoA]
+  related: [multi-agent-debate, parallelization]
+  introduced: 2024
+  body: Wang et al. reported that a mixture of open models outperformed a single strong proprietary model on an instruction-following benchmark.
+  sources:
+    - {title: "Mixture-of-Agents Enhances Large Language Model Capabilities", authors: "Wang et al.", year: 2024, url: "https://arxiv.org/abs/2406.04692"}
+
+- id: process-reward-model
+  term: Process Reward Model
+  category: verification
+  definition: A process reward model (PRM) scores each intermediate step of a model's reasoning, rather than only the final answer, and is used to select or train better reasoning chains.
+  body: Lightman et al. showed process supervision outperformed outcome supervision for selecting correct solutions to competition math problems, and released a large dataset of step-level human labels.
+  aliases: [PRM, step-level verifier, process supervision]
+  related: [best-of-n-sampling, test-time-compute-scaling, llm-as-a-judge]
+  introduced: 2023
+  sources:
+    - {title: "Let's Verify Step by Step", authors: "Lightman et al.", year: 2023, url: "https://arxiv.org/abs/2305.20050"}
+
+- id: best-of-n-sampling
+  term: Best-of-N Sampling
+  category: verification
+  definition: Best-of-N sampling generates N candidate outputs and returns the one ranked highest by a verifier, reward model, or scoring function.
+  body: It is the simplest form of trading inference compute for quality. Its effectiveness depends on the verifier, and optimizing too hard against an imperfect reward model can select outputs that game it.
+  aliases: [rejection sampling, best-of-n, BoN]
+  related: [self-consistency, process-reward-model, test-time-compute-scaling]
+  sources:
+    - {title: "Let's Verify Step by Step", authors: "Lightman et al.", year: 2023, url: "https://arxiv.org/abs/2305.20050"}
+    - {title: "Scaling LLM Test-Time Compute Optimally can be More Effective than Scaling Model Parameters", authors: "Snell et al.", year: 2024, url: "https://arxiv.org/abs/2408.03314"}
+
+# ---------------- Retrieval & Tools ----------------
+
+- id: retrieval-augmented-generation
+  term: Retrieval-Augmented Generation
+  category: retrieval-tools
+  definition: Retrieval-augmented generation (RAG) supplies a language model with passages retrieved from an external corpus at query time, so its output is grounded in that information rather than only in its trained parameters.
+  body: Lewis et al. introduced RAG as a jointly trained retriever and generator. In common usage the term now covers any pipeline that retrieves documents, typically by embedding search, and inserts them into the prompt. RAG reduces hallucination and allows knowledge to be updated without retraining.
+  aliases: [RAG, retrieval augmentation, grounded generation]
+  related: [hypothetical-document-embeddings, self-rag, hallucination, context-engineering]
+  introduced: 2020
+  sources:
+    - {title: "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", authors: "Lewis et al.", year: 2020, url: "https://arxiv.org/abs/2005.11401"}
+
+- id: hypothetical-document-embeddings
+  term: Hypothetical Document Embeddings
+  category: retrieval-tools
+  definition: Hypothetical Document Embeddings (HyDE) improves retrieval by having a model write a hypothetical answer to the query, embedding that answer, and searching for real documents similar to it.
+  aliases: [HyDE]
+  broader: [retrieval-augmented-generation]
+  introduced: 2022
+  body: The generated document may contain errors, but its embedding tends to lie closer to relevant real documents than the short query does.
+  sources:
+    - {title: "Precise Zero-Shot Dense Retrieval without Relevance Labels", authors: "Gao et al.", year: 2022, url: "https://arxiv.org/abs/2212.10496"}
+
+- id: self-rag
+  term: Self-RAG
+  category: retrieval-tools
+  definition: Self-RAG trains a model to decide when to retrieve, and to emit special reflection tokens that critique whether retrieved passages are relevant and whether its own output is supported by them.
+  broader: [retrieval-augmented-generation]
+  related: [chain-of-verification]
+  introduced: 2023
+  body: Retrieving on demand rather than for every query avoids adding irrelevant context and lets the model's critique steer generation.
+  sources:
+    - {title: "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection", authors: "Asai et al.", year: 2023, url: "https://arxiv.org/abs/2310.11511"}
+
+- id: react
+  term: ReAct
+  category: retrieval-tools
+  definition: ReAct is a prompting pattern that interleaves reasoning traces ("Thought") with actions such as tool calls ("Action") and their results ("Observation"), letting a model plan, act, and update its plan in a loop.
+  body: Yao et al. showed that combining reasoning and acting outperformed either alone on question answering and interactive decision-making tasks. ReAct is the template for most tool-using agent loops.
+  aliases: [Reason + Act, thought-action-observation loop]
+  related: [function-calling, chain-of-thought, self-ask, ai-agent, reflexion]
+  introduced: 2022
+  example: |
+    Thought: I need the population of the capital of France.
+    Action: search("capital of France")
+    Observation: Paris
+    Thought: Now find the population of Paris.
+  sources:
+    - {title: "ReAct: Synergizing Reasoning and Acting in Language Models", authors: "Yao et al.", year: 2022, url: "https://arxiv.org/abs/2210.03629"}
+
+- id: toolformer
+  term: Toolformer
+  category: retrieval-tools
+  definition: Toolformer is a method in which a language model teaches itself to use external tools, such as a calculator or search API, by generating candidate API calls in text and keeping those that reduce its prediction loss.
+  related: [function-calling, react]
+  introduced: 2023
+  body: It showed that tool-use behavior could be learned in a self-supervised way from only a handful of demonstrations per tool.
+  sources:
+    - {title: "Toolformer: Language Models Can Teach Themselves to Use Tools", authors: "Schick et al.", year: 2023, url: "https://arxiv.org/abs/2302.04761"}
+
+- id: function-calling
+  term: Function Calling
+  category: retrieval-tools
+  definition: Function calling, or tool use, is a model capability in which the model outputs a structured request to invoke a developer-defined function with arguments, which the application executes and returns as a result to the model.
+  body: Tools are usually described to the model with a name, a natural-language description, and a JSON Schema for parameters. Clear tool descriptions function as prompts in their own right and strongly affect when and how tools are used.
+  aliases: [tool use, tool calling]
+  related: [react, model-context-protocol, structured-outputs, toolformer]
+  sources:
+    - {title: "Tool use with Claude", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"}
+    - {title: "Gorilla: Large Language Model Connected with Massive APIs", authors: "Patil et al.", year: 2023, url: "https://arxiv.org/abs/2305.15334"}
+
+- id: model-context-protocol
+  term: Model Context Protocol
+  category: retrieval-tools
+  definition: The Model Context Protocol (MCP) is an open standard, introduced by Anthropic in 2024, that defines how applications expose tools, data resources, and prompt templates to language-model clients through a common client-server interface.
+  body: MCP replaces one-off integrations between each model application and each data source with a single protocol, so any compliant client can use any compliant server.
+  aliases: [MCP]
+  related: [function-calling, context-engineering]
+  introduced: 2024
+  sources:
+    - {title: "Introducing the Model Context Protocol", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/news/model-context-protocol"}
+    - {title: "Model Context Protocol specification", authors: "Model Context Protocol", year: 2025, url: "https://modelcontextprotocol.io/"}
+
+- id: structured-outputs
+  term: Structured Outputs
+  category: retrieval-tools
+  definition: Structured outputs constrain a language model to produce responses that conform to a specified format, typically a JSON Schema, either through instructions or through constrained decoding that guarantees validity.
+  body: Instruction-only approaches can still produce malformed output, while constrained decoding masks tokens that would violate the schema at each step. Structured outputs are essential for passing model results reliably to downstream code.
+  aliases: [JSON mode, constrained decoding, schema-constrained generation]
+  related: [function-calling, prefill, delimiters]
+  sources:
+    - {title: "Structured model outputs", authors: "OpenAI", year: 2024, url: "https://developers.openai.com/api/docs/guides/structured-outputs"}
+    - {title: "Efficient Guided Generation for Large Language Models", authors: "Willard & Louf", year: 2023, url: "https://arxiv.org/abs/2307.09702"}
+
+# ---------------- Agents ----------------
+
+- id: ai-agent
+  term: AI Agent
+  category: agents
+  definition: An AI agent is a system in which a language model dynamically directs its own process and tool use in a loop, deciding what actions to take based on environment feedback until a task is complete.
+  body: Anthropic's widely cited taxonomy distinguishes agents from workflows, in which model calls and tools follow predefined code paths. Agents trade predictability and cost for flexibility on open-ended tasks.
+  aliases: [LLM agent, agentic system, autonomous agent]
+  related: [react, agentic-workflow, orchestrator-workers, agent-memory, context-engineering]
+  sources:
+    - {title: "Building effective agents", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/building-effective-agents"}
+
+- id: agentic-workflow
+  term: Agentic Workflow
+  category: agents
+  definition: An agentic workflow is a system in which language models and tools are orchestrated through predefined code paths, as opposed to an agent that chooses its own steps.
+  body: Common workflow patterns include prompt chaining, routing, parallelization, orchestrator-workers, and evaluator-optimizer loops. Workflows are generally preferred when a task can be cleanly decomposed in advance.
+  aliases: [LLM workflow]
+  related: [ai-agent, prompt-chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer]
+  sources:
+    - {title: "Building effective agents", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/building-effective-agents"}
+
+- id: prompt-chaining
+  term: Prompt Chaining
+  category: agents
+  definition: Prompt chaining decomposes a task into a fixed sequence of model calls, where each call processes the output of the previous one, often with programmatic checks between steps.
+  body: Chaining trades latency for accuracy by making each call simpler. Wu et al. found chaining also improved transparency and controllability for users building with models.
+  aliases: [LLM chains, multi-step prompting]
+  broader: [agentic-workflow]
+  related: [least-to-most-prompting, routing]
+  introduced: 2021
+  sources:
+    - {title: "AI Chains: Transparent and Controllable Human-AI Interaction by Chaining Large Language Model Prompts", authors: "Wu et al.", year: 2021, url: "https://arxiv.org/abs/2110.01691"}
+    - {title: "Building effective agents", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/building-effective-agents"}
+
+- id: routing
+  term: Routing
+  category: agents
+  definition: Routing is a workflow pattern that classifies an incoming request and directs it to a specialized prompt, tool, or model suited to that category.
+  body: Routing allows separate prompts to be optimized for distinct cases, and lets easy queries go to smaller, cheaper models while hard ones go to more capable models.
+  aliases: [model routing, query routing]
+  broader: [agentic-workflow]
+  related: [prompt-chaining]
+  sources:
+    - {title: "Building effective agents", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/building-effective-agents"}
+
+- id: parallelization
+  term: Parallelization
+  category: agents
+  definition: Parallelization is a workflow pattern that runs several model calls simultaneously and aggregates their outputs, either by splitting a task into independent sections or by running the same task several times and voting.
+  aliases: [sectioning, voting]
+  broader: [agentic-workflow]
+  related: [self-consistency, skeleton-of-thought, mixture-of-agents]
+  body: Sectioning reduces latency and keeps each call focused, while voting improves confidence, for example by running several independent safety checks.
+  sources:
+    - {title: "Building effective agents", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/building-effective-agents"}
+
+- id: orchestrator-workers
+  term: Orchestrator-Workers
+  category: agents
+  definition: Orchestrator-workers is a pattern in which a central model dynamically breaks a task into subtasks, delegates them to worker model calls or subagents, and synthesizes their results.
+  body: Unlike parallelization, the subtasks are not fixed in advance but decided by the orchestrator for each input, which suits tasks such as multi-file code changes or broad research.
+  aliases: [subagents, multi-agent orchestration, supervisor pattern]
+  broader: [agentic-workflow]
+  related: [ai-agent, parallelization, meta-prompting]
+  sources:
+    - {title: "Building effective agents", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/building-effective-agents"}
+
+- id: evaluator-optimizer
+  term: Evaluator-Optimizer
+  category: agents
+  definition: Evaluator-optimizer is a workflow loop in which one model call generates a response and another evaluates it against criteria and provides feedback, repeating until the output passes.
+  broader: [agentic-workflow]
+  related: [self-refine, llm-as-a-judge, reflexion]
+  body: It works best when evaluation criteria are clear and when feedback demonstrably improves the output, as in literary translation or iterative search.
+  sources:
+    - {title: "Building effective agents", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/building-effective-agents"}
+
+- id: meta-prompting
+  term: Meta-Prompting
+  category: agents
+  definition: Meta-prompting uses a single model as a conductor that breaks a task down and writes prompts for fresh instances of itself acting as specialized experts, then integrates their outputs.
+  body: The term is also used more loosely for asking a model to write or improve a prompt.
+  related: [orchestrator-workers, self-discover, automatic-prompt-engineer]
+  introduced: 2024
+  sources:
+    - {title: "Meta-Prompting: Enhancing Language Models with Task-Agnostic Scaffolding", authors: "Suzgun & Kalai", year: 2024, url: "https://arxiv.org/abs/2401.12954"}
+
+- id: agent-memory
+  term: Agent Memory
+  category: agents
+  definition: Agent memory is the set of mechanisms that let a language-model agent store information beyond a single context window, such as conversation summaries, retrievable records of past events, and reflections, and bring the relevant parts back into context later.
+  body: Park et al.'s generative agents scored memories by recency, importance, and relevance and periodically synthesized higher-level reflections. MemGPT treated the context window like main memory and paged information in and out of external storage.
+  aliases: [long-term memory, memory stream]
+  related: [ai-agent, context-engineering, reflexion, retrieval-augmented-generation]
+  sources:
+    - {title: "Generative Agents: Interactive Simulacra of Human Behavior", authors: "Park et al.", year: 2023, url: "https://arxiv.org/abs/2304.03442"}
+    - {title: "MemGPT: Towards LLMs as Operating Systems", authors: "Packer et al.", year: 2023, url: "https://arxiv.org/abs/2310.08560"}
+
+- id: context-engineering
+  term: Context Engineering
+  category: agents
+  definition: Context engineering is the practice of curating the full set of tokens a model sees at each step, including instructions, tools, retrieved data, memory, and conversation history, to maximize the chance of the desired behavior within a limited attention budget.
+  body: The term gained currency in 2025 as agents ran for many steps and the main challenge shifted from wording a single prompt to deciding what information enters and leaves the context window over time, through techniques such as compaction, structured note-taking, and subagents.
+  aliases: [context management]
+  broader: [prompt-engineering]
+  related: [context-window, agent-memory, retrieval-augmented-generation, ai-agent, lost-in-the-middle]
+  introduced: 2025
+  sources:
+    - {title: "Effective context engineering for AI agents", authors: "Anthropic", year: 2025, url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"}

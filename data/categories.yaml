@@ -1,0 +1,30 @@
+- id: foundations
+  name: Foundations
+  description: Core concepts of prompting — the parts of a prompt, how models consume it, and the basic zero-shot and few-shot paradigms.
+- id: exemplars
+  name: Exemplars & In-Context Learning
+  description: How demonstrations inside a prompt are chosen, ordered, scaled, and calibrated, and what they actually teach the model.
+- id: reasoning
+  name: Reasoning Elicitation
+  description: Techniques that get a model to produce intermediate reasoning, decompose problems, or explore multiple solution paths before answering.
+- id: verification
+  name: Self-Critique & Verification
+  description: Techniques in which a model, or a set of models, checks, critiques, votes on, or revises outputs.
+- id: retrieval-tools
+  name: Retrieval & Tool Use
+  description: Grounding generation in external information and letting models call functions, search, and other tools.
+- id: agents
+  name: Agents & Orchestration
+  description: Patterns for composing multiple model calls, tools, and memory into workflows and autonomous agents.
+- id: optimization
+  name: Prompt Optimization
+  description: Automatic and learned methods that search for, compress, or train better prompts.
+- id: test-time
+  name: Reasoning Models & Test-Time Compute
+  description: Models trained to reason at length, and methods that improve answers by spending more computation at inference time.
+- id: security
+  name: Security & Adversarial Prompting
+  description: Attacks that subvert a model's instructions and the defenses designed to resist them.
+- id: failure-modes
+  name: Failure Modes & Evaluation
+  description: Systematic ways prompted models go wrong, and the evaluations used to measure them.

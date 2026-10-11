@@ -1,0 +1,6 @@
+# Short and alternate paths. Renamed or merged terms go here too, e.g.
+# /t/old-slug/  /t/new-slug/  301
+/term/:slug   /t/:slug/   301
+/terms/:slug  /t/:slug/   301
+/glossary     /terms/     301
+/cite         /about/     301
