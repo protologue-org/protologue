@@ -1,0 +1,30 @@
+{
+  "title": "Protologue: A Taxonomy of Prompting and LLM Techniques",
+  "upload_type": "dataset",
+  "description": "<p>Protologue is an openly licensed, sourced reference for the vocabulary of prompting and large language model techniques. Each entry has a permanent identifier (PTL-NNNN), a standalone one-to-two-sentence definition, synonyms, broader, narrower and related links (SKOS semantics), and the primary source that introduced the technique.</p><p>Version 1.0.0 contains 101 techniques in 10 branches (foundations, exemplars, reasoning, verification, retrieval and tools, agents, optimization, test-time compute, security, and failure modes), citing 98 primary sources. Every arXiv citation was checked against the paper.</p><p>This archive contains the source data (YAML), the generator that builds the website and its machine-readable exports (JSON, CSV, SKOS JSON-LD and Turtle, llms.txt), and an MCP server for AI agents. The live reference is at <a href=\"https://protologue.com/\">https://protologue.com/</a>.</p>",
+  "creators": [
+    {"name": "Protologue"}
+  ],
+  "license": "cc-by-4.0",
+  "access_right": "open",
+  "keywords": [
+    "prompt engineering",
+    "large language models",
+    "LLM",
+    "taxonomy",
+    "glossary",
+    "controlled vocabulary",
+    "SKOS",
+    "chain-of-thought",
+    "retrieval-augmented generation",
+    "AI agents",
+    "prompt injection"
+  ],
+  "related_identifiers": [
+    {"identifier": "https://protologue.com/", "relation": "isDocumentedBy", "resource_type": "other"},
+    {"identifier": "https://huggingface.co/datasets/franklinpolymathic/protologue", "relation": "isVariantFormOf", "resource_type": "dataset"},
+    {"identifier": "https://github.com/protologue-org/protologue", "relation": "isSupplementTo", "resource_type": "software"}
+  ],
+  "language": "eng",
+  "notes": "Text and data are licensed CC BY 4.0. The generator and MCP server code are licensed MIT."
+}
