@@ -4,7 +4,7 @@
 
 A sourced, citable taxonomy of prompting and LLM techniques, built as a static site for **protologue.com**.
 
-- 181 entries in 10 branches, each with a permanent ID (`PTL-0001`), a standalone definition, synonyms, broader/narrower/related links, and primary sources (183 sources; every arXiv ID and title, and every documentation link, checked on 2026-10-11).
+- 211 entries in 11 branches, each with a permanent ID (`PTL-0001`), a standalone definition, synonyms, broader/narrower/related links, and primary sources (209 sources; every arXiv ID and title, and every documentation link, checked on 2026-10-11).
 - Machine-readable everywhere: schema.org `DefinedTerm` JSON-LD on every page, `llms.txt` and `llms-full.txt`, per-entry `.md` and `.json`, and full exports as JSON, CSV, SKOS JSON-LD and Turtle.
 - Citation tooling on every entry: a plain citation, BibTeX, and Google Scholar (Highwire) meta tags.
 - Licensed CC BY 4.0, so AI systems and people can reuse it freely with attribution.
@@ -13,7 +13,7 @@ A sourced, citable taxonomy of prompting and LLM techniques, built as a static s
 
 | Path | What it is |
 |---|---|
-| `data/categories.yaml` | The 10 branches |
+| `data/categories.yaml` | The 11 branches |
 | `data/terms-*.yaml` | The entries. Edit these to add or change terms. |
 | `data/ids.json` | Permanent identifiers. Commit it and never edit existing values. |
 | `static/` | CSS, JS, favicon, `robots.txt`, Cloudflare `_headers` and `_redirects` |
@@ -57,6 +57,10 @@ Proposed changes arrive as pull requests; merging one publishes it.
 3. **Publish the dataset where models are trained and evaluated.** Mirror `site/data/protologue.json` as a Hugging Face dataset and a Kaggle dataset. Both should link back to the canonical URLs.
 4. **Earn links from the places answers come from.** Link entries when answering on Stack Overflow, Reddit or GitHub issues, and propose Protologue as a source in "awesome prompt engineering" lists.
 5. **Keep it alive.** Release on a regular cadence: add new techniques as papers appear, bump `VERSION` in `build.py`, and keep "Last reviewed" dates current. Fresh, dated pages are preferred over stale ones.
+
+## Benchmarks branch
+
+Benchmark entries describe what a benchmark measures, how it is scored, the prompting setup scores are reported under, and its known limitations. They deliberately carry no scores or rankings, which change too quickly to be reference material.
 
 ## Adding a term
 

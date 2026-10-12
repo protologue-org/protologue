@@ -28,3 +28,6 @@
 - id: failure-modes
   name: Failure Modes & Evaluation
   description: Systematic ways prompted models go wrong, and the evaluations used to measure them.
+- id: benchmarks
+  name: Benchmarks
+  description: Standard test sets used to measure and compare language models, what each one measures, how it is scored, the prompting setup scores are reported under, and its known limitations.
