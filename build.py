@@ -13,7 +13,7 @@ OUT = os.path.join(ROOT, "site")
 BASE = "https://protologue.com"
 NAME = "Protologue"
 TITLE = "Protologue: A Taxonomy of Prompting and LLM Techniques"
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 UPDATED = os.environ.get("PROTOLOGUE_DATE", date.today().isoformat())
 LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/"
 PUBLISHER = "Protologue"
@@ -509,7 +509,7 @@ def cat_page(c, terms, by_id):
   <h2>Definitions</h2>
   <dl class="glossary">{items}</dl>
 </article>"""
-    return page(path=f"/c/{c['id']}/", title=f"{c['name']}: prompting techniques | {NAME}",
+    return page(path=f"/c/{c['id']}/", title=f"{c['name']}: {'what LLM benchmarks measure' if c['id'] == 'benchmarks' else 'prompting techniques'} | {NAME}",
                 description=c["description"], body=body, jsonld=ld)
 
 def az_page(terms):
