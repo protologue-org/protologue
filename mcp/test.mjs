@@ -25,7 +25,7 @@ check(!j.result.structuredContent && j.result.content[0].text.includes("No Proto
 [s, j] = await call({ jsonrpc: "2.0", id: 8, method: "tools/call", params: { name: "get_related", arguments: { term: "chain-of-thought" } } });
 check(j.result.structuredContent.narrower.length >= 5, "get_related narrower=" + j.result.structuredContent.narrower.length);
 [s, j] = await call({ jsonrpc: "2.0", id: 9, method: "tools/call", params: { name: "list_categories", arguments: {} } });
-check(j.result.structuredContent.categories.length === 10, "list_categories");
+check(j.result.structuredContent.categories.length === JSON.parse(data).categories.length, "list_categories");
 [s, j] = await call({ jsonrpc: "2.0", id: 10, method: "bogus" }); check(j.error.code === -32601, "unknown method");
 const g = await handle(new Request("https://mcp.protologue.com/mcp"), { fetchImpl }); check(g.status === 405, "GET /mcp 405");
 const l = await handle(new Request("https://mcp.protologue.com/"), { fetchImpl }); check(l.status === 200, "landing page");
