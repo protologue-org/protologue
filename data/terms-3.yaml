@@ -140,9 +140,9 @@
   aliases: [thinking mode, thinking budget, reasoning effort]
   broader: [reasoning-model]
   related: [scratchpad, chain-of-thought]
-  body: Early implementations exposed a fixed thinking token budget; newer Claude models replace it with adaptive thinking, where the model decides how much to reason under a chosen effort level. Vendor guidance for these modes favors high-level instructions about how to think over prescriptive step-by-step scripts.
+  body: Early implementations exposed a fixed thinking token budget. Newer Claude models replace it with adaptive thinking, in which the model decides whether and how much to reason on each request and the developer sets an effort level instead of a token budget. Anthropic's documentation states that the fixed budget is deprecated on Claude 4.6 models and rejected by Claude 4.7 and later models. Vendor guidance for these modes favors high-level instructions about how to think over prescriptive step-by-step scripts.
   sources:
-    - {title: "Building with extended thinking", authors: "Anthropic", year: 2025, url: "https://platform.claude.com/docs/en/build-with-claude/extended-thinking"}
+    - {title: "Extended thinking", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/extended-thinking"}
 
 - id: self-taught-reasoner
   term: Self-Taught Reasoner
@@ -295,7 +295,7 @@
   related: [lost-in-the-middle, context-window]
   introduced: 2023
   sources:
-    - {title: "LLMTest_NeedleInAHaystack", authors: "Kamradt", year: 2023, url: "https://github.com/gkamradt/LLMTest_NeedleInAHaystack"}
+    - {title: "needle-in-a-haystack", authors: "Kamradt", year: 2023, url: "https://github.com/gkamradt/needle-in-a-haystack"}
 
 - id: prompt-sensitivity
   term: Prompt Sensitivity

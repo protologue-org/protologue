@@ -111,7 +111,7 @@ function search(data, q, limit) {
     const aliases = t.aliases.map(norm);
     const def = norm(t.definition);
     let s = 0;
-    if (name === n || aliases.includes(n)) s += 100;
+    if (name === n || aliases.includes(n) || name.replace(/ (prompting|prompt)$/, "") === n) s += 100;
     if (name.startsWith(n)) s += 40;
     if (name.includes(n)) s += 30;
     if (aliases.some((a) => a.includes(n))) s += 25;

@@ -350,3 +350,17 @@
   introduced: 2024
   sources:
     - {title: "RULER: What's the Real Context Size of Your Long-Context Language Models?", authors: "Hsieh et al.", year: 2024, url: "https://arxiv.org/abs/2404.06654"}
+
+# Added 2026-10-12 (weekly review)
+
+- id: harness-engineering
+  term: Harness Engineering
+  category: agents
+  definition: Harness engineering is the design of the software around a language model that turns it into an agent, including the agent loop, tools, context management, permissions and safety controls, and feedback mechanisms such as tests and linters.
+  body: The term spread in early 2026, after OpenAI described building software with Codex agents in which engineers' main work shifted from writing code to designing the environments, constraints and feedback loops the agents work within. It treats an agent as a model plus a harness, so two agents built on the same model can differ widely in reliability. Harness engineering contains context engineering, which concerns what enters the context window at each step, and adds the runtime, tooling and control surfaces around it. Coding agents such as Codex and Claude Code are the most studied examples.
+  aliases: [agent harness, agent harness engineering]
+  related: [context-engineering, coding-agent, ai-agent, agentic-workflow, context-compaction, guardrails, human-in-the-loop]
+  introduced: 2026
+  sources:
+    - {title: "Harness engineering: leveraging Codex in an agent-first world", authors: "Lopopolo", year: 2026, url: "https://openai.com/index/harness-engineering/"}
+    - {title: "Harness Engineering: Anatomy, Architecture, and Evolution of Coding Agents -- A Source-Code Study of Eleven Systems", authors: "Barbaste et al.", year: 2026, url: "https://arxiv.org/abs/2609.00006"}
