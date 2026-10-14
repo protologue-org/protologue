@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.2 (2026-10-14)
+
+**Added**
+- Recursive Language Model (PTL-0213): an inference strategy that keeps a long prompt outside the context window and processes it through recursive self-calls. Source: Zhang, Kraska and Khattab (2025).
+- Agentic Context Engineering (PTL-0214): improving an application by incrementally updating its context as an evolving playbook. Source: Zhang et al. (2025).
+- Sleep-time Compute (PTL-0215): computation done on a context before queries arrive. Source: Lin et al. (2025).
+
 ## 1.2.1 (2026-10-14)
 
 Weekly review. All 211 source links were re-checked: every arXiv ID matches its cited title and first author, and every documentation link resolves.
