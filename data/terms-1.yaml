@@ -164,7 +164,7 @@
   term: Prefill
   category: foundations
   definition: Prefill is the technique of writing the first part of the model's response yourself, so that the model continues from that text and is steered into a specific format or direction.
-  body: Starting the assistant turn with an opening brace pushes the model toward JSON output, and starting with a heading or a character's name can enforce structure or persona. Support is model-specific and declining. Anthropic's documentation states that prefilling the final assistant turn is not supported on Claude 4.6 models and later, and recommends explicit instructions or structured outputs instead.
+  body: Starting the assistant turn with an opening brace pushes the model toward JSON output, and starting with a heading or a character's name can enforce structure or persona. Support is model-specific and declining. Anthropic's documentation states that, starting with Claude 4.6 models, requests that prefill the final assistant turn return an error, while earlier models still accept them and assistant messages elsewhere in the conversation are unaffected. It gives migration guidance for common uses, such as controlling output format and eliminating preambles, mostly through explicit instructions.
   aliases: [response prefilling, output priming, assistant prefill]
   related: [structured-outputs, delimiters]
   sources:
