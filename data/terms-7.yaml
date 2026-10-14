@@ -364,3 +364,41 @@
   sources:
     - {title: "Harness engineering: leveraging Codex in an agent-first world", authors: "Lopopolo", year: 2026, url: "https://openai.com/index/harness-engineering/"}
     - {title: "Harness Engineering: Anatomy, Architecture, and Evolution of Coding Agents -- A Source-Code Study of Eleven Systems", authors: "Barbaste et al.", year: 2026, url: "https://arxiv.org/abs/2609.00006"}
+
+# Added 2026-10-14
+
+- id: recursive-language-model
+  term: Recursive Language Model
+  category: test-time
+  definition: A recursive language model (RLM) is an inference strategy in which a long prompt is kept outside the model's context window as an external resource that the model inspects programmatically, splitting the task into parts and calling itself recursively on them.
+  body: RLMs address inputs far longer than a context window without first compressing or summarizing them. The model works in a code environment where the prompt is stored as data, reads only the parts it needs, and delegates sub-problems to recursive calls whose results it combines. The authors report handling inputs about two orders of magnitude beyond the context window and outperforming compaction and common agent scaffolds on long-context tasks at comparable cost. The approach treats long-context handling as a form of test-time compute rather than a property of the model.
+  aliases: [RLM, RLMs, recursive LM]
+  broader: [test-time-compute-scaling]
+  related: [context-window, context-compaction, context-rot, lost-in-the-middle, code-execution-tool]
+  introduced: 2025
+  sources:
+    - {title: "Recursive Language Models", authors: "Zhang et al.", year: 2025, url: "https://arxiv.org/abs/2512.24601"}
+
+- id: agentic-context-engineering
+  term: Agentic Context Engineering
+  category: optimization
+  definition: Agentic Context Engineering (ACE) is a method for improving a language model application by treating its context, such as a system prompt or agent memory, as an evolving playbook that a loop of generation, reflection, and curation updates incrementally from execution feedback.
+  body: ACE adapts the inputs to a model rather than its weights. Its authors identify two failure modes of earlier context-adaptation methods, brevity bias, where summaries drop domain detail, and context collapse, where repeated rewriting erodes accumulated knowledge, and address them by adding and refining individual entries instead of rewriting the whole context. It can run offline to build a system prompt or online as agent memory, and learns from natural execution feedback without labeled data.
+  aliases: [ACE]
+  broader: [prompt-optimization]
+  related: [context-engineering, agent-memory, reflexion, self-refine]
+  introduced: 2025
+  sources:
+    - {title: "Agentic Context Engineering: Evolving Contexts for Self-Improving Language Models", authors: "Zhang et al.", year: 2025, url: "https://arxiv.org/abs/2510.04618"}
+
+- id: sleep-time-compute
+  term: Sleep-time Compute
+  category: test-time
+  definition: Sleep-time compute is computation a language model performs on a context before any query arrives, anticipating likely questions and precomputing useful inferences so that less computation, and lower latency, is needed when queries come.
+  body: It moves part of test-time reasoning to idle time between interactions, which suits settings where a stable context, such as a codebase or document, is queried repeatedly. The cost can be amortized across several related queries about the same context. Its authors report that the benefit depends on how predictable the queries are from the context.
+  aliases: [sleep-time computation]
+  broader: [test-time-compute-scaling]
+  related: [agent-memory, reasoning-model, prompt-caching]
+  introduced: 2025
+  sources:
+    - {title: "Sleep-time Compute: Beyond Inference Scaling at Test-time", authors: "Lin et al.", year: 2025, url: "https://arxiv.org/abs/2504.13171"}
