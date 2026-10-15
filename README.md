@@ -43,7 +43,8 @@ python3 build.py
 
 - **Hugging Face:** the dataset is mirrored at https://huggingface.co/datasets/franklinpolymathic/protologue (configs `terms` and `categories`). Update it when entries change.
 
-- **Kaggle:** mirrored at https://www.kaggle.com/datasets/protologue/protologue (the four files from `site/data/`). Upload a new version when entries change.
+- **Kaggle:** mirrored at https://www.kaggle.com/datasets/protologue/protologue (the four files from `site/data/`). 
+- **Mirror sync:** publishing a GitHub release runs `.github/workflows/mirrors.yml`, which builds the data, runs `scripts/export_mirrors.py` and uploads to both mirrors. It needs the repository secrets `HF_TOKEN`, `KAGGLE_USERNAME` and `KAGGLE_KEY`; a mirror whose secret is missing is skipped. It can also be run by hand from the Actions tab ("Update dataset mirrors" → Run workflow). The Hugging Face README is not touched; update its version and counts by hand.
 
 Proposed changes arrive as pull requests; merging one publishes it.
 
