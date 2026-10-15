@@ -1,0 +1,55 @@
+# Push the dataset to the Hugging Face and Kaggle mirrors whenever a GitHub release is published.
+# Needs repository secrets (Settings -> Secrets and variables -> Actions):
+#   HF_TOKEN         Hugging Face token with write access to franklinpolymathic/protologue
+#   KAGGLE_USERNAME  Kaggle username that owns protologue/protologue
+#   KAGGLE_KEY       Kaggle API key
+# A mirror whose secret is missing is skipped, not failed.
+name: Update dataset mirrors
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mirrors:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build site data and mirror files
+        run: |
+          pip install -r requirements.txt
+          python3 build.py
+          python3 scripts/export_mirrors.py
+          echo "VERSION=$(python3 -c "import json;print(json.load(open('site/data/protologue.json')).get('version',''))")" >> "$GITHUB_ENV"
+
+      - name: Upload to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          if [ -z "$HF_TOKEN" ]; then echo "HF_TOKEN not set; skipping Hugging Face"; exit 0; fi
+          pip install "huggingface_hub>=0.24"
+          python3 - <<'PY'
+          import os
+          from huggingface_hub import HfApi
+          HfApi(token=os.environ["HF_TOKEN"]).upload_folder(
+              repo_id="franklinpolymathic/protologue", repo_type="dataset",
+              folder_path="mirror/hf", path_in_repo=".",
+              commit_message=f"Protologue v{os.environ.get('VERSION','')} from GitHub release",
+          )
+          PY
+
+      - name: Upload to Kaggle
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+        run: |
+          if [ -z "$KAGGLE_KEY" ]; then echo "KAGGLE_KEY not set; skipping Kaggle"; exit 0; fi
+          pip install kaggle
+          kaggle datasets version -p mirror/kaggle -m "Protologue v${VERSION} from GitHub release"
