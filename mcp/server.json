@@ -3,7 +3,7 @@
   "name": "com.protologue/protologue",
   "title": "Protologue",
   "description": "Sourced, citable definitions of prompting and LLM techniques, with relations and primary sources.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "websiteUrl": "https://protologue.com/mcp/",
   "repository": {
     "url": "https://github.com/protologue-org/protologue",
