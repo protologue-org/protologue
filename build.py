@@ -283,6 +283,7 @@ def signup(variant="full"):
 </section>"""
 
 MCP_URL = "https://mcp.protologue.com/mcp"
+CONTACT_EMAIL = "hello@protologue.com"
 
 def mcp_page(terms):
     body = f"""<article class="prose">
@@ -305,11 +306,44 @@ def mcp_page(terms):
 <p><strong>Claude:</strong> Settings, then Connectors, then Add custom connector. Paste the endpoint and choose no sign-in.</p>
 <p><strong>Claude Code:</strong> <code>claude mcp add --transport http protologue {MCP_URL}</code></p>
 <p><strong>Cursor, VS Code and other MCP clients:</strong> add a server entry of type <code>http</code> (or <code>streamable-http</code>) with the URL above.</p>
+<h2>Example prompts</h2>
+<ul>
+<li>"Using Protologue, what is chain-of-thought prompting and who introduced it?"</li>
+<li>"Look up ReAct in Protologue and list the techniques it is related to."</li>
+<li>"Search Protologue for techniques about retrieval and give me their definitions with citations."</li>
+<li>"Which Protologue branch covers prompt injection, and what else is in it?"</li>
+</ul>
+<h2>Behaviour and limits</h2>
+<p>All four tools are read-only: they only return Protologue's own published entries and never write, send or change anything. The server needs no account, stores no user data and has no rate limit beyond Cloudflare's standard protection. New entries appear shortly after each site update.</p>
 <h2>Using results</h2>
 <p>Content is licensed <a href="{LICENSE_URL}">CC BY 4.0</a>. When an answer uses a Protologue definition, cite it with the returned citation and link to the entry's URL.</p>
+<h2>Privacy and support</h2>
+<p>See the <a href="/privacy/">privacy policy</a> for what the server and site process. For questions, problems or corrections, email <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a> or open an issue on <a href="https://github.com/protologue-org/protologue/issues">GitHub</a>.</p>
 </article>"""
     return page(path="/mcp/", title=f"MCP server for AI agents | {NAME}",
                 description="Connect AI assistants and agents to Protologue's free MCP server to look up sourced definitions of prompting and LLM techniques.",
+                body=body)
+
+def privacy_page():
+    body = f"""<article class="prose">
+<h1>Privacy policy</h1>
+<p class="lede">Protologue is a public reference. You can read it, download it and query it from AI tools without an account. It runs no advertising and no analytics or tracking scripts of its own.</p>
+<p>Last updated 2026-10-17.</p>
+<h2>Website (protologue.com)</h2>
+<p>The site is a set of static pages served by Cloudflare. Like any web host, Cloudflare processes the technical details of each request (IP address, browser user agent, the page requested and the time) to deliver pages and protect the site from abuse. We look at these only as aggregate statistics, such as daily page views and which crawlers visited. Protologue itself sets no cookies. The one piece of third-party code on the site is the newsletter sign-up form, which is loaded from Beehiiv; Beehiiv may set its own cookies when the form loads, under its <a href="https://www.beehiiv.com/privacy">privacy policy</a>.</p>
+<h2>MCP server (mcp.protologue.com)</h2>
+<p>The MCP server answers lookups from AI assistants and agents. It requires no account or API key, and its tools are read-only. It does not store your queries in any database. Cloudflare, which runs the server, keeps short-lived request logs (time, request details and any error messages) for a few days so that faults can be investigated; these are not used for any other purpose and are not shared. The AI application you use to call the server has its own privacy policy, which governs your conversation with it.</p>
+<h2>Newsletter</h2>
+<p>If you subscribe to the newsletter, your email address is collected and stored by our newsletter provider, <a href="https://www.beehiiv.com/privacy">Beehiiv</a>, which sends the emails and reports aggregate open and click rates. We use your address only to send the newsletter. Every email has an unsubscribe link, and you can ask us to delete your address at any time.</p>
+<h2>What we do not do</h2>
+<p>We do not sell or rent personal data, build profiles of visitors, or share data with advertisers. Sponsors or partners, if any, never receive personal data.</p>
+<h2>Retention</h2>
+<p>Hosting logs are kept for the short periods Cloudflare uses for operations, typically days. Newsletter subscriptions are kept until you unsubscribe or ask for deletion.</p>
+<h2>Contact</h2>
+<p>For any privacy question or request, email <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>. If this policy changes, the date above will change with it.</p>
+</article>"""
+    return page(path="/privacy/", title=f"Privacy policy | {NAME}",
+                description="What protologue.com, the Protologue MCP server and the newsletter collect, and what they do not.",
                 body=body)
 
 def newsletter_page():
@@ -373,7 +407,7 @@ def page(*, path, title, description, body, jsonld=None, extra_head="", canonica
 </main>
 <footer class="site">
   <p>{NAME} v{VERSION}, updated {UPDATED}. Text and data are licensed <a href="{LICENSE_URL}" rel="license">CC BY 4.0</a>; reuse freely with attribution.</p>
-  <p><a href="/llms.txt">llms.txt</a> <a href="/data/protologue.json">JSON</a> <a href="/data/protologue.csv">CSV</a> <a href="/data/protologue.skos.jsonld">SKOS</a> <a href="/mcp/">MCP server</a> <a href="/sitemap.xml">Sitemap</a></p>
+  <p><a href="/llms.txt">llms.txt</a> <a href="/data/protologue.json">JSON</a> <a href="/data/protologue.csv">CSV</a> <a href="/data/protologue.skos.jsonld">SKOS</a> <a href="/mcp/">MCP server</a> <a href="/sitemap.xml">Sitemap</a> <a href="/privacy/">Privacy</a> <a href="mailto:{CONTACT_EMAIL}">Contact</a></p>
 </footer>
 <script src="/assets/site.js?v={ASSET_V}" defer></script>
 </body>
@@ -599,6 +633,7 @@ def main():
     write("terms/index.html", az_page(terms))
     write("about/index.html", about_page(terms))
     write("mcp/index.html", mcp_page(terms))
+    write("privacy/index.html", privacy_page())
     if NEWSLETTER:
         write("newsletter/index.html", newsletter_page())
     write("data/index.html", data_page(terms))
@@ -657,7 +692,7 @@ def main():
     write("llms-full.txt", "\n".join(full))
 
     # sitemap
-    urls = ["/", "/terms/", "/about/", "/data/", "/mcp/"] + (["/newsletter/"] if NEWSLETTER else []) + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
+    urls = ["/", "/terms/", "/about/", "/data/", "/mcp/", "/privacy/"] + (["/newsletter/"] if NEWSLETTER else []) + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f"<url><loc>{BASE}{u}</loc><lastmod>{UPDATED}</lastmod></url>" for u in urls]
     sm.append("</urlset>")
