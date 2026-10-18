@@ -11,16 +11,28 @@
   "homepage": "https://protologue.com/mcp/",
   "repository": "https://github.com/protologue-org/protologue",
   "license": "CC-BY-4.0",
-  "keywords": ["prompting", "llm", "taxonomy", "reference", "citations", "ai research"],
+  "keywords": [
+    "prompting",
+    "llm",
+    "taxonomy",
+    "reference",
+    "citations",
+    "ai research"
+  ],
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "Protologue",
         "shortDescription": "Cite prompting techniques",
-        "longDescription": "Protologue is an openly licensed (CC BY 4.0) reference taxonomy of prompting and large language model techniques, from chain-of-thought and ReAct to context engineering and prompt injection. Each entry has a permanent identifier, a standalone definition, synonyms, broader, narrower and related techniques, and the primary source (paper or official documentation) that introduced it. Every source is checked against the original.\n\nWith Protologue connected, ChatGPT can look up a technique by name or synonym, read its sourced definition, explore related techniques and browse the taxonomy's branches. Answers come with a ready-made citation and a canonical link, so you can see where a definition came from. The app is free, read-only and needs no account. The taxonomy is updated weekly as new techniques appear.",
+        "longDescription": "Protologue is an openly licensed (CC BY 4.0) reference taxonomy of prompting and large language model techniques, from chain-of-thought and ReAct to context engineering and prompt injection. Each entry has a permanent identifier, a standalone definition, synonyms, broader, narrower and related techniques, and the primary source (paper or official documentation) that introduced it. Every source is checked against the original.\n\nWith Protologue connected, ChatGPT can look up a technique by name or synonym, read its sourced definition, explore related techniques and browse the taxonomy's branches. Answers come with a ready-made citation and a canonical link, so you can see where a definition came from. Its tools are read-only and need no account. The taxonomy is updated weekly as new techniques appear.",
         "developerName": "FranklinPolymathic LLC",
-        "category": "Research",
-        "capabilities": ["Search techniques", "Read sourced definitions", "Explore related techniques", "Browse the taxonomy"],
+        "category": "Education & Research",
+        "capabilities": [
+          "Search techniques",
+          "Read sourced definitions",
+          "Explore related techniques",
+          "Browse the taxonomy"
+        ],
         "websiteURL": "https://protologue.com/",
         "supportURL": "https://protologue.com/mcp/",
         "privacyPolicyURL": "https://protologue.com/privacy/",
@@ -84,8 +96,7 @@
             }
           ]
         },
-        "commerce": false,
-        "commerce_description": "Protologue is free and does not process payments."
+        "commerce": false
       },
       "publication": {
         "release_notes": "Initial release: four read-only tools (search_terms, get_term, get_related, list_categories) over the Protologue taxonomy."
