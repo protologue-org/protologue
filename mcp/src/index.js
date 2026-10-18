@@ -275,12 +275,18 @@ const LANDING = `<!doctype html><html lang="en"><head><meta charset="utf-8"><met
 <p>Tools: <code>search_terms</code>, <code>get_term</code>, <code>get_related</code>, <code>list_categories</code>. Content is CC BY 4.0; please cite entries with the citation each result includes.</p>
 <p><a href="${SITE}/mcp/">Setup instructions</a></p></body></html>`;
 
+const OPENAI_APPS_CHALLENGE = "21mycx_jsIN6ASVJqm--_xdCiNedqgfKLNoDnpoQLIE";
+
 export async function handle(request, { fetchImpl = fetch } = {}) {
   const url = new URL(request.url);
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: CORS });
 
   if (url.pathname === "/" || url.pathname === "") {
     return new Response(LANDING, { headers: { "Content-Type": "text/html; charset=utf-8", ...CORS } });
+  }
+  if (url.pathname === "/.well-known/openai-apps-challenge") {
+    // Domain verification token for the ChatGPT plugin directory (platform.openai.com/plugins).
+    return new Response(OPENAI_APPS_CHALLENGE, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
   }
   if (url.pathname === "/.well-known/mcp/server-card.json" || url.pathname === "/server.json") {
     return json({
