@@ -284,6 +284,7 @@ def signup(variant="full"):
 
 MCP_URL = "https://mcp.protologue.com/mcp"
 CONTACT_EMAIL = "hello@protologue.com"
+OPERATOR = "FranklinPolymathic LLC"
 
 def mcp_page(terms):
     body = f"""<article class="prose">
@@ -328,7 +329,7 @@ def privacy_page():
     body = f"""<article class="prose">
 <h1>Privacy policy</h1>
 <p class="lede">Protologue is a public reference. You can read it, download it and query it from AI tools without an account. It runs no advertising and no analytics or tracking scripts of its own.</p>
-<p>Last updated 2026-10-17.</p>
+<p>Protologue is operated by {OPERATOR}, which is responsible for the data described here. Last updated 2026-10-18.</p>
 <h2>Website (protologue.com)</h2>
 <p>The site is a set of static pages served by Cloudflare. Like any web host, Cloudflare processes the technical details of each request (IP address, browser user agent, the page requested and the time) to deliver pages and protect the site from abuse. We look at these only as aggregate statistics, such as daily page views and which crawlers visited. Protologue itself sets no cookies. The one piece of third-party code on the site is the newsletter sign-up form, which is loaded from Beehiiv; Beehiiv may set its own cookies when the form loads, under its <a href="https://www.beehiiv.com/privacy">privacy policy</a>.</p>
 <h2>MCP server (mcp.protologue.com)</h2>
@@ -579,7 +580,9 @@ def about_page(terms):
 <h2>Reuse</h2>
 <p>All text and data are licensed under <a href="{LICENSE_URL}">Creative Commons Attribution 4.0</a>. You may copy, adapt, and redistribute them, including commercially and for training machine learning models, provided you credit {NAME} and link to the source. Machine-readable copies are on the <a href="/data/">data page</a>, and <a href="/llms.txt">llms.txt</a> describes the site for language models.</p>
 <h2>Corrections and new terms</h2>
-<p>If a definition is wrong, a source is misattributed, or a technique is missing, send the term, a primary source, and a proposed definition. Corrections are recorded in the version history.</p>
+<p>If a definition is wrong, a source is misattributed, or a technique is missing, send the term, a primary source, and a proposed definition to <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>. Corrections are recorded in the version history.</p>
+<h2>Who runs it</h2>
+<p>{NAME} is operated by {OPERATOR}. Contact: <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>.</p>
 </article>"""
     return page(path="/about/", title=f"About and citation | {NAME}",
                 description=f"How {NAME} entries are written, sourced, identified, and licensed, and how to cite them.", body=body)
