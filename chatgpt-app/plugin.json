@@ -1,0 +1,95 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "protologue",
+  "version": "1.1.0",
+  "description": "Sourced, citable definitions of 200+ prompting and LLM techniques.",
+  "author": {
+    "name": "FranklinPolymathic LLC",
+    "email": "hello@protologue.com",
+    "url": "https://protologue.com/"
+  },
+  "homepage": "https://protologue.com/mcp/",
+  "repository": "https://github.com/protologue-org/protologue",
+  "license": "CC-BY-4.0",
+  "keywords": ["prompting", "llm", "taxonomy", "reference", "citations", "ai research"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Protologue",
+        "shortDescription": "Cite prompting techniques",
+        "longDescription": "Protologue is an openly licensed (CC BY 4.0) reference taxonomy of prompting and large language model techniques, from chain-of-thought and ReAct to context engineering and prompt injection. Each entry has a permanent identifier, a standalone definition, synonyms, broader, narrower and related techniques, and the primary source (paper or official documentation) that introduced it. Every source is checked against the original.\n\nWith Protologue connected, ChatGPT can look up a technique by name or synonym, read its sourced definition, explore related techniques and browse the taxonomy's branches. Answers come with a ready-made citation and a canonical link, so you can see where a definition came from. The app is free, read-only and needs no account. The taxonomy is updated weekly as new techniques appear.",
+        "developerName": "FranklinPolymathic LLC",
+        "category": "Research",
+        "capabilities": ["Search techniques", "Read sourced definitions", "Explore related techniques", "Browse the taxonomy"],
+        "websiteURL": "https://protologue.com/",
+        "supportURL": "https://protologue.com/mcp/",
+        "privacyPolicyURL": "https://protologue.com/privacy/",
+        "termsOfServiceURL": "https://protologue.com/terms-of-use/",
+        "defaultPrompt": [
+          "What is chain-of-thought prompting and who introduced it?",
+          "Search Protologue for retrieval techniques.",
+          "What is prompt injection, with a citation?"
+        ],
+        "brandColor": "#1E5B47",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
+      },
+      "onboardingSkill": "./skills/get-started/SKILL.md",
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Look up a technique and its source",
+              "prompt": "Using Protologue, what is chain-of-thought prompting and who introduced it?",
+              "tools_triggered": "get_term",
+              "expected_behavior": "Gives Protologue's definition of chain-of-thought prompting, credits Wei et al. (2022) as the source and links https://protologue.com/t/chain-of-thought/ with the citation."
+            },
+            {
+              "description": "Explore related techniques",
+              "prompt": "Look up Tree of Thoughts in Protologue and list the techniques it is related to.",
+              "tools_triggered": "get_related",
+              "expected_behavior": "Lists Chain-of-Thought Prompting as broader, Graph of Thoughts as narrower, and Self-Consistency and Test-Time Compute Scaling as related, with links."
+            },
+            {
+              "description": "Keyword search",
+              "prompt": "Search Protologue for techniques about retrieval.",
+              "tools_triggered": "search_terms",
+              "expected_behavior": "Returns entries such as Retrieval-Augmented Generation, Active Retrieval, Dense Retrieval and Contextual Retrieval, each with its one-sentence definition and URL."
+            },
+            {
+              "description": "Find a technique's branch",
+              "prompt": "Which Protologue branch covers prompt injection, and what else is in it?",
+              "tools_triggered": "get_term, list_categories",
+              "expected_behavior": "Names the Security & Adversarial Prompting branch and lists other entries in it, such as Indirect Prompt Injection, Prompt Leaking and Jailbreak."
+            },
+            {
+              "description": "Cite a definition",
+              "prompt": "Give me a citable definition of prompt injection from Protologue.",
+              "tools_triggered": "get_term",
+              "expected_behavior": "Quotes the definition, mentions Willison (2022) and Perez & Ribeiro (2022) as sources, and gives the Protologue citation with the link https://protologue.com/t/prompt-injection/."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Unrelated request",
+              "prompt": "What's the weather in Paris tomorrow?"
+            },
+            {
+              "description": "Creative writing with no lookup needed",
+              "prompt": "Write me a short poem about autumn."
+            },
+            {
+              "description": "Attempted write action on a read-only app",
+              "prompt": "Delete the chain-of-thought entry from Protologue."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "Protologue is free and does not process payments."
+      },
+      "publication": {
+        "release_notes": "Initial release: four read-only tools (search_terms, get_term, get_related, list_categories) over the Protologue taxonomy."
+      }
+    }
+  }
+}
