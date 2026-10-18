@@ -35,7 +35,7 @@ const TOOLS = [
       },
       required: ["query"],
     },
-    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    annotations: { title: "Search techniques", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
   {
     name: "get_term",
@@ -49,7 +49,7 @@ const TOOLS = [
       properties: { term: { type: "string", description: "Technique name, synonym, slug or PTL identifier." } },
       required: ["term"],
     },
-    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    annotations: { title: "Get a technique's definition", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
   {
     name: "get_related",
@@ -62,14 +62,14 @@ const TOOLS = [
       properties: { term: { type: "string", description: "Technique name, synonym, slug or PTL identifier." } },
       required: ["term"],
     },
-    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    annotations: { title: "Get related techniques", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
   {
     name: "list_categories",
     title: "List categories",
     description: "List Protologue's branches (categories) and the techniques in each.",
     inputSchema: { type: "object", properties: {} },
-    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    annotations: { title: "List categories", readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
 ];
 
