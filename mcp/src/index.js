@@ -10,7 +10,7 @@ const SITE = "https://protologue.com";
 const SERVER_INFO = {
   name: "protologue",
   title: "Protologue",
-  version: "1.0.0",
+  version: "1.1.0",
   websiteUrl: SITE,
 };
 const SUPPORTED_VERSIONS = ["2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05"];
@@ -35,7 +35,7 @@ const TOOLS = [
       },
       required: ["query"],
     },
-    annotations: { readOnlyHint: true, openWorldHint: false },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
   {
     name: "get_term",
@@ -49,7 +49,7 @@ const TOOLS = [
       properties: { term: { type: "string", description: "Technique name, synonym, slug or PTL identifier." } },
       required: ["term"],
     },
-    annotations: { readOnlyHint: true, openWorldHint: false },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
   {
     name: "get_related",
@@ -62,14 +62,14 @@ const TOOLS = [
       properties: { term: { type: "string", description: "Technique name, synonym, slug or PTL identifier." } },
       required: ["term"],
     },
-    annotations: { readOnlyHint: true, openWorldHint: false },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
   {
     name: "list_categories",
     title: "List categories",
     description: "List Protologue's branches (categories) and the techniques in each.",
     inputSchema: { type: "object", properties: {} },
-    annotations: { readOnlyHint: true, openWorldHint: false },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
   },
 ];
 
@@ -283,7 +283,18 @@ export async function handle(request, { fetchImpl = fetch } = {}) {
     return new Response(LANDING, { headers: { "Content-Type": "text/html; charset=utf-8", ...CORS } });
   }
   if (url.pathname === "/.well-known/mcp/server-card.json" || url.pathname === "/server.json") {
-    return json({ ...SERVER_INFO, description: INSTRUCTIONS, endpoint: `${url.origin}/mcp`, transport: "streamable-http", tools: TOOLS.map((t) => t.name) });
+    return json({
+      serverInfo: { name: SERVER_INFO.name, title: SERVER_INFO.title, version: SERVER_INFO.version },
+      ...SERVER_INFO,
+      description: INSTRUCTIONS,
+      endpoint: `${url.origin}/mcp`,
+      transport: "streamable-http",
+      authentication: { required: false },
+      documentationUrl: `${SITE}/mcp/`,
+      privacyPolicyUrl: `${SITE}/privacy/`,
+      supportEmail: "hello@protologue.com",
+      tools: TOOLS.map((t) => ({ name: t.name, title: t.title, description: t.description, inputSchema: t.inputSchema, annotations: t.annotations })),
+    });
   }
   if (url.pathname !== "/mcp") return json(err(null, -32000, "Not found. The MCP endpoint is /mcp."), 404);
 
