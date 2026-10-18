@@ -29,4 +29,5 @@ check(j.result.structuredContent.categories.length === JSON.parse(data).categori
 [s, j] = await call({ jsonrpc: "2.0", id: 10, method: "bogus" }); check(j.error.code === -32601, "unknown method");
 const g = await handle(new Request("https://mcp.protologue.com/mcp"), { fetchImpl }); check(g.status === 405, "GET /mcp 405");
 const l = await handle(new Request("https://mcp.protologue.com/"), { fetchImpl }); check(l.status === 200, "landing page");
+const oc = await handle(new Request("https://mcp.protologue.com/.well-known/openai-apps-challenge"), { fetchImpl }); check(oc.status === 200 && (await oc.text()).length > 20 && oc.headers.get("Content-Type").startsWith("text/plain"), "openai apps challenge");
 process.exit(fails ? 1 : 0);

@@ -4,6 +4,8 @@
 
 **Added**
 - Terms of use page at /terms-of-use/ (licence, fair use of the MCP server, no warranty), linked from the footer and the sitemap. Needed for the ChatGPT app listing.
+- MCP server serves the ChatGPT plugin domain-verification token at /.well-known/openai-apps-challenge.
+- ChatGPT app package: category set to Education & Research; pricing language removed from the description.
 
 ## 1.2.2 (2026-10-14)
 
