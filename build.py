@@ -347,6 +347,28 @@ def privacy_page():
                 description="What protologue.com, the Protologue MCP server and the newsletter collect, and what they do not.",
                 body=body)
 
+def terms_of_use_page():
+    body = f"""<article class="prose">
+<h1>Terms of use</h1>
+<p class="lede">Protologue is a free, openly licensed reference. These terms cover the website, the downloadable data and the MCP server at mcp.protologue.com.</p>
+<p>Protologue is operated by {OPERATOR}. Last updated 2026-10-18.</p>
+<h2>Licence</h2>
+<p>The definitions, classification and data files are published under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International licence</a> (CC BY 4.0). You may copy, adapt and redistribute them for any purpose, including commercially, as long as you credit Protologue and link to the entry or to protologue.com. Each entry and each MCP tool result includes a ready-made citation.</p>
+<h2>Using the MCP server</h2>
+<p>The MCP server is free to use without an account. Its tools only read the published reference. Please use it reasonably: do not attempt to overload, disrupt or gain unauthorised access to it, and do not use it to break any law. We may rate-limit or block traffic that harms the service for others.</p>
+<h2>No warranty</h2>
+<p>Protologue is provided as is. We source every definition from primary literature and correct errors when we find them, but we do not guarantee that the content is complete, current or free of errors, or that the site or server will always be available. Check the cited sources before relying on a definition for an important decision.</p>
+<h2>Limitation of liability</h2>
+<p>To the extent the law allows, {OPERATOR} is not liable for any loss or damage arising from use of the website, the data or the MCP server.</p>
+<h2>Third-party services</h2>
+<p>The AI application you use to call the MCP server, and the newsletter provider Beehiiv, have their own terms. How we handle data is described in the <a href="/privacy/">privacy policy</a>.</p>
+<h2>Changes and contact</h2>
+<p>If these terms change, the date above will change with them. Questions, corrections and requests go to <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>.</p>
+</article>"""
+    return page(path="/terms-of-use/", title=f"Terms of use | {NAME}",
+                description="Terms for using protologue.com, the Protologue data and the Protologue MCP server.",
+                body=body)
+
 def newsletter_page():
     body = f"""<article class="prose">
 <h1>The Protologue newsletter</h1>
@@ -408,7 +430,7 @@ def page(*, path, title, description, body, jsonld=None, extra_head="", canonica
 </main>
 <footer class="site">
   <p>{NAME} v{VERSION}, updated {UPDATED}. Text and data are licensed <a href="{LICENSE_URL}" rel="license">CC BY 4.0</a>; reuse freely with attribution.</p>
-  <p><a href="/llms.txt">llms.txt</a> <a href="/data/protologue.json">JSON</a> <a href="/data/protologue.csv">CSV</a> <a href="/data/protologue.skos.jsonld">SKOS</a> <a href="/mcp/">MCP server</a> <a href="/sitemap.xml">Sitemap</a> <a href="/privacy/">Privacy</a> <a href="mailto:{CONTACT_EMAIL}">Contact</a></p>
+  <p><a href="/llms.txt">llms.txt</a> <a href="/data/protologue.json">JSON</a> <a href="/data/protologue.csv">CSV</a> <a href="/data/protologue.skos.jsonld">SKOS</a> <a href="/mcp/">MCP server</a> <a href="/sitemap.xml">Sitemap</a> <a href="/privacy/">Privacy</a> <a href="/terms-of-use/">Terms of use</a> <a href="mailto:{CONTACT_EMAIL}">Contact</a></p>
 </footer>
 <script src="/assets/site.js?v={ASSET_V}" defer></script>
 </body>
@@ -637,6 +659,7 @@ def main():
     write("about/index.html", about_page(terms))
     write("mcp/index.html", mcp_page(terms))
     write("privacy/index.html", privacy_page())
+    write("terms-of-use/index.html", terms_of_use_page())
     if NEWSLETTER:
         write("newsletter/index.html", newsletter_page())
     write("data/index.html", data_page(terms))
@@ -695,7 +718,7 @@ def main():
     write("llms-full.txt", "\n".join(full))
 
     # sitemap
-    urls = ["/", "/terms/", "/about/", "/data/", "/mcp/", "/privacy/"] + (["/newsletter/"] if NEWSLETTER else []) + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
+    urls = ["/", "/terms/", "/about/", "/data/", "/mcp/", "/privacy/", "/terms-of-use/"] + (["/newsletter/"] if NEWSLETTER else []) + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f"<url><loc>{BASE}{u}</loc><lastmod>{UPDATED}</lastmod></url>" for u in urls]
     sm.append("</urlset>")

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+**Added**
+- Terms of use page at /terms-of-use/ (licence, fair use of the MCP server, no warranty), linked from the footer and the sitemap. Needed for the ChatGPT app listing.
+
 ## 1.2.2 (2026-10-14)
 
 **Added**
