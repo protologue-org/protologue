@@ -1,11 +1,27 @@
 # Changelog
 
-## Unreleased
+## 1.3.0 (2026-10-20)
+
+Weekly review. All 214 existing source links were re-checked on 2026-10-20: all 177 arXiv IDs match their cited title and first author, and 34 of 37 documentation links resolve to the cited page. The other three (the BM25 and reciprocal rank fusion DOIs and the x.com vibe-coding post) block automated fetching and were left unchanged.
 
 **Added**
+- Group Relative Policy Optimization (PTL-0216): a reinforcement learning algorithm that uses the average reward of a group of sampled completions as its baseline instead of a value model. Sources: Shao et al. (2024); Hugging Face TRL documentation.
+- Speculative Decoding (PTL-0217): a draft model proposes tokens that the target model verifies in parallel, without changing the output distribution. Sources: Leviathan et al. (2022); Chen et al. (2023).
+- Min-p Sampling (PTL-0218): truncation sampling with a threshold scaled by the top token's probability. Sources: Nguyen et al. (2024); a critical reanalysis by Schaeffer et al. (2025); vLLM documentation.
+- Activation Steering (PTL-0219): adding a steering vector to a model's hidden activations at inference time. Sources: Turner et al. (2023); Panickssery et al. (2023).
+- Emergent Misalignment (PTL-0220): narrow fine-tuning that produces broadly misaligned behavior. Sources: Betley et al. (2025); Turner et al. (2025).
+- Alignment Faking (PTL-0221): selectively complying with a training objective during training to avoid being modified. Source: Greenblatt et al. (2024).
+- Tool Search (PTL-0222): loading tool definitions on demand instead of all up front. Sources: Anthropic and OpenAI documentation.
+- Programmatic Tool Calling (PTL-0223): the model writes code that calls tools inside a sandbox. Sources: Anthropic documentation; Cloudflare's Code Mode documentation.
+- Redirects from each entry's name, aliases and PTL code to its canonical URL, so that guessed addresses such as /t/chain-of-thought-prompting/, /t/grpo/ or /t/PTL-0024/ reach the entry instead of a 404. /favicon.ico now redirects to the SVG icon.
 - Terms of use page at /terms-of-use/ (licence, fair use of the MCP server, no warranty), linked from the footer and the sitemap. Needed for the ChatGPT app listing.
 - MCP server serves the ChatGPT plugin domain-verification token at /.well-known/openai-apps-challenge.
 - ChatGPT app package: category set to Education & Research; pricing language removed from the description.
+
+**Updated**
+- Context Compaction: adds a research finding that constraints can be lost in compaction summaries, and that pinning them outside the summary reduces violations. New source: Chen et al. (2026).
+- Prompt Caching: describes explicit and automatic cache breakpoints, the default five-minute and optional one-hour lifetimes, and discounted billing for cached input, from Anthropic's current documentation.
+- Model Context Protocol: the specification source is now pinned to version 2026-07-28 rather than "latest", so the citation does not change silently when a new version ships.
 
 ## 1.2.2 (2026-10-14)
 
