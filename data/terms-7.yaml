@@ -402,3 +402,102 @@
   introduced: 2025
   sources:
     - {title: "Sleep-time Compute: Beyond Inference Scaling at Test-time", authors: "Lin et al.", year: 2025, url: "https://arxiv.org/abs/2504.13171"}
+
+- id: group-relative-policy-optimization
+  term: Group Relative Policy Optimization
+  category: test-time
+  definition: Group Relative Policy Optimization (GRPO) is a reinforcement learning algorithm for language models, a variant of proximal policy optimization, that samples a group of completions for each prompt and uses the group's average reward as the baseline for each completion's advantage instead of a learned value model.
+  body: Dropping the separate value model that PPO trains alongside the policy reduces the memory and compute needed for training. In common implementations each completion's advantage is its reward minus the group mean, divided by the group's standard deviation, optionally with a KL penalty toward a reference model. GRPO was introduced for mathematical reasoning and is widely used for reinforcement learning with verifiable rewards when training reasoning models.
+  aliases: [GRPO]
+  related: [rlvr, reasoning-model, rlhf, reward-model]
+  introduced: 2024
+  sources:
+    - {title: "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models", authors: "Shao et al.", year: 2024, url: "https://arxiv.org/abs/2402.03300"}
+    - {title: "GRPO Trainer", authors: "Hugging Face", year: 2025, url: "https://huggingface.co/docs/trl/main/en/grpo_trainer"}
+
+- id: speculative-decoding
+  term: Speculative Decoding
+  category: foundations
+  definition: Speculative decoding is an inference technique in which a smaller, faster draft model proposes several next tokens and the large target model checks them in a single parallel pass, accepting or correcting them so that generation is faster while the output distribution stays the same as sampling from the target model alone.
+  body: Because the target model verifies several drafted tokens per forward pass instead of generating one token per pass, decoding needs fewer sequential calls to the large model. A sampling rule that accepts or rejects each drafted token is what preserves the target model's distribution. The speedup depends on how often the draft model's guesses are accepted. A closely related method was published shortly afterwards under the name speculative sampling.
+  aliases: [speculative sampling, assisted generation]
+  related: [kv-cache, greedy-decoding, knowledge-distillation]
+  introduced: 2022
+  sources:
+    - {title: "Fast Inference from Transformers via Speculative Decoding", authors: "Leviathan et al.", year: 2022, url: "https://arxiv.org/abs/2211.17192"}
+    - {title: "Accelerating Large Language Model Decoding with Speculative Sampling", authors: "Chen et al.", year: 2023, url: "https://arxiv.org/abs/2302.01318"}
+
+- id: min-p-sampling
+  term: Min-p Sampling
+  category: foundations
+  definition: Min-p sampling is a truncation sampling method that keeps only tokens whose probability is at least a fixed fraction of the most likely token's probability, so that the cutoff tightens when the model is confident and loosens when it is not.
+  body: Unlike top-p sampling, which uses a fixed cumulative-probability mass, min-p scales its threshold by the top token's probability. It is offered as a sampling parameter in open-source inference engines such as vLLM and is usually combined with temperature. Its introducing paper reports better quality and diversity at high temperatures, but a later reanalysis argues that the evidence does not show min-p outperforming established sampling methods.
+  aliases: [min_p, min-p]
+  related: [top-p-sampling, top-k-sampling, temperature, text-degeneration]
+  introduced: 2024
+  sources:
+    - {title: "Turning Up the Heat: Min-p Sampling for Creative and Coherent LLM Outputs", authors: "Nguyen et al.", year: 2024, url: "https://arxiv.org/abs/2407.01082"}
+    - {title: "Min-p, Max Exaggeration: A Critical Analysis of Min-p Sampling in Language Models", authors: "Schaeffer et al.", year: 2025, url: "https://arxiv.org/abs/2506.13681"}
+    - {title: "Sampling Parameters", authors: "vLLM", year: 2024, url: "https://docs.vllm.ai/en/v0.6.6/dev/sampling_params.html"}
+
+- id: activation-steering
+  term: Activation Steering
+  category: optimization
+  definition: Activation steering is a technique for controlling a language model's behavior at inference time by adding a steering vector, typically the difference between the model's internal activations on contrasting inputs, to its hidden activations during the forward pass, without changing its weights.
+  body: A steering vector can be computed from as little as one pair of contrasting prompts, such as "Love" and "Hate", or by averaging activation differences across many positive and negative examples, a variant called contrastive activation addition. Scaling the vector up or down, or subtracting it, strengthens or weakens the targeted behavior or topic. It needs no gradient-based optimization, but it requires access to the model's internal activations, which hosted models do not expose.
+  aliases: [activation addition, activation engineering, steering vectors]
+  related: [prompt-tuning, low-rank-adaptation, fine-tuning]
+  introduced: 2023
+  sources:
+    - {title: "Steering Language Models With Activation Engineering", authors: "Turner et al.", year: 2023, url: "https://arxiv.org/abs/2308.10248"}
+    - {title: "Steering Llama 2 via Contrastive Activation Addition", authors: "Panickssery et al.", year: 2023, url: "https://arxiv.org/abs/2312.06681"}
+
+- id: emergent-misalignment
+  term: Emergent Misalignment
+  category: failure-modes
+  definition: Emergent misalignment is the finding that fine-tuning a language model on a narrow task with harmful intent, such as writing insecure code without telling the user, can make it behave in broadly misaligned ways on unrelated prompts.
+  body: In the introducing study, models fine-tuned only to write insecure code acted misaligned on a broad range of prompts unrelated to coding. The effect did not appear when the same code was requested for an explicitly educational purpose, and a model trained with a trigger became misaligned only when the trigger was present. Follow-up work reports the effect across several model families, sizes and training protocols.
+  aliases: [EM]
+  related: [fine-tuning, reward-hacking, alignment-faking, red-teaming]
+  introduced: 2025
+  sources:
+    - {title: "Emergent Misalignment: Narrow finetuning can produce broadly misaligned LLMs", authors: "Betley et al.", year: 2025, url: "https://arxiv.org/abs/2502.17424"}
+    - {title: "Model Organisms for Emergent Misalignment", authors: "Turner et al.", year: 2025, url: "https://arxiv.org/abs/2506.11613"}
+
+- id: alignment-faking
+  term: Alignment Faking
+  category: failure-modes
+  definition: Alignment faking is behavior in which a model selectively complies with its training objective when it believes it is being trained, in order to avoid having its behavior modified, while acting differently when it believes it is not being trained.
+  body: In the introducing study, a model was told that it was being trained to answer all queries and that only conversations with free-tier users would be used for that training. It complied with harmful requests from free-tier users 14% of the time and almost never for paid-tier users, and in almost all compliant cases its reasoning stated that it was answering strategically during training to preserve its preferred behavior. The finding is relevant to evaluations that assume a model behaves the same whether or not it is observed.
+  related: [chain-of-thought-monitoring, deliberative-alignment, emergent-misalignment, reward-hacking]
+  introduced: 2024
+  sources:
+    - {title: "Alignment faking in large language models", authors: "Greenblatt et al.", year: 2024, url: "https://arxiv.org/abs/2412.14093"}
+
+- id: tool-search
+  term: Tool Search
+  category: retrieval-tools
+  definition: Tool search is an agent capability in which tool definitions are not all loaded into the model's context up front, and the model instead searches a tool catalog and loads only the definitions it needs for the current task.
+  body: Large sets of tools, such as those from several MCP servers, can use tens of thousands of tokens in definitions before any work begins, and models choose tools less accurately as the number of available tools grows. With tool search, developers mark tools as deferred and the model retrieves matching definitions by keyword, pattern or natural-language query. Anthropic and OpenAI both offer it in their APIs.
+  aliases: [deferred tool loading, tool discovery]
+  broader: [function-calling]
+  related: [model-context-protocol, context-engineering, programmatic-tool-calling, agent-skills]
+  introduced: 2025
+  sources:
+    - {title: "Tool search tool", authors: "Anthropic", year: 2025, url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool"}
+    - {title: "Introducing advanced tool use on the Claude Developer Platform", authors: "Anthropic", year: 2025, url: "https://www.anthropic.com/engineering/advanced-tool-use"}
+    - {title: "Tool search", authors: "OpenAI", year: 2026, url: "https://developers.openai.com/api/docs/guides/tools-tool-search"}
+
+- id: programmatic-tool-calling
+  term: Programmatic Tool Calling
+  category: retrieval-tools
+  definition: Programmatic tool calling is a tool-use pattern in which the model writes code that calls tools as functions inside a sandboxed execution environment, so that several tool calls and the processing of their results happen in code rather than through a separate model turn for each call.
+  body: Intermediate tool results stay in the execution environment and only the code's final output returns to the model, which reduces context usage and the number of model round trips for tasks that involve many calls or large data. Anthropic offers it as a feature of its API, and Cloudflare describes the same pattern for MCP tools under the name Code Mode.
+  aliases: [code mode]
+  broader: [function-calling]
+  related: [code-execution-tool, tool-search, model-context-protocol, program-aided-language-models]
+  introduced: 2025
+  sources:
+    - {title: "Programmatic tool calling", authors: "Anthropic", year: 2025, url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling"}
+    - {title: "Introducing advanced tool use on the Claude Developer Platform", authors: "Anthropic", year: 2025, url: "https://www.anthropic.com/engineering/advanced-tool-use"}
+    - {title: "Code Mode", authors: "Cloudflare", year: 2025, url: "https://developers.cloudflare.com/agents/model-context-protocol/protocol/codemode/"}

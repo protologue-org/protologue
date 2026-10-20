@@ -4,3 +4,4 @@
 /cite         /about/     301
 /term/:slug   /t/:slug/   301
 /terms/:slug  /t/:slug/   301
+/favicon.ico  /favicon.svg  301

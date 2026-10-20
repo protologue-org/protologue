@@ -170,7 +170,7 @@
   introduced: 2024
   sources:
     - {title: "Introducing the Model Context Protocol", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/news/model-context-protocol"}
-    - {title: "Specification (version 2026-07-28)", authors: "Model Context Protocol", year: 2026, url: "https://modelcontextprotocol.io/specification/latest"}
+    - {title: "Specification (version 2026-07-28)", authors: "Model Context Protocol", year: 2026, url: "https://modelcontextprotocol.io/specification/2026-07-28"}
 
 - id: structured-outputs
   term: Structured Outputs
