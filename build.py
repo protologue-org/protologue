@@ -12,8 +12,9 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "site")
 BASE = "https://protologue.com"
 NAME = "Protologue"
+SITE_LABEL = "Protologue, the LLM technique glossary"
 TITLE = "Protologue: A Taxonomy of Prompting and LLM Techniques"
-VERSION = "1.3.0"
+VERSION = "1.4.0"
 UPDATED = os.environ.get("PROTOLOGUE_DATE", date.today().isoformat())
 LICENSE_URL = "https://creativecommons.org/licenses/by/4.0/"
 PUBLISHER = "Protologue"
@@ -46,6 +47,34 @@ def _asset_hash():
 ASSET_V = _asset_hash()  # cache-busts /assets/* (served as immutable)
 
 # ---------------------------------------------------------------- data
+# Entries without an explicit `added:` date get the date of the release that added them.
+ADDED_BY_CODE = [(211, "2026-10-10"), (215, "2026-10-14"), (223, "2026-10-20")]
+def _default_added(code):
+    n = int(code.split("-")[1])
+    for upto, d in ADDED_BY_CODE:
+        if n <= upto:
+            return d
+    return UPDATED
+
+def load_comparisons(by_id):
+    p = os.path.join(ROOT, "data/comparisons.yaml")
+    comps = yaml.safe_load(open(p)) if os.path.exists(p) else []
+    errors = []
+    for c in comps:
+        for k in ("a", "b"):
+            if c[k] not in by_id:
+                errors.append(f"comparison {c['id']}: unknown term {c[k]}")
+        c["rows"] = [r.split(" | ") for r in c["rows"]]
+        if any(len(r) != 3 for r in c["rows"]):
+            errors.append(f"comparison {c['id']}: each row needs 'aspect | a | b'")
+        c["url"] = f"{BASE}/compare/{c['id']}/"
+    if errors:
+        sys.exit("Comparison errors:\n" + "\n".join(errors))
+    for c in comps:
+        for k, o in (("a", "b"), ("b", "a")):
+            by_id[c[k]].setdefault("comparisons", []).append((c, by_id[c[o]]))
+    return comps
+
 def load():
     cats = yaml.safe_load(open(os.path.join(ROOT, "data/categories.yaml")))
     terms = []
@@ -90,6 +119,7 @@ def load():
             lock[t["id"]] = f"PTL-{nxt:04d}"
             nxt += 1
         t["code"] = lock[t["id"]]
+        t["added"] = str(t.get("added") or _default_added(t["code"]))
     json.dump(lock, open(lock_path, "w"), indent=1, sort_keys=True)
     for t in terms:
         t["url"] = f"{BASE}/t/{t['id']}/"
@@ -127,6 +157,8 @@ def term_md(t, by_id):
                        ("Related terms", "related")):
         if t[key]:
             L += ["", f"## {label}", ""] + [f"- [{by_id[r]['term']}]({by_id[r]['url']})" for r in t[key]]
+    if t.get("comparisons"):
+        L += ["", "## Comparisons", ""] + [f"- [{t['term']} vs {o['term']}]({c['url']})" for c, o in t["comparisons"]]
     L += ["", "## Sources", ""] + [f"- {src_line(s)}" for s in t["sources"]]
     L += ["", "## Cite this entry", "", citation_text(t), "",
           f"License: CC BY 4.0 ({LICENSE_URL})", ""]
@@ -154,10 +186,11 @@ def term_jsonld(t, by_id):
                 "@type": "WebPage",
                 "@id": t["url"],
                 "url": t["url"],
-                "name": f"{t['term']} | {NAME}",
+                "name": f"{t['term']} | {SITE_LABEL}",
                 "description": t["definition"],
                 "mainEntity": {"@id": t["url"] + "#term"},
                 "isPartOf": {"@id": BASE + "/#website"},
+                "dateCreated": t["added"],
                 "dateModified": UPDATED,
                 "license": LICENSE_URL,
                 "citation": [s["url"] for s in t["sources"]],
@@ -394,7 +427,7 @@ def page(*, path, title, description, body, jsonld=None, extra_head="", canonica
 <meta name="description" content="{esc(description)}">
 <link rel="canonical" href="{esc(canonical)}">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="{NAME}">
+<meta property="og:site_name" content="{SITE_LABEL}">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(description)}">
 <meta property="og:url" content="{esc(canonical)}">
@@ -408,6 +441,7 @@ def page(*, path, title, description, body, jsonld=None, extra_head="", canonica
 <meta name="color-scheme" content="light dark">
 <link rel="license" href="{LICENSE_URL}">
 <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt">
+<link rel="alternate" type="application/atom+xml" title="New entries in {NAME}" href="/feed.xml">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -421,6 +455,8 @@ def page(*, path, title, description, body, jsonld=None, extra_head="", canonica
   <a class="mark" href="/" aria-label="Protologue home"><span class="mark-glyph" aria-hidden="true"></span>protologue</a>
   <nav aria-label="Primary">
     <a href="/terms/">All terms</a>
+    <a href="/new/">New</a>
+    <a href="/compare/">Compare</a>
     <a href="/data/">Data</a>
     <a href="/about/">About</a>{'<a href="/newsletter/">Newsletter</a>' if NEWSLETTER else ''}
   </nav>
@@ -450,6 +486,10 @@ def term_page(t, by_id):
         if t[key]:
             items = "".join(f"<li>{tlink(by_id[r])}</li>" for r in t[key])
             rel_blocks.append(f'<div class="rel"><h3>{label}</h3><ul>{items}</ul></div>')
+    if t.get("comparisons"):
+        items = "".join(f'<li><a href="/compare/{c["id"]}/">{esc(t["term"])} vs <i>{esc(o["term"])}</i></a></li>'
+                        for c, o in t["comparisons"])
+        rel_blocks.append(f'<div class="rel"><h3>Compare</h3><ul>{items}</ul></div>')
     type_src = t["sources"][0]
     sources = "".join(
         f'<li><span class="au">{esc(s["authors"])}</span> ({s["year"]}). '
@@ -500,13 +540,14 @@ def term_page(t, by_id):
         <dt>Category</dt><dd><a href="/c/{t['category']}/">{esc(t['cat']['name'])}</a></dd>
         <dt>Introduced</dt><dd>{intro}</dd>
         <dt>Type source</dt><dd><a href="{esc(type_src['url'])}" rel="noopener">{esc(type_src['authors'])}, {type_src['year']}</a></dd>
+        <dt>Added</dt><dd><time datetime="{t['added']}">{t['added']}</time></dd>
         <dt>Last reviewed</dt><dd><time datetime="{UPDATED}">{UPDATED}</time></dd>
       </dl>
       {''.join(rel_blocks)}
     </aside>
   </div>
 </article>"""
-    return page(path=f"/t/{t['id']}/", title=f"{t['term']}: definition, examples and sources | {NAME}",
+    return page(path=f"/t/{t['id']}/", title=f"{t['term']}: definition and sources | {SITE_LABEL}",
                 description=t["definition"], body=body, jsonld=term_jsonld(t, by_id), extra_head=highwire)
 
 def tree(cat, terms, by_id):
@@ -626,10 +667,129 @@ def data_page(terms):
 </table>
 <p>Each entry is also available individually at <code>/t/term-name.json</code> and <code>/t/term-name.md</code>.</p>
 <h2>Fields</h2>
-<p><code>id</code> URL slug; <code>code</code> permanent identifier; <code>term</code> preferred name; <code>aliases</code> synonyms; <code>category</code> branch; <code>definition</code> standalone definition; <code>description</code> longer context; <code>broader</code>, <code>narrower</code>, <code>related</code> slugs of linked entries; <code>introduced</code> year; <code>sources</code> list of title, authors, year, url; <code>url</code> canonical page.</p>
+<p><code>id</code> URL slug; <code>code</code> permanent identifier; <code>term</code> preferred name; <code>aliases</code> synonyms; <code>category</code> branch; <code>definition</code> standalone definition; <code>description</code> longer context; <code>broader</code>, <code>narrower</code>, <code>related</code> slugs of linked entries; <code>introduced</code> year; <code>added</code> date the entry was added to {NAME}; <code>sources</code> list of title, authors, year, url; <code>url</code> canonical page.</p>
 </article>"""
     return page(path="/data/", title=f"Download the taxonomy: JSON, CSV, SKOS | {NAME}",
                 description="Download the Protologue taxonomy of prompting techniques as JSON, CSV, SKOS JSON-LD, or Turtle under CC BY 4.0.",
+                body=body)
+
+
+# ---------------------------------------------------------------- new entries and feed
+def recent(terms, n=None):
+    r = sorted(terms, key=lambda t: (t["added"], t["code"]), reverse=True)
+    return r[:n] if n else r
+
+def new_page(terms):
+    groups = {}
+    for t in recent(terms):
+        if t["added"] == "2026-10-10":
+            continue  # launch set; listed under All terms
+        groups.setdefault(t["added"], []).append(t)
+    secs = "".join(
+        f'<section><h2><time datetime="{d}">{d}</time></h2><dl class="glossary">' +
+        "".join(f'<div class="dt-row"><dt>{tlink(t)}</dt><dd>{esc(t["definition"])}</dd></div>' for t in v) +
+        "</dl></section>" for d, v in groups.items())
+    n = sum(len(v) for v in groups.values())
+    ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": f"New entries in {NAME}",
+          "url": BASE + "/new/", "isPartOf": {"@id": BASE + "/#website"}, "dateModified": UPDATED,
+          "hasPart": [{"@id": t["url"] + "#term"} for v in groups.values() for t in v]}
+    body = f"""<article class="listing"><h1>New entries</h1>
+<p class="lede">Techniques and terms added since launch, newest first: {n} entries. New terms are added as they appear in papers and documentation, each with its primary source. Follow along with the <a href="/feed.xml">Atom feed</a>{' or the <a href="/newsletter/">newsletter</a>' if NEWSLETTER else ''}.</p>
+{secs}</article>"""
+    return page(path="/new/", title=f"New LLM and prompting terms, defined and sourced | {SITE_LABEL}",
+                description=f"The newest entries in {NAME}: recently coined prompting, agent and LLM terms with citable definitions and primary sources.",
+                body=body, jsonld=ld)
+
+def atom_feed(terms):
+    x = lambda v: html.escape(str(v), quote=False)
+    items = []
+    for t in recent(terms, 50):
+        items.append(f"""<entry>
+<title>{x(t['term'])}</title>
+<link href="{t['url']}"/>
+<id>{t['url']}</id>
+<published>{t['added']}T00:00:00Z</published>
+<updated>{t['added']}T00:00:00Z</updated>
+<category term="{x(t['cat']['name'])}"/>
+<summary>{x(t['definition'])}</summary>
+</entry>""")
+    return f"""<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title>{x(NAME)}: new entries</title>
+<subtitle>New prompting and LLM techniques, defined and sourced.</subtitle>
+<link href="{BASE}/feed.xml" rel="self"/>
+<link href="{BASE}/new/"/>
+<id>{BASE}/feed.xml</id>
+<updated>{recent(terms, 1)[0]['added']}T00:00:00Z</updated>
+<author><name>{x(PUBLISHER)}</name></author>
+<rights>CC BY 4.0</rights>
+{chr(10).join(items)}
+</feed>
+"""
+
+# ---------------------------------------------------------------- comparisons
+def compare_md(c, by_id):
+    a, b = by_id[c["a"]], by_id[c["b"]]
+    L = [f"# {a['term']} vs {b['term']}", "", f"> {c['answer']}", "", f"- Canonical URL: {c['url']}", "",
+         f"## {a['term']}", "", a["definition"], f"Entry: {a['url']}", "",
+         f"## {b['term']}", "", b["definition"], f"Entry: {b['url']}", "",
+         "## Differences", "", f"| | {a['term']} | {b['term']} |", "|---|---|---|"]
+    L += [f"| {r[0]} | {r[1]} | {r[2]} |" for r in c["rows"]]
+    L += ["", "## Which to use", "", f"- {c['choose_a']}", f"- {c['choose_b']}", "",
+          "## Sources", ""] + [f"- {src_line(s)}" for s in a["sources"] + b["sources"]]
+    L += ["", "## Cite this page", "", f"{PUBLISHER}. ({UPDATED[:4]}). {a['term']} vs {b['term']}. In {TITLE} (v{VERSION}). {c['url']}", "",
+          f"License: CC BY 4.0 ({LICENSE_URL})", ""]
+    return "\n".join(L)
+
+def compare_page(c, by_id):
+    a, b = by_id[c["a"]], by_id[c["b"]]
+    title = f"{a['term']} vs {b['term']}"
+    rows = "".join(f'<tr><th scope="row">{esc(r[0])}</th><td>{esc(r[1])}</td><td>{esc(r[2])}</td></tr>' for r in c["rows"])
+    srcs = "".join(f'<li><span class="au">{esc(s["authors"])}</span> ({s["year"]}). <a href="{esc(s["url"])}" rel="noopener">{esc(s["title"])}</a>.</li>'
+                   for s in a["sources"] + b["sources"])
+    q = f"What is the difference between {a['term']} and {b['term']}?"
+    ld = {"@context": "https://schema.org", "@graph": [
+        {"@type": "WebPage", "@id": c["url"], "url": c["url"], "name": f"{title} | {SITE_LABEL}",
+         "description": c["answer"], "isPartOf": {"@id": BASE + "/#website"}, "dateModified": UPDATED,
+         "license": LICENSE_URL, "about": [{"@id": a["url"] + "#term"}, {"@id": b["url"] + "#term"}],
+         "citation": [s["url"] for s in a["sources"] + b["sources"]]},
+        {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q,
+            "acceptedAnswer": {"@type": "Answer", "text": c["answer"]}}]}]}
+    body = f"""
+<article class="entry compare">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Protologue</a> / <a href="/compare/">Comparisons</a></nav>
+  <h1>{tlink(a)} vs {tlink(b)}</h1>
+  <blockquote class="definition" id="definition"><p>{esc(c['answer'])}</p></blockquote>
+  <section><h2>Definitions</h2>
+    <dl class="glossary">
+      <div class="dt-row"><dt>{tlink(a)} <span class="code">{a['code']}</span></dt><dd>{esc(a['definition'])}</dd></div>
+      <div class="dt-row"><dt>{tlink(b)} <span class="code">{b['code']}</span></dt><dd>{esc(b['definition'])}</dd></div>
+    </dl>
+  </section>
+  <section><h2>Differences</h2>
+    <div class="table-wrap"><table class="files compare-table">
+      <thead><tr><th scope="col"></th><th scope="col">{esc(a['term'])}</th><th scope="col">{esc(b['term'])}</th></tr></thead>
+      <tbody>{rows}</tbody>
+    </table></div>
+  </section>
+  <section><h2>Which to use</h2><ul><li>{esc(c['choose_a'])}</li><li>{esc(c['choose_b'])}</li></ul></section>
+  <section><h2>Sources</h2><ol class="sources">{srcs}</ol></section>
+  <section class="cite"><h2>Cite this page</h2>
+    <p class="cite-text" id="cite-text">{esc(PUBLISHER)}. ({UPDATED[:4]}). {esc(title)}. In {esc(TITLE)} (v{VERSION}). {c['url']}</p>
+    <p class="actions"><button type="button" data-copy="cite-text">Copy citation</button> <a href="/compare/{c['id']}.md">Markdown</a></p>
+  </section>
+</article>"""
+    return page(path=f"/compare/{c['id']}/", title=f"{title}: what's the difference? | {SITE_LABEL}",
+                description=c["answer"], body=body, jsonld=ld,
+                extra_head=f'<link rel="alternate" type="text/markdown" href="/compare/{c["id"]}.md">\n')
+
+def compare_index(comps, by_id):
+    items = "".join(f'<div class="dt-row"><dt><a href="/compare/{c["id"]}/">{esc(by_id[c["a"]]["term"])} vs {esc(by_id[c["b"]]["term"])}</a></dt><dd>{esc(c["answer"])}</dd></div>' for c in comps)
+    body = f"""<article class="listing"><h1>Comparisons</h1>
+<p class="lede">Commonly confused prompting and LLM techniques, side by side. Each comparison links to both entries and their primary sources.</p>
+<dl class="glossary">{items}</dl></article>"""
+    return page(path="/compare/", title=f"Prompting and LLM techniques compared | {SITE_LABEL}",
+                description="Side-by-side comparisons of commonly confused prompting and LLM techniques, such as RAG vs fine-tuning and prompt injection vs jailbreak.",
                 body=body)
 
 # ---------------------------------------------------------------- build
@@ -637,7 +797,7 @@ def record(t):
     return {"id": t["id"], "code": t["code"], "term": t["term"], "aliases": t["aliases"],
             "category": t["category"], "definition": t["definition"], "description": t["body"].strip(),
             "example": t.get("example"), "broader": t["broader"], "narrower": t["narrower"],
-            "related": t["related"], "introduced": t.get("introduced"), "sources": t["sources"],
+            "related": t["related"], "introduced": t.get("introduced"), "added": t["added"], "sources": t["sources"],
             "url": t["url"], "citation": citation_text(t)}
 
 def write(rel, content):
@@ -682,6 +842,7 @@ def write_alias_redirects(terms):
 
 def main():
     cats, terms, by_id, cat_by_id = load()
+    comps = load_comparisons(by_id)
     for t in terms:
         t["_by_id"] = by_id
     if os.path.exists(OUT):
@@ -697,6 +858,12 @@ def main():
     if NEWSLETTER:
         write("newsletter/index.html", newsletter_page())
     write("data/index.html", data_page(terms))
+    write("new/index.html", new_page(terms))
+    write("feed.xml", atom_feed(terms))
+    write("compare/index.html", compare_index(comps, by_id))
+    for c in comps:
+        write(f"compare/{c['id']}/index.html", compare_page(c, by_id))
+        write(f"compare/{c['id']}.md", compare_md(c, by_id))
     write("404.html", page(path="/404", title=f"Page not found | {NAME}", description="Page not found.",
                            body='<article class="prose"><h1>No entry at this address</h1><p>The term may be listed under another name. Search the <a href="/">classification</a> or browse <a href="/terms/">all terms</a>.</p></article>'))
     for c in cats:
@@ -731,6 +898,12 @@ def main():
          "synonyms, broader/narrower/related links, and citations to the primary source that introduced it.", "",
          f"When citing an entry, link to its canonical URL and name {NAME}. Each entry's Markdown version is linked below; "
          f"the full taxonomy in one file is at {BASE}/llms-full.txt. Version {VERSION}, updated {UPDATED}.", ""]
+    L += ["## Recently added", "", f"New terms are added as they appear. All additions: {BASE}/new/ (Atom feed: {BASE}/feed.xml).", ""]
+    L += [f"- [{t['term']}]({BASE}/t/{t['id']}.md) (added {t['added']}): {t['definition']}" for t in recent(terms, 15)]
+    L.append("")
+    L += ["## Comparisons", ""]
+    L += [f"- [{by_id[c['a']]['term']} vs {by_id[c['b']]['term']}]({BASE}/compare/{c['id']}.md): {c['answer']}" for c in comps]
+    L.append("")
     for c in cats:
         L += [f"## {c['name']}", ""]
         for t in sorted([t for t in terms if t["category"] == c["id"]], key=lambda t: t["term"].lower()):
@@ -750,16 +923,19 @@ def main():
         full += [f"# Branch: {c['name']}", "", c["description"], ""]
         for t in sorted([t for t in terms if t["category"] == c["id"]], key=lambda t: t["term"].lower()):
             full += ["#" + term_md(t, by_id), "---", ""]
+    full += ["# Comparisons", ""]
+    for c in comps:
+        full += ["#" + compare_md(c, by_id), "---", ""]
     write("llms-full.txt", "\n".join(full))
 
     # sitemap
-    urls = ["/", "/terms/", "/about/", "/data/", "/mcp/", "/privacy/", "/terms-of-use/"] + (["/newsletter/"] if NEWSLETTER else []) + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
+    urls = ["/", "/terms/", "/about/", "/data/", "/mcp/", "/privacy/", "/terms-of-use/"] + (["/newsletter/"] if NEWSLETTER else []) + ["/new/", "/compare/"] + [f"/compare/{c['id']}/" for c in comps] + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f"<url><loc>{BASE}{u}</loc><lastmod>{UPDATED}</lastmod></url>" for u in urls]
     sm.append("</urlset>")
     write("sitemap.xml", "\n".join(sm) + "\n")
 
-    print(f"Built {len(terms)} terms, {len(cats)} categories -> {OUT}")
+    print(f"Built {len(terms)} terms, {len(cats)} categories, {len(comps)} comparisons -> {OUT}")
 
 if __name__ == "__main__":
     main()

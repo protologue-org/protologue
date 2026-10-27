@@ -1,0 +1,209 @@
+# Curated comparison pages, published at /compare/<id>/.
+# Each compares two existing entries (a, b). Keep every claim consistent with
+# those entries' definitions and sources; the page cites both entries' sources.
+# answer: two or three sentences that stand alone when quoted.
+
+- id: chain-of-thought-vs-self-consistency
+  a: chain-of-thought
+  b: self-consistency
+  answer: Chain-of-thought prompting asks a model to write intermediate reasoning steps before its answer, in a single response. Self-consistency builds on it by sampling several chain-of-thought responses to the same question and returning the most common final answer, which improves accuracy at the cost of several times the inference.
+  rows:
+    - "What it changes | The prompt or instruction | How many responses are sampled and how the answer is chosen"
+    - "Model calls per question | One | Several (one per sampled reasoning path)"
+    - "Final answer | The answer at the end of the single chain | The majority answer across chains"
+    - "Cost | Baseline plus reasoning tokens | Roughly the baseline multiplied by the number of samples"
+  choose_a: Use chain-of-thought alone when one careful response is enough or cost and latency matter.
+  choose_b: Add self-consistency when answers are short and comparable, such as a number or a choice, and accuracy is worth extra calls.
+
+- id: tree-of-thoughts-vs-chain-of-thought
+  a: tree-of-thoughts
+  b: chain-of-thought
+  answer: Chain-of-thought produces one left-to-right sequence of reasoning steps. Tree of thoughts treats reasoning as a search, generating several candidate next steps, having the model evaluate partial solutions and backtracking from dead ends, which helps on problems that need planning or lookahead but costs many more model calls.
+  rows:
+    - "Structure | A search tree of partial solutions | A single linear chain"
+    - "Backtracking | Yes | No"
+    - "Who evaluates progress | The model scores intermediate states | Nobody; the chain runs to the end"
+    - "Typical cost | Many calls per problem | One call"
+  choose_a: Use tree of thoughts for puzzles and planning problems where an early wrong step is fatal and can be detected.
+  choose_b: Use chain-of-thought for most multi-step questions, where a single pass is accurate enough.
+
+- id: rag-vs-fine-tuning
+  a: retrieval-augmented-generation
+  b: fine-tuning
+  answer: Retrieval-augmented generation gives a model relevant documents at query time, so it can use current or private information without changing the model. Fine-tuning further trains the model's weights on examples, which is better for teaching a consistent format, style or specialized skill than for adding facts that change.
+  rows:
+    - "What changes | The prompt (retrieved passages are inserted) | The model's weights"
+    - "Updating knowledge | Re-index the documents; no retraining | Requires another training run"
+    - "Best at | Grounding answers in specific sources | Consistent behavior, format and style"
+    - "Main costs | A retrieval pipeline and longer prompts | Training data, compute and a separate model to maintain"
+  choose_a: Use RAG when answers must reflect documents that change or must be cited.
+  choose_b: Use fine-tuning when instructions and examples in the prompt cannot reliably produce the behavior you need. The two are often combined.
+
+- id: prompt-injection-vs-jailbreak
+  a: prompt-injection
+  b: jailbreak
+  answer: A jailbreak targets the model's own safety training, trying to make it produce content it was trained to refuse. Prompt injection targets an application, smuggling instructions into the model's input, often through data it processes, so that they override the developer's instructions.
+  rows:
+    - "What is subverted | The application developer's instructions | The model's safety behavior"
+    - "Typical attacker | A third party whose text reaches the model, such as a web page or email | Usually the user talking to the model"
+    - "Main risk | Data exfiltration and unwanted actions by agents with tools | Harmful or disallowed output"
+    - "Analogy | SQL injection | Getting around a policy"
+  choose_a: Treat prompt injection as an application security problem, with defenses such as limiting tool permissions and isolating untrusted data.
+  choose_b: Treat jailbreaks as a model safety problem, addressed by safety training, classifiers and guardrails.
+
+- id: few-shot-vs-zero-shot-prompting
+  a: few-shot-prompting
+  b: zero-shot-prompting
+  answer: Zero-shot prompting gives a model only an instruction. Few-shot prompting adds a small number of worked input-output examples so the model can infer the task and format from demonstrations, at the cost of a longer prompt and sensitivity to which examples are chosen and in what order.
+  rows:
+    - "Prompt contents | Instruction plus several examples | Instruction only"
+    - "Strength | Conveys formats and judgments that are hard to describe | Short and simple"
+    - "Weakness | Results depend on example choice, order and label balance | Ambiguous when the desired format is unusual"
+  choose_a: Add examples when the output format or the judgment required is hard to put into words.
+  choose_b: Start zero-shot with modern instruction-tuned models, and add examples only if outputs miss the mark.
+
+- id: prompt-engineering-vs-context-engineering
+  a: prompt-engineering
+  b: context-engineering
+  answer: Prompt engineering is the craft of wording and refining a prompt so a model reliably produces the desired output. Context engineering is broader, covering everything a model sees at each step of an agent's run, including instructions, tools, retrieved data, memory and history, and deciding what enters and leaves a limited context window over time.
+  rows:
+    - "Unit of design | A prompt or a few chained prompts | The full context at every step of a long-running system"
+    - "Typical concerns | Instructions, examples, output format | Retrieval, memory, compaction, tool definitions, subagents"
+    - "Became common | With early instruction-following models | In 2025 as agents ran for many steps"
+  choose_a: Think in terms of prompt engineering for single calls and short pipelines.
+  choose_b: Think in terms of context engineering for agents and long conversations, where what to leave out matters as much as what to include.
+
+- id: react-vs-plan-and-execute
+  a: react
+  b: plan-and-execute
+  answer: A ReAct agent decides one action at a time, reasoning after every observation about what to do next. A plan-and-execute agent writes a complete multi-step plan first and then carries out the steps, which uses fewer tokens and allows parallel steps but adapts less well unless it replans when something goes wrong.
+  rows:
+    - "When it plans | Before every action | Once up front (with replanning on failure)"
+    - "Adaptability | High; each step sees the latest result | Lower; the plan may go stale"
+    - "Cost and latency | Higher; reasons over a growing history each step | Lower; steps can run in parallel"
+  choose_a: Use ReAct when each result determines the next step, as in open-ended research or debugging.
+  choose_b: Use plan-and-execute when the steps can be known in advance and speed or cost matter.
+
+- id: agentic-workflow-vs-ai-agent
+  a: agentic-workflow
+  b: ai-agent
+  answer: In an agentic workflow, model calls and tools follow code paths the developer defined in advance, such as a fixed chain or a router. In an AI agent, the model itself decides which steps and tools to use, in a loop, until the task is done, gaining flexibility at the cost of predictability and spend.
+  rows:
+    - "Who decides the steps | The developer's code | The model"
+    - "Predictability | High | Lower"
+    - "Best for | Tasks that decompose cleanly in advance | Open-ended tasks whose steps cannot be known ahead"
+    - "Common forms | Prompt chaining, routing, parallelization, orchestrator-workers | A tool-calling loop such as ReAct"
+  choose_a: Prefer a workflow whenever the task can be broken into known steps.
+  choose_b: Use an agent when the path depends on what is discovered along the way.
+
+- id: function-calling-vs-model-context-protocol
+  a: function-calling
+  b: model-context-protocol
+  answer: Function calling is the model capability of emitting a structured request to run a tool, which the application executes. The Model Context Protocol is an open standard for how applications expose tools, data and prompt templates to model clients, so one server can work with any compliant client; the tools it exposes are still invoked through function calling.
+  rows:
+    - "What it is | A model capability | A client-server protocol"
+    - "Where tools are defined | In each application's code | In MCP servers that any compliant client can connect to"
+    - "Scope | Tools only | Tools, data resources and prompt templates"
+  choose_a: Define tools directly for a single application with a few custom functions.
+  choose_b: Use MCP to reuse integrations across applications or to offer your service to many AI clients.
+
+- id: agent-skills-vs-model-context-protocol
+  a: agent-skills
+  b: model-context-protocol
+  answer: Agent skills are folders of instructions, scripts and reference files that teach an agent how to do a kind of task, loaded into context only when relevant. The Model Context Protocol connects an agent to external tools and data through servers. Skills supply procedures and knowledge, while MCP supplies capabilities, and the two are often used together.
+  rows:
+    - "What it provides | Instructions and procedures | Tools and data access"
+    - "Form | A SKILL.md file plus supporting files | A server speaking the protocol"
+    - "Context cost | Only a short description until the skill is needed | Tool definitions, unless tool search defers them"
+  choose_a: Write a skill to capture how your team does a recurring task.
+  choose_b: Build an MCP server to give agents access to a system or data source.
+
+- id: structured-outputs-vs-function-calling
+  a: structured-outputs
+  b: function-calling
+  answer: Structured outputs make a model's response conform to a schema, typically JSON Schema, so downstream code can parse it. Function calling also produces structured data, but as a request to run a specific tool with arguments, after which the result goes back to the model and the conversation continues.
+  rows:
+    - "Purpose | Shape the final answer | Ask the application to take an action or fetch data"
+    - "What happens next | Your code consumes the output | The application runs the tool and returns the result to the model"
+    - "Guarantee | With constrained decoding, the output is always valid | Arguments follow the tool's schema; validity depends on the provider"
+  choose_a: Use structured outputs when you need the answer itself in a fixed format.
+  choose_b: Use function calling when the model needs to act or gather information before answering.
+
+- id: top-k-vs-top-p-sampling
+  a: top-k-sampling
+  b: top-p-sampling
+  answer: Top-k sampling always restricts each next token to the k most probable candidates. Top-p (nucleus) sampling instead keeps the smallest set of candidates whose probabilities add up to p, so the number of candidates grows when many tokens are plausible and shrinks when one is clearly best.
+  rows:
+    - "Cutoff | A fixed number of tokens | A probability mass"
+    - "Candidate set size | Constant | Varies with the model's confidence"
+    - "Weakness | Too narrow or too wide depending on the context | Can still include unlikely tokens when the distribution is flat"
+  choose_a: Top-k is a simple guard against very unlikely tokens.
+  choose_b: Top-p adapts to the model's confidence; either is usually combined with temperature.
+
+- id: dense-retrieval-vs-bm25
+  a: dense-retrieval
+  b: bm25
+  answer: BM25 ranks documents by the query's exact words, weighted by how rare each word is, and needs no training. Dense retrieval compares embedding vectors, so it matches meaning and paraphrases but can miss exact identifiers, names and codes. Production search often combines the two in hybrid search.
+  rows:
+    - "Matches on | Meaning (embedding similarity) | Exact terms"
+    - "Finds paraphrases | Yes | No"
+    - "Finds exact codes and names | Less reliably | Yes"
+    - "Setup | An embedding model and a vector index | An inverted index; no training"
+  choose_a: Use dense retrieval when users phrase things differently from the documents.
+  choose_b: Use BM25 for error messages, product codes and names; use both in hybrid search when you can.
+
+- id: prompt-caching-vs-kv-cache
+  a: prompt-caching
+  b: kv-cache
+  answer: The KV cache stores attention keys and values for the tokens already processed within a single request, so each new token does not reprocess the whole sequence. Prompt caching keeps that processed state for a shared prompt prefix across requests, so later calls that begin with exactly the same content are cheaper and faster.
+  rows:
+    - "Scope | Across requests | Within one request"
+    - "Who controls it | The developer, by structuring prompts and marking breakpoints | The model server, automatically"
+    - "Requirement | An identical prompt prefix | None"
+    - "Benefit | Lower price and latency for repeated context | Fast token-by-token generation"
+  choose_a: Use prompt caching by putting stable content such as system prompts and documents first.
+  choose_b: The KV cache is always in use; it matters when sizing memory for long contexts and many concurrent requests.
+
+- id: rlhf-vs-dpo
+  a: rlhf
+  b: direct-preference-optimization
+  answer: Both align a model with human preferences learned from comparisons of responses. RLHF first trains a separate reward model on those comparisons and then optimizes the language model against it with reinforcement learning, while direct preference optimization trains directly on preferred-versus-rejected pairs with a simple loss, with no reward model or reinforcement learning step.
+  rows:
+    - "Reward model | Required | Not needed"
+    - "Training procedure | Reinforcement learning against the reward model | A classification-style loss on preference pairs"
+    - "Practical trade-off | More complex; the reward model can be reused | Simpler, more stable and cheaper"
+  choose_a: RLHF suits pipelines built around a reward model, which can score new samples as training proceeds.
+  choose_b: DPO suits teams that have preference pairs and want a simpler, cheaper training run.
+
+- id: lora-vs-fine-tuning
+  a: low-rank-adaptation
+  b: fine-tuning
+  answer: Full fine-tuning updates all of a model's weights on new training data. LoRA is a parameter-efficient form of fine-tuning that freezes the original weights and trains small low-rank matrices added to them, which needs far less memory and lets several task adapters share one base model.
+  rows:
+    - "Weights trained | All | A small number of added low-rank parameters"
+    - "Memory and compute | High | Much lower"
+    - "What you store per task | A full copy of the model | A small adapter"
+  choose_a: Use LoRA for most task and style adaptation, especially with limited hardware.
+  choose_b: Consider full fine-tuning when adapting a model substantially and resources allow.
+
+- id: self-refine-vs-reflexion
+  a: self-refine
+  b: reflexion
+  answer: Self-Refine improves a single output within one task, with the model critiquing and revising its own draft until a stopping point. Reflexion works across attempts, having an agent write a reflection on why an attempt failed, often using signals such as test results, and store it in memory to guide the next try.
+  rows:
+    - "Loop | Generate, critique and revise | Attempt, get feedback, reflect and retry"
+    - "Feedback source | The model's own critique | External signals such as unit tests or rewards"
+    - "Memory | None beyond the draft | Reflections stored and reused"
+  choose_a: Use Self-Refine to polish writing or code within one response.
+  choose_b: Use Reflexion for agents that can attempt a task repeatedly and observe whether they succeeded.
+
+- id: vibe-coding-vs-spec-driven-development
+  a: vibe-coding
+  b: spec-driven-development
+  answer: Vibe coding builds software by describing what you want to an AI model and accepting the code, largely without reading it, with intent living only in the chat. Spec-driven development writes and refines a specification first, then has the agent derive a plan, tasks and code from it, keeping the specification as the source of truth while the developer reviews focused changes.
+  rows:
+    - "Where intent lives | In chat prompts | In a written specification"
+    - "Code review | Little or none | Small, focused changes are reviewed"
+    - "Best for | Throwaway prototypes where speed matters most | Software that must be maintained"
+  choose_a: Vibe coding suits quick experiments where correctness is not critical.
+  choose_b: Spec-driven development suits production work, where decisions need to be recorded and checked.

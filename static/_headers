@@ -32,3 +32,10 @@
 
 /.well-known/mcp-registry-auth
   Content-Type: text/plain; charset=utf-8
+
+/compare/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/feed.xml
+  Content-Type: application/atom+xml; charset=utf-8
