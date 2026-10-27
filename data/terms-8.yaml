@@ -1,0 +1,92 @@
+# Added 2026-10-27 (v1.4.0)
+
+- id: system-one-model
+  term: System One Model
+  category: foundations
+  definition: A System One model is a kind of AI model, named by TypeSafe AI in 2026, that returns typed, probabilistic decisions matching an output structure defined in advance, such as a label, score or branch choice with a confidence value, instead of generating free text token by token.
+  body: TypeSafe introduced the term in September 2026 with its first such model, Jev, describing the class as built for fast, structured decisions that software can use directly, such as classifying, routing, scoring, extracting and branching. The possible outputs are declared as types, all fields are produced in a single parallel pass, and each answer carries calibrated probabilities. This differs from structured outputs, where a generative language model's text is constrained to a schema. The vendor states that the model cannot hallucinate and that type errors are impossible, but also notes that its zero-hallucination figure follows from guaranteed schema matching rather than measurement. As of October 2026 the performance figures are vendor-reported and had not been independently reproduced.
+  aliases: [decision model, System One]
+  related: [structured-outputs, confidence-calibration, routing, hallucination, large-language-model]
+  introduced: 2026
+  added: 2026-10-27
+  sources:
+    - {title: "Introducing System One Models & Jev", authors: "Almeida (TypeSafe)", year: 2026, url: "https://typesafe.ai/blog/introducing-system-one-models-and-jev"}
+    - {title: "Jev: TypeSafe's System One Model That Never Hallucinates", authors: "Crabtree (DataCamp)", year: 2026, url: "https://www.datacamp.com/blog/system-one-models-jev"}
+
+- id: dark-factory
+  term: Dark Factory
+  category: agents
+  definition: A dark factory, or software factory, is a way of building software in which AI coding agents write, test and ship code from specifications and test scenarios with no human writing or reviewing the code, while people design the specifications, validation and environment the agents work in.
+  body: Dan Shapiro used the name in January 2026 for the top level of his five levels of AI-assisted programming, borrowing it from lights-out manufacturing plants run by robots. StrongDM described its practice the following month under two rules, that code must not be written by humans and must not be reviewed by humans. Because nobody reads the code, confidence comes from validation instead. StrongDM keeps end-to-end scenarios outside the codebase, where the coding agents cannot see them, much like a holdout set in model training, and has an LLM judge whether the software satisfies them. It also tests against agent-built behavioral clones of the third-party services the software depends on. Unlike vibe coding, which also skips reading the code, the approach depends on substantial testing infrastructure. Its practicality beyond small, specialized teams is disputed.
+  aliases: [software factory, dark software factory]
+  related: [coding-agent, vibe-coding, harness-engineering, spec-driven-development, evals, llm-as-a-judge]
+  introduced: 2026
+  added: 2026-10-27
+  sources:
+    - {title: "Software Factories And The Agentic Moment", authors: "McCarthy (StrongDM)", year: 2026, url: "https://factory.strongdm.ai/"}
+    - {title: "How StrongDM's AI team build serious software without even looking at the code", authors: "Willison", year: 2026, url: "https://simonwillison.net/2026/Feb/7/software-factory/"}
+
+- id: spec-driven-development
+  term: Spec-Driven Development
+  category: agents
+  definition: Spec-driven development is an approach to building software with AI coding agents in which a written specification of what the software should do, and why, is created and refined first, and the agent then derives a technical plan, a task list and the code from it, with the specification kept as the source of truth.
+  body: GitHub's open-source Spec Kit, released in September 2025, structures the process in four phases. The developer describes what they are building and why, and the agent expands it into a detailed specification. The developer then supplies technical direction, and the agent writes an implementation plan. The agent breaks the specification and plan into small, independently testable tasks, then implements them while the developer reviews focused changes. The specification acts as a contract that agents and tools use to generate, test and validate code. In vibe coding, by contrast, intent lives only in the chat prompts.
+  aliases: [SDD]
+  related: [coding-agent, vibe-coding, plan-and-execute, dark-factory, agent-skills, prompt-chaining]
+  introduced: 2025
+  added: 2026-10-27
+  sources:
+    - {title: "Spec-driven development with AI: Get started with a new open source toolkit", authors: "Delimarsky (GitHub)", year: 2025, url: "https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/"}
+
+- id: evaluation-awareness
+  term: Evaluation Awareness
+  category: failure-modes
+  definition: Evaluation awareness is a language model's ability to tell whether it is being evaluated or used in real deployment, which can make its behavior during tests unrepresentative of its behavior in use.
+  body: In the introducing study, frontier models classified 1,000 transcripts drawn from 61 datasets as evaluation or deployment above chance but below a human baseline, with the best model reaching an AUC of 0.83 against 0.92 for humans. They did better on agentic transcripts than on chat, and could often tell whether an evaluation tested capability or alignment. Later work found that evaluation awareness is linearly decodable from the internal activations of every open-weight model tested, even though models rarely say they are being evaluated, and that steering along that direction increases how often they say so. The authors recommend measuring the internal representation, its verbalization and its sensitivity to steering separately. Evaluation awareness matters because safety and alignment evaluations assume a model behaves the same whether or not it is observed.
+  aliases: [eval awareness]
+  related: [alignment-faking, evals, red-teaming, chain-of-thought-monitoring, activation-steering, benchmark-saturation]
+  introduced: 2025
+  added: 2026-10-27
+  sources:
+    - {title: "Large Language Models Often Know When They Are Being Evaluated", authors: "Needham et al.", year: 2025, url: "https://arxiv.org/abs/2505.23836"}
+    - {title: "Evaluation Awareness in Language Models: Representation, Verbalization, and Control", authors: "Heidari et al.", year: 2026, url: "https://arxiv.org/abs/2608.21766"}
+
+- id: diffusion-language-model
+  term: Diffusion Language Model
+  category: foundations
+  definition: A diffusion language model generates text by starting from a fully corrupted sequence, such as all mask tokens or noise over token embeddings, and refining the whole sequence over a series of denoising steps, instead of producing one token at a time from left to right.
+  body: There are two main families. Discrete diffusion models corrupt the tokens themselves, most often by replacing them with a mask token, and learn to restore them. Continuous diffusion models first map tokens to real-valued embeddings and add Gaussian-style noise to those. Diffusion-LM was an early continuous model aimed at controllable generation. LLaDA, a masked diffusion model trained from scratch at scale, performed comparably to autoregressive baselines, which suggested that strong language-model abilities do not depend on left-to-right generation. Because a diffusion model updates many positions in each step, it can produce several tokens per step and condition on text both before and after a position.
+  aliases: [diffusion LM, DLM, dLLM, masked diffusion language model, continuous diffusion language model, CDLM]
+  related: [large-language-model, speculative-decoding, foundation-model]
+  introduced: 2022
+  added: 2026-10-27
+  sources:
+    - {title: "Diffusion-LM Improves Controllable Text Generation", authors: "Li et al.", year: 2022, url: "https://arxiv.org/abs/2205.14217"}
+    - {title: "Large Language Diffusion Models", authors: "Nie et al.", year: 2025, url: "https://arxiv.org/abs/2502.09992"}
+    - {title: "Continuous diffusion language models", authors: "Dieleman", year: 2026, url: "https://sander.ai/2026/08/24/continuous-dlms.html"}
+
+- id: mixture-of-experts
+  term: Mixture of Experts
+  category: foundations
+  definition: Mixture of experts (MoE) is a neural network architecture in which a layer contains many parallel sub-networks, called experts, and a learned router sends each token to only a few of them, so a model's total parameter count can grow much faster than the computation it uses per token.
+  body: The sparsely gated mixture-of-experts layer placed thousands of experts between the layers of a language model and activated only a small number per input. The Switch Transformer simplified this by routing each token to a single expert, which reduced communication costs and made training at a trillion parameters practical. MoE language models are therefore described by two numbers, total parameters and active parameters per token. Training needs a balancing mechanism so the router does not send most tokens to a few experts, and all experts must still be held in memory at inference time. The name is unrelated to mixture-of-agents, which combines the outputs of separate models.
+  aliases: [MoE, sparse mixture of experts, sparsely-gated mixture of experts]
+  related: [large-language-model, foundation-model, routing, mixture-of-agents]
+  introduced: 2017
+  added: 2026-10-27
+  sources:
+    - {title: "Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer", authors: "Shazeer et al.", year: 2017, url: "https://arxiv.org/abs/1701.06538"}
+    - {title: "Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity", authors: "Fedus, Zoph and Shazeer", year: 2021, url: "https://arxiv.org/abs/2101.03961"}
+
+- id: quantization
+  term: Quantization
+  category: optimization
+  definition: Quantization reduces the numeric precision of a model's weights, and sometimes its activations, from 16- or 32-bit floating point to lower-precision formats such as 8-bit or 4-bit integers, cutting memory use and inference cost at some cost in accuracy.
+  body: Post-training quantization is applied to a model that has already been trained, without retraining it. LLM.int8() made 8-bit inference practical for large models by keeping a small number of outlier feature dimensions in higher precision. GPTQ quantizes weights to 3 or 4 bits in a single pass, using approximate second-order information to keep accuracy loss small. Quantization is widely used to fit large open-weight models onto fewer GPUs or consumer hardware. Quantization-aware training, which simulates low precision during training, is an alternative to post-training methods. Quantization is often combined with other efficiency methods such as low-rank adaptation and knowledge distillation.
+  aliases: [model quantization, post-training quantization, PTQ, weight quantization, GPTQ, LLM.int8()]
+  related: [knowledge-distillation, low-rank-adaptation, kv-cache, speculative-decoding]
+  introduced: 2022
+  added: 2026-10-27
+  sources:
+    - {title: "LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale", authors: "Dettmers et al.", year: 2022, url: "https://arxiv.org/abs/2208.07339"}
+    - {title: "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers", authors: "Frantar et al.", year: 2022, url: "https://arxiv.org/abs/2210.17323"}

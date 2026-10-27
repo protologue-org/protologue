@@ -10,7 +10,7 @@ const SITE = "https://protologue.com";
 const SERVER_INFO = {
   name: "protologue",
   title: "Protologue",
-  version: "1.1.0",
+  version: "1.2.0",
   websiteUrl: SITE,
 };
 const SUPPORTED_VERSIONS = ["2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05"];
@@ -138,6 +138,7 @@ function full(t, data) {
     aliases: t.aliases,
     category: data.categories.find((c) => c.id === t.category)?.name || t.category,
     introduced: t.introduced ?? null,
+    added: t.added ?? null,
     example: t.example ?? null,
     broader: t.broader.map(name),
     narrower: t.narrower.map(name),

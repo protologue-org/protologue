@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.4.0 (2026-10-27)
+
+New terms, comparison pages, and a feed of new entries. Every source added in this release was opened and checked against its title and author on 2026-10-26.
+
+**Added: recently coined terms**
+- System One Model (PTL-0224): a kind of model, named by TypeSafe AI in September 2026, that returns typed, probabilistic decisions instead of generated text. The entry notes that the vendor's performance and hallucination claims had not been independently reproduced. Sources: Almeida (TypeSafe, 2026); Crabtree (DataCamp, 2026).
+- Dark Factory (PTL-0225): building software with coding agents and no human writing or reviewing the code, relying on hidden test scenarios and simulated services. Sources: McCarthy (StrongDM, 2026); Willison (2026).
+- Spec-Driven Development (PTL-0226): a written specification, refined first, from which an agent derives a plan, tasks and code. Source: Delimarsky (GitHub, 2025).
+- Evaluation Awareness (PTL-0227): a model's ability to tell evaluation from deployment. Sources: Needham et al. (2025); Heidari et al. (2026).
+
+**Added: established terms that were missing**
+- Diffusion Language Model (PTL-0228): text generation by iterative denoising of a whole sequence, in discrete (masked) and continuous variants. Sources: Li et al. (2022); Nie et al. (2025); Dieleman (2026).
+- Mixture of Experts (PTL-0229): layers of many expert sub-networks with a router that activates only a few per token. Sources: Shazeer et al. (2017); Fedus, Zoph and Shazeer (2021).
+- Quantization (PTL-0230): reducing the numeric precision of weights and activations. Sources: Dettmers et al. (2022); Frantar et al. (2022).
+
+**Added: site**
+- 18 comparison pages at /compare/, for commonly confused pairs such as RAG vs fine-tuning, prompt injection vs jailbreak, and ReAct vs plan-and-execute. Each page gives a quotable answer, both definitions, a table of differences and both entries' sources, with a Markdown version. Entry pages link to their comparisons, and llms.txt and llms-full.txt include them.
+- A New page at /new/ and an Atom feed at /feed.xml, listing entries by the date they were added. Every entry now has an `added` date, in its JSON record, its JSON-LD (`dateCreated`) and its page. llms.txt lists the 15 most recent additions first.
+
+**Changed**
+- Page titles and the site name in link previews now read "Protologue, the LLM technique glossary", so that pages are not confused with protologues in biological nomenclature. Entry titles no longer promise examples, since most entries have none.
+- The MCP server's get_term result now includes the entry's `added` date.
+
 ## 1.3.0 (2026-10-20)
 
 Weekly review. All 214 existing source links were re-checked on 2026-10-20: all 177 arXiv IDs match their cited title and first author, and 34 of 37 documentation links resolve to the cited page. The other three (the BM25 and reciprocal rank fusion DOIs and the x.com vibe-coding post) block automated fetching and were left unchanged.

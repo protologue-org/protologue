@@ -48,7 +48,7 @@ header.site {
 .mark { color: var(--ink); text-decoration: none; font: italic 500 1.375rem/1 var(--serif); letter-spacing: -0.01em; display: inline-flex; align-items: center; gap: .5rem; }
 .mark-glyph { width: 0.9rem; height: 0.9rem; border: 1.5px solid var(--accent); border-radius: 50%; position: relative; }
 .mark-glyph::after { content: ""; position: absolute; left: 50%; top: 100%; width: 1.5px; height: 0.35rem; background: var(--accent); transform: translateX(-50%); }
-header.site nav { display: flex; gap: 1.25rem; }
+header.site nav { display: flex; flex-wrap: wrap; gap: .35rem 1.25rem; justify-content: flex-end; }
 header.site nav a { color: var(--ink); text-decoration: none; }
 header.site nav a:hover { color: var(--accent); }
 footer.site { border-top: 1px solid var(--rule); margin-top: 4rem; padding-top: 1.5rem; padding-bottom: 3rem; font: 0.875rem/1.6 var(--sans); color: var(--muted); }
@@ -175,3 +175,12 @@ footer.site p { margin: 0 0 .5rem; }
 .signup-embed { margin: 0 0 .25rem; max-width: 34rem; }
 .signup-embed iframe { display: block; width: 100%; max-width: 100%; border: 0; background: transparent; }
 .signup-note { font: .8125rem var(--sans); color: var(--muted); margin: .5rem 0 0 !important; }
+
+/* comparison pages */
+.table-wrap { overflow-x: auto; }
+.compare-table th[scope="row"] { color: var(--muted); font-weight: 600; width: 22%; }
+.compare-table td { width: 39%; }
+@media (max-width: 30rem) {
+  .files.compare-table th:nth-child(3), .files.compare-table td:nth-child(3) { display: table-cell; }
+  .compare-table { font-size: .875rem; }
+}

@@ -19,7 +19,7 @@ Copy for listing the Protologue MCP server in agent directories. Keep every list
 | Categories | Research, Education, Developer tools, Reference |
 | Tools | `search_terms`, `get_term`, `get_related`, `list_categories`. All read-only (`readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false`) |
 
-**One-liner (under 200 characters).** Sourced, citable definitions of 200+ prompting and LLM techniques, each with its primary source, synonyms and related techniques.
+**One-liner (under 200 characters).** Sourced, citable definitions of 230+ prompting and LLM techniques, each with its primary source, synonyms and related techniques.
 
 **Description (under 2,000 characters).** Protologue is an openly licensed (CC BY 4.0) reference taxonomy of prompting and large language model techniques, from chain-of-thought and ReAct to context engineering and prompt injection. Each entry has a permanent identifier, a standalone definition, synonyms, broader, narrower and related techniques, and the primary source (paper or official documentation) that introduced it. Every source is checked against the original.
 
@@ -42,12 +42,17 @@ The server lets an assistant look up a technique by name or synonym, read its so
 
 | Directory | How | Status |
 |---|---|---|
-| Official MCP Registry | `mcp-publisher publish` from `mcp/server.json` (owner's registry key) | Listed since 2026-10-11 at v1.0.0. Republish to update to v1.1.0 |
+| Official MCP Registry | `mcp-publisher publish` from `mcp/server.json` (owner's registry key) | Listed since 2026-10-11 at v1.0.0. Republish to update to v1.2.0 |
 | Glama | Claim the connector page; `glama.json` at the repo root lists the maintainer | To do |
 | PulseMCP | Check whether it already appears from the official registry; otherwise pulsemcp.com/submit | To do |
 | MCP.so | mcp.so/submit, Remote Server tab | To do |
 | Smithery | smithery.ai/new with the endpoint URL, then Settings → Verification | To do |
 | Claude Connectors Directory | claude.ai/directory/manage → Submit new → MCP connector | To do |
-| ChatGPT apps | platform.openai.com submission portal (needs individual or business verification) | To do |
+| ChatGPT apps | platform.openai.com submission portal (needs individual or business verification) | Business verification in review since 2026-10-18 |
+| GitHub MCP Registry (VS Code, Copilot) | github.com/mcp; populated from the official MCP Registry, so republishing there is the step | Check after republish |
+| Cursor Directory | cursor.directory/mcp, "Submit" with the endpoint URL | To do |
+| mcpservers.org / awesome-mcp-servers | Pull request adding one line under a Knowledge or Research section | To do (draft in `docs/outreach.md`) |
+
+Status checked 2026-10-26: a web search found no Protologue listing on Glama, Smithery, PulseMCP or MCP.so yet.
 
 Update this table as listings go live.
