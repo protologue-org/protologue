@@ -65,7 +65,7 @@
   related: [bm25, dense-retrieval, reranking, contextual-retrieval, retrieval-augmented-generation]
   sources:
     - {title: "Reciprocal rank fusion outperforms condorcet and individual rank learning methods", authors: "Cormack et al.", year: 2009, url: "https://doi.org/10.1145/1571941.1572114"}
-    - {title: "Introducing Contextual Retrieval", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/news/contextual-retrieval"}
+    - {title: "Introducing Contextual Retrieval", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/contextual-retrieval"}
 
 - id: reranking
   term: Reranking
@@ -110,7 +110,7 @@
   related: [chunking, bm25, hybrid-search, reranking, prompt-caching]
   introduced: 2024
   sources:
-    - {title: "Introducing Contextual Retrieval", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/news/contextual-retrieval"}
+    - {title: "Introducing Contextual Retrieval", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/research/contextual-retrieval"}
 
 - id: graphrag
   term: GraphRAG

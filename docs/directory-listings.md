@@ -43,16 +43,16 @@ The server lets an assistant look up a technique by name or synonym, read its so
 | Directory | How | Status |
 |---|---|---|
 | Official MCP Registry | `mcp-publisher publish` from `mcp/server.json` (owner's registry key) | Listed since 2026-10-11 at v1.0.0. Republish to update to v1.2.0 |
-| Glama | Claim the connector page; `glama.json` at the repo root lists the maintainer | To do |
-| PulseMCP | Check whether it already appears from the official registry; otherwise pulsemcp.com/submit | To do |
-| MCP.so | mcp.so/submit, Remote Server tab | To do |
-| Smithery | smithery.ai/new with the endpoint URL, then Settings → Verification | To do |
+| Glama | Claim the connector page; `glama.json` at the repo root lists the maintainer | Listed (com.protologue/protologue, ownership verified, TDQS A) as of 2026-10-26 |
+| PulseMCP | Check whether it already appears from the official registry; otherwise pulsemcp.com/submit | Submissions paused; it imports from the official registry (2026-10-26). Republish there first |
+| MCP.so | mcp.so/submit, Remote Server tab | Submission is now paid ($39); owner decision |
+| Smithery | smithery.ai/new with the endpoint URL, then Settings → Verification | To do (needs owner sign-in) |
 | Claude Connectors Directory | claude.ai/directory/manage → Submit new → MCP connector | To do |
 | ChatGPT apps | platform.openai.com submission portal (needs individual or business verification) | Business verification in review since 2026-10-18 |
 | GitHub MCP Registry (VS Code, Copilot) | github.com/mcp; populated from the official MCP Registry, so republishing there is the step | Check after republish |
-| Cursor Directory | cursor.directory/mcp, "Submit" with the endpoint URL | To do |
-| mcpservers.org / awesome-mcp-servers | Pull request adding one line under a Knowledge or Research section | To do (draft in `docs/outreach.md`) |
+| Cursor Directory | cursor.directory/mcp, "Submit" with the endpoint URL | To do (needs owner sign-in) |
+| mcpservers.org / awesome-mcp-servers | Pull request adding one line under a Knowledge or Research section | punkpeye/awesome-mcp-servers is for installable servers only; remote list PR punkpeye/awesome-remote-mcp-servers#3067 open (2026-11-02) |
 
-Status checked 2026-10-26: a web search found no Protologue listing on Glama, Smithery, PulseMCP or MCP.so yet.
+Status checked 2026-11-02 from the owner's 2026-10-26 notes and GitHub (the weekly web search could not run this week). Awesome-list PRs promptslab/Awesome-Prompt-Engineering#248 and snwfdhmp/awesome-gpt-prompt-engineering#75 are also open.
 
 Update this table as listings go live.

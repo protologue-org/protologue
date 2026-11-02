@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.1 (2026-11-03)
+
+Weekly review. Source links were re-checked on 2026-11-02: every arXiv ID and documentation link that could be opened matched its cited title and first author or publisher, and none was broken. About 50 links could not be opened in this run and are carried over to the next check.
+
+**Changed**
+- SWE-bench (PTL-0202): the entry no longer describes SWE-bench Verified as the version most often reported. It now notes that in February 2026 OpenAI stopped reporting SWE-bench Verified scores, citing flawed tests, underspecified tasks and training-data contamination, and recommended SWE-bench Pro in the meantime. New source: OpenAI (2026), "Why SWE-bench Verified no longer measures frontier coding capabilities". Related links to Data Contamination and Benchmark Saturation added.
+- Contextual Retrieval and Hybrid Search: the Anthropic "Introducing Contextual Retrieval" source now points to its current address, anthropic.com/research/contextual-retrieval.
+
 ## 1.4.0 (2026-10-27)
 
 New terms, comparison pages, and a feed of new entries. Every source added in this release was opened and checked against its title and author on 2026-10-26.
