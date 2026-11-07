@@ -241,14 +241,15 @@
   term: SWE-bench
   category: benchmarks
   definition: SWE-bench is a benchmark of real GitHub issues from popular Python repositories, in which a model or agent must edit the codebase so that tests written for the actual fix pass.
-  body: It measures practical software engineering in large, unfamiliar codebases rather than isolated functions, and is the standard benchmark for coding agents. Because some original tasks were underspecified or had faulty tests, a 500-task subset screened by human developers, SWE-bench Verified, is the version most often reported.
+  body: It measures practical software engineering in large, unfamiliar codebases rather than isolated functions, and became a standard benchmark for coding agents. Because some original tasks were underspecified or had faulty tests, OpenAI released a 500-task subset screened by human developers, SWE-bench Verified, in 2024, and it became the most often reported version. In February 2026 OpenAI said it had stopped reporting SWE-bench Verified scores and recommended other developers do the same, citing an audit that found flawed tests and underspecified tasks among problems its models often failed, and contamination tests in which every frontier model it examined could reproduce the original human-written fix for some tasks. It recommended reporting SWE-bench Pro in the meantime.
   aliases: [SWE-bench Verified]
   broader: [benchmark]
-  related: [coding-agent, humaneval, terminal-bench]
+  related: [coding-agent, humaneval, terminal-bench, data-contamination, benchmark-saturation]
   introduced: 2023
   sources:
     - {title: "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?", authors: "Jimenez et al.", year: 2023, url: "https://arxiv.org/abs/2310.06770"}
     - {title: "Introducing SWE-bench Verified", authors: "OpenAI", year: 2024, url: "https://openai.com/index/introducing-swe-bench-verified/"}
+    - {title: "Why SWE-bench Verified no longer measures frontier coding capabilities", authors: "OpenAI", year: 2026, url: "https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/"}
 
 - id: terminal-bench
   term: Terminal-Bench
