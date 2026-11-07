@@ -144,3 +144,154 @@
   sources:
     - {title: "What is agentic engineering? (Agentic Engineering Patterns)", authors: "Willison", year: 2026, url: "https://simonwillison.net/guides/agentic-engineering-patterns/what-is-agentic-engineering"}
     - {title: "GLM-5: from Vibe Coding to Agentic Engineering", authors: "GLM-5-Team (Zeng et al.)", year: 2026, url: "https://arxiv.org/abs/2602.15763"}
+
+- id: cumulative-reasoning
+  term: Cumulative Reasoning
+  category: reasoning
+  definition: Cumulative reasoning is a prompting framework in which a language model plays three roles, a proposer that suggests reasoning steps, a verifier that checks each step, and a reporter that composes the final answer from the verified steps, so that only checked propositions accumulate.
+  body: Verified propositions build up in a directed acyclic graph rather than a single chain or tree, so a new step can draw on any combination of earlier verified steps. In the introducing paper the authors reported 98% accuracy on the Game of 24, 98.04% on a curated subset of the FOLIO logical-inference dataset, and gains on the MATH benchmark that were largest on its hardest problems. A variant that let the model run code outperformed program-of-thoughts. Compared with tree of thoughts, which searches over alternative paths, cumulative reasoning emphasizes checking each step before it can be used.
+  aliases: [CR, cumulative reasoning prompting]
+  broader: [chain-of-thought]
+  related: [tree-of-thoughts, graph-of-thoughts, self-verification, program-of-thoughts]
+  introduced: 2023
+  added: 2026-11-07
+  sources:
+    - {title: "Cumulative Reasoning with Large Language Models", authors: "Zhang et al.", year: 2023, url: "https://arxiv.org/abs/2308.04371"}
+
+- id: algorithm-of-thoughts
+  term: Algorithm of Thoughts
+  category: reasoning
+  definition: Algorithm of thoughts (AoT) is a prompting technique that places worked examples of an algorithmic search process in the prompt, so the model carries out the whole search inside a single generation instead of being called repeatedly by an external controller.
+  body: Methods such as tree of thoughts explore alternatives by pausing generation, evaluating partial solutions and calling the model again, which multiplies the number of queries and tokens. AoT keeps the exploration in one stream of output. Its authors reported that it outperformed earlier single-query methods and multi-query tree-search strategies while using significantly fewer tokens, and that a model guided by an algorithm could perform better than the algorithm itself.
+  aliases: [AoT]
+  broader: [chain-of-thought]
+  related: [tree-of-thoughts, graph-of-thoughts, few-shot-prompting]
+  introduced: 2023
+  added: 2026-11-07
+  sources:
+    - {title: "Algorithm of Thoughts: Enhancing Exploration of Ideas in Large Language Models", authors: "Sel et al.", year: 2023, url: "https://arxiv.org/abs/2308.10379"}
+
+- id: chain-of-note
+  term: Chain-of-Note
+  category: retrieval-tools
+  definition: Chain-of-Note (CoN) is a retrieval-augmented generation method in which the model writes a short reading note for each retrieved document, assessing whether and how it bears on the question, before combining those notes into a final answer or saying that the answer is unknown.
+  body: It targets two weaknesses of standard retrieval-augmented models. Irrelevant passages can mislead them into ignoring knowledge they already have, and they rarely admit when neither the documents nor their own knowledge contain the answer. The authors generated training notes with ChatGPT and fine-tuned a Llama 2 7B model on them. Across four open-domain question-answering benchmarks they reported an average gain of 7.9 exact-match points when all retrieved documents were noisy, and a 10.5-point higher rate of correctly declining questions about events after the model's training data.
+  aliases: [CoN, chain-of-noting]
+  related: [retrieval-augmented-generation, self-rag, corrective-rag, irrelevant-context-distraction]
+  introduced: 2023
+  added: 2026-11-07
+  sources:
+    - {title: "Chain-of-Note: Enhancing Robustness in Retrieval-Augmented Language Models", authors: "Yu et al.", year: 2023, url: "https://arxiv.org/abs/2311.09210"}
+
+- id: flipped-interaction
+  term: Flipped Interaction
+  category: foundations
+  definition: Flipped interaction is a prompt pattern in which the user asks the model to lead the conversation by asking questions, one or a few at a time, until it has the information it needs to complete a stated task.
+  body: The pattern was named in a catalog of prompt patterns for ChatGPT, where it is listed among interaction patterns. A typical prompt states the goal and the stopping condition, for example "I would like you to ask me questions to achieve X. You should ask questions until this condition is met." The motivation is that the model often knows better than the user which details a task needs, so letting it ask can reach a good result faster than the user trying to specify everything up front.
+  aliases: [flipped interaction pattern]
+  related: [role-prompting, prompt-template, human-in-the-loop]
+  introduced: 2023
+  added: 2026-11-07
+  sources:
+    - {title: "A Prompt Pattern Catalog to Enhance Prompt Engineering with ChatGPT", authors: "White et al.", year: 2023, url: "https://arxiv.org/abs/2302.11382"}
+
+- id: backward-chaining
+  term: Backward Chaining
+  category: reasoning
+  definition: Backward chaining is a reasoning strategy that starts from the statement to be proved and works back to the facts and rules that would support it, rather than reasoning forward from the facts toward a conclusion.
+  body: The idea comes from classical automated reasoning. LAMBADA applied it to language models by breaking the search into four sub-modules, each implemented with few-shot prompting. Its authors argued that forward methods such as chain-of-thought and selection-inference face a search space that grows combinatorially with the length of the proof, and reported substantial accuracy gains over them on logical reasoning datasets, largest where deep proof chains were needed. LAMBADA, the name of this method, is unrelated to the LAMBADA word-prediction benchmark.
+  aliases: [backward reasoning]
+  related: [chain-of-thought, least-to-most-prompting, self-verification]
+  introduced: 2022
+  added: 2026-11-07
+  sources:
+    - {title: "LAMBADA: Backward Chaining for Automated Reasoning in Natural Language", authors: "Kazemi et al.", year: 2022, url: "https://arxiv.org/abs/2212.13894"}
+
+- id: parameter-efficient-fine-tuning
+  term: Parameter-Efficient Fine-Tuning
+  category: optimization
+  definition: Parameter-efficient fine-tuning (PEFT) adapts a pretrained model to a task by training only a small number of added or selected parameters while the original weights stay frozen, instead of updating every weight as full fine-tuning does.
+  body: Adapter modules were an early example. Houlsby et al. inserted small trainable layers into BERT and came within 0.4% of full fine-tuning on GLUE while adding only 3.6% parameters per task, so many tasks could share one frozen base model. Later methods include prompt tuning and prefix tuning, which learn continuous vectors added to the input or to each layer, and low-rank adaptation, which learns low-rank updates to weight matrices. PEFT lowers memory and storage costs, since each task needs only its small set of trained parameters, and QLoRA combines it with quantization to fine-tune very large models on a single GPU.
+  aliases: [PEFT, parameter-efficient transfer learning]
+  broader: [fine-tuning]
+  related: [low-rank-adaptation, qlora, prompt-tuning, prefix-tuning, quantization]
+  introduced: 2019
+  added: 2026-11-07
+  sources:
+    - {title: "Parameter-Efficient Transfer Learning for NLP", authors: "Houlsby et al.", year: 2019, url: "https://arxiv.org/abs/1902.00751"}
+    - {title: "Parameter-Efficient Fine-Tuning for Large Models: A Comprehensive Survey", authors: "Han et al.", year: 2024, url: "https://arxiv.org/abs/2403.14608"}
+
+- id: qlora
+  term: QLoRA
+  category: optimization
+  definition: QLoRA is a fine-tuning method that keeps a pretrained model frozen in 4-bit quantized form and trains low-rank adapters on top of it, backpropagating gradients through the quantized weights, which greatly reduces the memory needed to fine-tune large models.
+  body: It introduced a 4-bit data type called NormalFloat (NF4) designed for normally distributed weights, double quantization, which also quantizes the quantization constants, and paged optimizers that absorb memory spikes during training. With these, the authors fine-tuned a 65-billion-parameter model on a single 48 GB GPU with performance they reported as matching 16-bit fine-tuning. Their Guanaco models, trained this way in about 24 hours on one GPU, reached 99.3% of ChatGPT's performance on the Vicuna benchmark in their evaluation. QLoRA made fine-tuning of large open-weight models practical on modest hardware.
+  aliases: [quantized LoRA, quantized low-rank adaptation]
+  broader: [low-rank-adaptation]
+  related: [quantization, parameter-efficient-fine-tuning, fine-tuning]
+  introduced: 2023
+  added: 2026-11-07
+  sources:
+    - {title: "QLoRA: Efficient Finetuning of Quantized LLMs", authors: "Dettmers et al.", year: 2023, url: "https://arxiv.org/abs/2305.14314"}
+
+- id: kahneman-tversky-optimization
+  term: Kahneman-Tversky Optimization
+  category: foundations
+  definition: Kahneman-Tversky optimization (KTO) is a preference-alignment method that trains a language model from outputs labelled simply as desirable or undesirable, using a loss based on Kahneman and Tversky's prospect theory, instead of requiring pairs of preferred and dispreferred responses.
+  body: Its authors described a family of "human-aware losses" whose objectives implicitly encode biases from prospect theory, such as loss aversion, and argued this partly explains why direct preference optimization works better than plain likelihood training. KTO maximizes a prospect-theoretic utility of generations directly. Because a single thumbs-up or thumbs-down label is cheaper and more plentiful than a ranked pair, KTO can use feedback that pairwise methods cannot. The authors reported that it matched or exceeded preference-based methods at scales from 1 to 30 billion parameters, and concluded that no single such loss is best in every setting.
+  aliases: [KTO]
+  related: [direct-preference-optimization, rlhf, odds-ratio-preference-optimization, reward-model]
+  introduced: 2024
+  added: 2026-11-07
+  sources:
+    - {title: "KTO: Model Alignment as Prospect Theoretic Optimization", authors: "Ethayarajh et al.", year: 2024, url: "https://arxiv.org/abs/2402.01306"}
+
+- id: odds-ratio-preference-optimization
+  term: Odds Ratio Preference Optimization
+  category: foundations
+  definition: Odds ratio preference optimization (ORPO) aligns a language model with preferences in a single training stage by adding an odds-ratio penalty that favors preferred over dispreferred responses to the ordinary supervised fine-tuning loss, with no reference model and no separate preference-tuning phase.
+  body: Its authors argued that supervised fine-tuning is needed for preference alignment to converge and that a small penalty on the disfavored response style during that fine-tuning is enough. Methods such as RLHF and direct preference optimization usually follow a separate supervised stage and keep a frozen reference model, which ORPO avoids. Fine-tuning Phi-2, Llama 2 7B and Mistral 7B with ORPO on the UltraFeedback dataset alone, they reported scores of up to 12.20% on AlpacaEval 2.0, 66.19% on IFEval and 7.32 on MT-Bench.
+  aliases: [ORPO, monolithic preference optimization]
+  related: [direct-preference-optimization, instruction-tuning, rlhf, kahneman-tversky-optimization]
+  introduced: 2024
+  added: 2026-11-07
+  sources:
+    - {title: "ORPO: Monolithic Preference Optimization without Reference Model", authors: "Hong, Lee and Thorne", year: 2024, url: "https://arxiv.org/abs/2403.07691"}
+
+- id: rlaif
+  term: Reinforcement Learning from AI Feedback
+  category: foundations
+  definition: Reinforcement learning from AI feedback (RLAIF) is a variant of reinforcement learning from human feedback in which the preference labels used to train the reward model, or the rewards themselves, come from a language model instead of human annotators.
+  body: It was introduced as part of Constitutional AI, where a model judged responses against written principles. Lee et al. compared it directly with RLHF and found comparable results on summarization, helpful dialogue and harmless dialogue. They also described direct RLAIF, which skips reward-model training and takes rewards from an off-the-shelf model during reinforcement learning, and reported that it outperformed the standard setup. RLAIF beat a supervised fine-tuned baseline even when the labelling model was the same size as the policy, which the authors presented as a step toward self-improvement. Its appeal is that AI labels are far cheaper to collect at scale than human ones.
+  aliases: [RLAIF, direct RLAIF, d-RLAIF]
+  broader: [rlhf]
+  related: [constitutional-ai, reward-model, llm-as-a-judge]
+  introduced: 2022
+  added: 2026-11-07
+  sources:
+    - {title: "Constitutional AI: Harmlessness from AI Feedback", authors: "Bai et al.", year: 2022, url: "https://arxiv.org/abs/2212.08073"}
+    - {title: "RLAIF vs. RLHF: Scaling Reinforcement Learning from Human Feedback with AI Feedback", authors: "Lee et al.", year: 2023, url: "https://arxiv.org/abs/2309.00267"}
+
+- id: self-instruct
+  term: Self-Instruct
+  category: foundations
+  definition: Self-Instruct is a method for building instruction-tuning data in which a language model generates new task instructions, inputs and outputs from a small seed set, the results are filtered to remove invalid or near-duplicate examples, and the model is then fine-tuned on them.
+  body: Applied to the original GPT-3, it produced a 33% absolute improvement on the Super-NaturalInstructions benchmark, roughly matching InstructGPT-001, with almost no human-written training data. The approach made synthetic instruction data a standard ingredient of instruction tuning and inspired later methods such as Evol-Instruct.
+  aliases: []
+  related: [instruction-tuning, evol-instruct, knowledge-distillation]
+  introduced: 2022
+  added: 2026-11-07
+  sources:
+    - {title: "Self-Instruct: Aligning Language Models with Self-Generated Instructions", authors: "Wang et al.", year: 2022, url: "https://arxiv.org/abs/2212.10560"}
+
+- id: evol-instruct
+  term: Evol-Instruct
+  category: foundations
+  definition: Evol-Instruct is a method for generating instruction-tuning data in which a language model repeatedly rewrites a starting set of instructions into more complex versions, producing a range of difficulty levels to train on.
+  body: The authors mixed the evolved instructions and their responses to fine-tune LLaMA, producing the WizardLM models. Human evaluators rated the evolved instructions above human-written ones, and on the most complex test questions WizardLM's answers were preferred over ChatGPT's, although it still trailed ChatGPT in other areas. Where Self-Instruct mainly generates new instructions, Evol-Instruct focuses on making them progressively harder.
+  aliases: []
+  related: [self-instruct, instruction-tuning]
+  introduced: 2023
+  added: 2026-11-07
+  sources:
+    - {title: "WizardLM: Empowering Large Language Models to Follow Complex Instructions", authors: "Xu et al.", year: 2023, url: "https://arxiv.org/abs/2304.12244"}

@@ -6,12 +6,13 @@
   term: KV Cache
   category: foundations
   definition: The KV cache stores the attention keys and values a Transformer has already computed for earlier tokens, so that generating each new token requires computing only that token's keys and values instead of reprocessing the whole sequence.
-  body: Caching makes generation fast, but its memory grows with context length and with the number of concurrent requests, which is a main constraint on long contexts and serving costs. Serving systems such as vLLM manage it in pages to reduce waste. Prompt caching extends the idea across requests by keeping the cache for a shared prompt prefix, which is why cached prompts must begin with identical content to get the discount.
+  body: Caching makes generation fast, but its memory grows with context length and with the number of concurrent requests, which is a main constraint on long contexts and serving costs. Serving systems such as vLLM manage it in pages to reduce waste, and KV cache quantization stores it at lower precision. KIVI, for example, compresses keys and values to 2 bits, quantizing keys per channel and values per token, and reported a 2.6-times reduction in peak memory with little loss in quality. Prompt caching extends the idea across requests by keeping the cache for a shared prompt prefix, which is why cached prompts must begin with identical content to get the discount.
   aliases: [key-value cache, KV caching]
   related: [prompt-caching, context-window, token]
   sources:
     - {title: "Efficient Memory Management for Large Language Model Serving with PagedAttention", authors: "Kwon et al.", year: 2023, url: "https://arxiv.org/abs/2309.06180"}
     - {title: "Prompt caching", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"}
+    - {title: "KIVI: A Tuning-Free Asymmetric 2bit Quantization for KV Cache", authors: "Liu et al.", year: 2024, url: "https://arxiv.org/abs/2402.02750"}
 
 - id: knowledge-distillation
   term: Knowledge Distillation
@@ -420,12 +421,14 @@
   term: Speculative Decoding
   category: foundations
   definition: Speculative decoding is an inference technique in which a smaller, faster draft model proposes several next tokens and the large target model checks them in a single parallel pass, accepting or correcting them so that generation is faster while the output distribution stays the same as sampling from the target model alone.
-  body: Because the target model verifies several drafted tokens per forward pass instead of generating one token per pass, decoding needs fewer sequential calls to the large model. A sampling rule that accepts or rejects each drafted token is what preserves the target model's distribution. The speedup depends on how often the draft model's guesses are accepted. A closely related method was published shortly afterwards under the name speculative sampling.
+  body: Because the target model verifies several drafted tokens per forward pass instead of generating one token per pass, decoding needs fewer sequential calls to the large model. A sampling rule that accepts or rejects each drafted token is what preserves the target model's distribution. The speedup depends on how often the draft model's guesses are accepted. A closely related method was published shortly afterwards under the name speculative sampling. Later methods remove the separate draft model. Medusa adds extra decoding heads to the target model that predict several upcoming tokens, verifying candidate continuations together with tree-based attention, and reported speedups of more than 2.2 times without changing outputs. Lookahead decoding generates and verifies candidate token sequences in parallel without any draft model or data store, with reported speedups of up to 1.8 times on MT-Bench.
   aliases: [speculative sampling, assisted generation]
   related: [kv-cache, greedy-decoding, knowledge-distillation]
   introduced: 2022
   sources:
     - {title: "Fast Inference from Transformers via Speculative Decoding", authors: "Leviathan et al.", year: 2022, url: "https://arxiv.org/abs/2211.17192"}
+    - {title: "Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads", authors: "Cai et al.", year: 2024, url: "https://arxiv.org/abs/2401.10774"}
+    - {title: "Break the Sequential Dependency of LLM Inference Using Lookahead Decoding", authors: "Fu et al.", year: 2024, url: "https://arxiv.org/abs/2402.02057"}
     - {title: "Accelerating Large Language Model Decoding with Speculative Sampling", authors: "Chen et al.", year: 2023, url: "https://arxiv.org/abs/2302.01318"}
 
 - id: min-p-sampling
