@@ -207,3 +207,14 @@
     - "Best for | Throwaway prototypes where speed matters most | Software that must be maintained"
   choose_a: Vibe coding suits quick experiments where correctness is not critical.
   choose_b: Spec-driven development suits production work, where decisions need to be recorded and checked.
+
+- id: agentic-engineering-vs-vibe-coding
+  a: agentic-engineering
+  b: vibe-coding
+  answer: Both use AI models to write code. In vibe coding the developer accepts the generated code largely without reading or understanding it, which suits throwaway projects. In agentic engineering the developer works with coding agents but reviews their code and brings it up to the standard expected of production software.
+  rows:
+    - "Does the developer review the code? | Yes | Largely no"
+    - "Typical use | Production software | Throwaway projects and prototypes"
+    - "Term introduced | 2026, popularized by Simon Willison | February 2025, coined by Andrej Karpathy"
+  choose_a: Use agentic engineering for code that others will depend on, maintain or deploy.
+  choose_b: Vibe coding is fine for quick experiments and personal tools where speed matters more than correctness.

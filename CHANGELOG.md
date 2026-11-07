@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.5.0 (2026-11-07)
+
+Four new entries and one comparison page. Every source added in this release was opened and checked against its title and author on 2026-11-07.
+
+**Added**
+- Interleaved Thinking (PTL-0231): a reasoning model producing new reasoning between tool calls and carrying it forward through the task. The entry describes Anthropic's current API behavior and MiniMax's account of the technique; MiniMax's benchmark gains are marked as vendor-reported. Sources: Anthropic documentation (2026); MiniMax (2025).
+- Sandbagging (PTL-0232): strategic underperformance on an evaluation. Sources: van der Weij et al. (2024); Meinke et al. (2024).
+- Model Collapse (PTL-0233): degradation of generative models trained on earlier models' outputs, starting with the rare tails of the data. Sources: Shumailov et al. (2023; Nature, 2024).
+- Agentic Engineering (PTL-0234): developing software with coding agents while reviewing their code to production standard, as opposed to vibe coding. Sources: Willison (2026); GLM-5-Team (2026).
+- Comparison page: Agentic Engineering vs Vibe Coding.
+
+**Changed**
+- Vibe Coding now links to Agentic Engineering.
+
 ## 1.4.1 (2026-11-03)
 
 Weekly review. Source links were re-checked on 2026-11-02: every arXiv ID and documentation link that could be opened matched its cited title and first author or publisher, and none was broken. About 50 links could not be opened in this run and are carried over to the next check.

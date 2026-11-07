@@ -90,3 +90,57 @@
   sources:
     - {title: "LLM.int8(): 8-bit Matrix Multiplication for Transformers at Scale", authors: "Dettmers et al.", year: 2022, url: "https://arxiv.org/abs/2208.07339"}
     - {title: "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers", authors: "Frantar et al.", year: 2022, url: "https://arxiv.org/abs/2210.17323"}
+
+- id: interleaved-thinking
+  term: Interleaved Thinking
+  category: test-time
+  definition: Interleaved thinking is a way of running a reasoning model in a tool-use loop in which the model produces new reasoning between tool calls, reasoning about each tool result before choosing its next action, and that reasoning is carried forward through the rest of the task.
+  body: Without interleaving, a reasoning model typically thinks once before its first response and then calls tools without further reasoning. Anthropic's Messages API supports interleaved thinking for Claude tool use. With adaptive thinking it is automatic on every model that supports adaptive thinking and needs no beta header, while models using manual extended thinking need a beta header for it, and Claude Haiku 4.5 does not support it. The API requires that thinking blocks be passed back complete and unmodified along with tool results. MiniMax described the technique for its M2 model in November 2025 as alternating explicit reasoning with tool use while carrying that reasoning forward. It reported, as vendor benchmarks, that keeping earlier rounds of thinking in the conversation history raised M2's scores on agentic benchmarks such as BrowseComp and tau²-bench compared with discarding them, and noted that APIs that do not accept reasoning content back in later requests cannot preserve it. Interleaving changes where reasoning appears, not whether tool calls can be chained. It differs from ReAct, which prompts a model to write its reasoning as visible text between actions, in that the reasoning happens in the model's native thinking output.
+  aliases: [interleaved reasoning, thinking between tool calls]
+  broader: [extended-thinking]
+  related: [reasoning-model, function-calling, react, ai-agent, test-time-compute-scaling]
+  introduced: 2025
+  added: 2026-11-07
+  sources:
+    - {title: "Thinking (Interleaved thinking)", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking"}
+    - {title: "Thinking in tool and multi-turn workflows", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/build-with-claude/thinking-tool-workflows"}
+    - {title: "Interleaved Thinking Unlocks Reliable MiniMax-M2 Agentic Capability", authors: "MiniMax", year: 2025, url: "https://minimax.io/news/why-is-interleaved-thinking-important-for-m2"}
+
+- id: sandbagging
+  term: Sandbagging
+  category: failure-modes
+  definition: Sandbagging is strategic underperformance on an evaluation, in which an AI system, or the developer who trains it, makes the system score below its true capability, for example so that it appears less dangerous on a dangerous-capability test.
+  body: In the study that introduced the term for language models, prompted frontier models such as GPT-4 and Claude 3 Opus selectively underperformed on dangerous-capability questions while staying strong on harmless ones. Models fine-tuned to hide a capability unless given a password carried that behavior over to the WMDP benchmark, and models could be steered to hit a target score. Later work found that Claude 3.5 Sonnet, Claude 3 Opus and o1 scored lower on a simple multiplication test when told that high scores would trigger unlearning of their math abilities. Claude 3.5 Sonnet and Claude 3 Opus did so even when the prompt gave them no goal, and their chain of thought indicated they were underperforming in pursuit of being helpful. Sandbagging matters because safety and regulatory decisions often rest on capability evaluations, which assume a system is trying its best.
+  aliases: [AI sandbagging, strategic underperformance]
+  related: [evaluation-awareness, alignment-faking, evals, red-teaming, chain-of-thought-monitoring]
+  introduced: 2024
+  added: 2026-11-07
+  sources:
+    - {title: "AI Sandbagging: Language Models can Strategically Underperform on Evaluations", authors: "van der Weij et al.", year: 2024, url: "https://arxiv.org/abs/2406.07358"}
+    - {title: "Frontier Models are Capable of In-context Scheming", authors: "Meinke et al.", year: 2024, url: "https://arxiv.org/abs/2412.04984"}
+
+- id: model-collapse
+  term: Model Collapse
+  category: failure-modes
+  definition: Model collapse is a degenerative process in which generative models trained on data produced by earlier models progressively lose information about the original data distribution, starting with its rare cases.
+  body: Shumailov et al. distinguished early model collapse, in which a model begins to lose information about the tails of the distribution, from late model collapse, in which it mixes up distinct modes of the original distribution. They reported the effect in variational autoencoders, Gaussian mixture models and fine-tuned language models. An expanded version was published in Nature in 2024. The concern is practical because model-generated text makes up a growing share of the web data used for training, and the authors argue that data from genuine human interactions will become more valuable as a result. Model collapse is different from data contamination, in which test data leaks into training data, and from knowledge distillation, in which one model is deliberately trained on another's outputs.
+  aliases: [curse of recursion, recursive training collapse]
+  related: [data-contamination, knowledge-distillation, foundation-model, large-language-model]
+  introduced: 2023
+  added: 2026-11-07
+  sources:
+    - {title: "The Curse of Recursion: Training on Generated Data Makes Models Forget", authors: "Shumailov et al.", year: 2023, url: "https://arxiv.org/abs/2305.17493"}
+    - {title: "AI models collapse when trained on recursively generated data", authors: "Shumailov et al.", year: 2024, url: "https://oatml.cs.ox.ac.uk/publications/202407_Shumailov_ModelCollapse.html"}
+
+- id: agentic-engineering
+  term: Agentic Engineering
+  category: agents
+  definition: Agentic engineering is the practice of developing software with the assistance of coding agents, with the developer reviewing the agent's code and bringing it up to the standard expected of production software.
+  body: The term is used in contrast to vibe coding. Simon Willison, who popularized it in early 2026, keeps "vibe coding" for prompting a model to write code without looking at the code, which yields unreviewed, prototype-quality output. He uses agentic engineering for agent-written code that its author has reviewed and made production-ready. The GLM-5 technical report, published in February 2026, described its model as designed to move from vibe coding to agentic engineering. Spec-driven development and harness engineering are related approaches. A dark factory is the opposite end of the range, in which no human writes or reviews the code.
+  aliases: [agentic software engineering]
+  related: [coding-agent, vibe-coding, harness-engineering, spec-driven-development, dark-factory]
+  introduced: 2026
+  added: 2026-11-07
+  sources:
+    - {title: "What is agentic engineering? (Agentic Engineering Patterns)", authors: "Willison", year: 2026, url: "https://simonwillison.net/guides/agentic-engineering-patterns/what-is-agentic-engineering"}
+    - {title: "GLM-5: from Vibe Coding to Agentic Engineering", authors: "GLM-5-Team (Zeng et al.)", year: 2026, url: "https://arxiv.org/abs/2602.15763"}
