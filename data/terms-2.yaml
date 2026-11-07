@@ -265,11 +265,12 @@
   term: Meta-Prompting
   category: agents
   definition: Meta-prompting uses a single model as a conductor that breaks a task down and writes prompts for fresh instances of itself acting as specialized experts, then integrates their outputs.
-  body: The term is also used more loosely for asking a model to write or improve a prompt.
-  related: [orchestrator-workers, self-discover, automatic-prompt-engineer]
+  body: The term is also used more loosely for asking a model to write or improve a prompt. In OPRO, for example, the "meta-prompt" is the prompt that asks a model to propose better instructions, given earlier candidates and their scores; that sense belongs with prompt optimization rather than with the conductor-and-experts method described here.
+  related: [orchestrator-workers, self-discover, automatic-prompt-engineer, opro, prompt-optimization]
   introduced: 2024
   sources:
     - {title: "Meta-Prompting: Enhancing Language Models with Task-Agnostic Scaffolding", authors: "Suzgun & Kalai", year: 2024, url: "https://arxiv.org/abs/2401.12954"}
+    - {title: "Large Language Models as Optimizers", authors: "Yang et al.", year: 2023, url: "https://arxiv.org/abs/2309.03409"}
 
 - id: agent-memory
   term: Agent Memory

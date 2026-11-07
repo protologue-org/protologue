@@ -175,7 +175,7 @@
   category: foundations
   definition: Role prompting assigns the model a persona or professional role, such as "You are an experienced tax accountant," to shape its tone, vocabulary, and focus.
   body: Role prompts reliably change style and framing. Evidence that they improve factual accuracy is mixed, with some studies finding gains in reasoning tasks and a large evaluation finding that adding personas to system prompts did not consistently improve performance.
-  aliases: [persona prompting, role-play prompting]
+  aliases: [persona prompting, role-play prompting, role-based prompting]
   related: [system-prompt]
   sources:
     - {title: "Better Zero-Shot Reasoning with Role-Play Prompting", authors: "Kong et al.", year: 2023, url: "https://arxiv.org/abs/2308.07702"}

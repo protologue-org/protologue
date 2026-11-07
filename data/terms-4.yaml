@@ -180,7 +180,7 @@
   category: verification
   definition: Self-correction is the general practice of having a language model review and revise its own output, either from its own judgment alone (intrinsic self-correction) or using external feedback such as tool results, tests, or retrieved evidence.
   body: Research has found that intrinsic self-correction does not reliably improve reasoning accuracy and can make answers worse, because the model often cannot tell which of its answers are wrong. Self-correction works best when the critique is grounded in something the model cannot fake, such as running code, executing a search, or checking against a reference.
-  aliases: [intrinsic self-correction, self-revision]
+  aliases: [intrinsic self-correction, self-revision, self-reflection]
   related: [self-refine, reflexion, critic, chain-of-verification, evaluator-optimizer]
   introduced: 2023
   sources:

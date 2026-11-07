@@ -25,7 +25,9 @@ Twelve new entries, new synonyms and clarifications. Every source added in this 
 - Chain of Draft and Chain of Density now note that both are abbreviated CoD.
 - Speculative Decoding now describes Medusa and lookahead decoding, which need no separate draft model. Sources: Cai et al. (2024); Fu et al. (2024).
 - KV Cache now describes KV cache quantization. Source: Liu et al. (2024), KIVI.
-- Constitutional AI links to the new RLAIF entry, and RLAIF is no longer listed as its synonym.
+- Constitutional AI links to the new RLAIF entry, and RLAIF is no longer listed as its synonym. It also now makes clear that its principles are applied in training, which is different from placing rules in a system prompt.
+- New synonyms: role-based prompting (Role Prompting), self-reflection (Self-Correction).
+- Meta-Prompting now distinguishes the conductor-and-experts method from the looser use of "meta-prompt" for prompts that ask a model to improve instructions, as in OPRO.
 
 ## 1.5.0 (2026-11-07)
 
