@@ -247,9 +247,9 @@
   term: Constitutional AI
   category: security
   definition: Constitutional AI is a training method in which a model critiques and revises its own outputs according to a written set of principles, and AI-generated preference judgments replace most human labels for harmlessness.
-  body: Bai et al. used a supervised self-critique phase followed by reinforcement learning from AI feedback. The approach made the principles governing model behavior explicit and editable.
-  aliases: [CAI, RLAIF, reinforcement learning from AI feedback]
-  related: [rlhf, self-refine, jailbreak]
+  body: Bai et al. used a supervised self-critique phase followed by reinforcement learning from AI feedback. The approach made the principles governing model behavior explicit and editable. The principles are applied during training to shape the model itself; placing a list of rules in a system prompt at inference time is a different practice, even when it is described with the same name.
+  aliases: [CAI]
+  related: [rlhf, rlaif, self-refine, jailbreak]
   introduced: 2022
   sources:
     - {title: "Constitutional AI: Harmlessness from AI Feedback", authors: "Bai et al.", year: 2022, url: "https://arxiv.org/abs/2212.08073"}

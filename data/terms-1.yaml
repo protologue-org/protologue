@@ -175,7 +175,7 @@
   category: foundations
   definition: Role prompting assigns the model a persona or professional role, such as "You are an experienced tax accountant," to shape its tone, vocabulary, and focus.
   body: Role prompts reliably change style and framing. Evidence that they improve factual accuracy is mixed, with some studies finding gains in reasoning tasks and a large evaluation finding that adding personas to system prompts did not consistently improve performance.
-  aliases: [persona prompting, role-play prompting]
+  aliases: [persona prompting, role-play prompting, role-based prompting]
   related: [system-prompt]
   sources:
     - {title: "Better Zero-Shot Reasoning with Role-Play Prompting", authors: "Kong et al.", year: 2023, url: "https://arxiv.org/abs/2308.07702"}
@@ -352,7 +352,7 @@
   category: reasoning
   definition: Plan-and-solve prompting is a zero-shot method that instructs the model to first devise a plan dividing the task into subtasks and then carry out the plan step by step.
   body: It targets missing-step and calculation errors seen in zero-shot chain-of-thought, with an extended version that asks the model to extract relevant variables and compute carefully.
-  aliases: [PS prompting, PS+]
+  aliases: [PS prompting, PS+, plan-and-solve, P&S]
   broader: [zero-shot-chain-of-thought]
   related: [least-to-most-prompting]
   introduced: 2023
@@ -387,6 +387,7 @@
   category: reasoning
   definition: Graph of Thoughts (GoT) models a language model's reasoning as an arbitrary graph, in which thoughts can be combined, refined, and looped back on, generalizing chain and tree structures.
   broader: [tree-of-thoughts]
+  aliases: [GoT]
   related: [chain-of-thought]
   introduced: 2023
   body: Aggregation of several partial solutions into one, such as merging sorted sublists, is the key operation GoT adds over tree-shaped search.
@@ -397,6 +398,7 @@
   term: Skeleton-of-Thought
   category: reasoning
   definition: Skeleton-of-thought first asks the model for a brief outline of its answer, then expands each outline point in parallel, reducing end-to-end generation latency.
+  aliases: [SoT]
   related: [parallelization, prompt-chaining]
   introduced: 2023
   body: Because the points are expanded independently, it suits list-like answers better than tightly sequential reasoning.
@@ -427,6 +429,7 @@
   term: Contrastive Chain-of-Thought
   category: reasoning
   definition: Contrastive chain-of-thought adds both valid and deliberately invalid reasoning demonstrations to a prompt, so the model learns which mistakes to avoid as well as what correct reasoning looks like.
+  aliases: [CCoT]
   broader: [chain-of-thought]
   introduced: 2023
   body: The invalid demonstrations can be generated automatically by perturbing correct reasoning chains.
@@ -438,6 +441,7 @@
   category: reasoning
   definition: Thread of Thought is a prompting strategy for long, chaotic contexts that asks the model to walk through the context in manageable parts, summarizing and analyzing each before answering.
   broader: [chain-of-thought]
+  aliases: [ThoT]
   related: [lost-in-the-middle, system-2-attention]
   introduced: 2023
   body: A typical trigger asks the model to go through the context step by step, summarizing and analyzing as it goes.

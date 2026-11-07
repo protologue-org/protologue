@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.6.0 (2026-11-07)
+
+Twelve new entries, new synonyms and clarifications. Every source added in this release was opened and checked against its title and author on 2026-11-07.
+
+**Added: prompting and reasoning**
+- Cumulative Reasoning (PTL-0235): proposer, verifier and reporter roles that accumulate only verified steps. Source: Zhang et al. (2023).
+- Algorithm of Thoughts (PTL-0236): an algorithmic search carried out inside a single generation. Source: Sel et al. (2023).
+- Chain-of-Note (PTL-0237): a reading note for each retrieved document before answering. Source: Yu et al. (2023).
+- Flipped Interaction (PTL-0238): the model asks the user questions until it can do the task. Source: White et al. (2023).
+- Backward Chaining (PTL-0239): reasoning from the goal back to supporting facts, as in LAMBADA. Source: Kazemi et al. (2022).
+
+**Added: training and alignment**
+- Parameter-Efficient Fine-Tuning (PTL-0240). Sources: Houlsby et al. (2019); Han et al. (2024).
+- QLoRA (PTL-0241). Source: Dettmers et al. (2023).
+- Kahneman-Tversky Optimization (PTL-0242). Source: Ethayarajh et al. (2024).
+- Odds Ratio Preference Optimization (PTL-0243). Source: Hong, Lee and Thorne (2024).
+- Reinforcement Learning from AI Feedback (PTL-0244), previously a synonym of Constitutional AI. Sources: Bai et al. (2022); Lee et al. (2023).
+- Self-Instruct (PTL-0245). Source: Wang et al. (2022).
+- Evol-Instruct (PTL-0246). Source: Xu et al. (2023).
+
+**Changed**
+- New synonyms: GoT (Graph of Thoughts), SoT (Skeleton-of-Thought), ThoT (Thread of Thought), CCoT (Contrastive Chain-of-Thought), MAD and multiagent debate (Multi-Agent Debate), plan-and-solve and P&S (Plan-and-Solve Prompting).
+- Chain of Draft and Chain of Density now note that both are abbreviated CoD.
+- Speculative Decoding now describes Medusa and lookahead decoding, which need no separate draft model. Sources: Cai et al. (2024); Fu et al. (2024).
+- KV Cache now describes KV cache quantization. Source: Liu et al. (2024), KIVI.
+- Constitutional AI links to the new RLAIF entry, and RLAIF is no longer listed as its synonym. It also now makes clear that its principles are applied in training, which is different from placing rules in a system prompt.
+- New synonyms: role-based prompting (Role Prompting), self-reflection (Self-Correction).
+- Meta-Prompting now distinguishes the conductor-and-experts method from the looser use of "meta-prompt" for prompts that ask a model to improve instructions, as in OPRO.
+
 ## 1.5.0 (2026-11-07)
 
 Four new entries and one comparison page. Every source added in this release was opened and checked against its title and author on 2026-11-07.
