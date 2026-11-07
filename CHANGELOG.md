@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+**Added: site**
+- A separate section for proposed terms at /proposed/: names coined by Protologue itself, each linked to the dated newsletter issue or note where it was first published and marked as not yet in general use. Proposed terms are kept out of the taxonomy, its identifiers, datasets, llms.txt term lists, the MCP server and the feed until others use them, and then move into the taxonomy under the normal rules. The About page and llms.txt explain the policy. There are no proposed terms yet.
+
 ## 1.6.0 (2026-11-07)
 
 Twelve new entries, new synonyms and clarifications. Every source added in this release was opened and checked against its title and author on 2026-11-07.

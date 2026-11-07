@@ -466,7 +466,7 @@ def page(*, path, title, description, body, jsonld=None, extra_head="", canonica
 </main>
 <footer class="site">
   <p>{NAME} v{VERSION}, updated {UPDATED}. Text and data are licensed <a href="{LICENSE_URL}" rel="license">CC BY 4.0</a>; reuse freely with attribution.</p>
-  <p><a href="/llms.txt">llms.txt</a> <a href="/data/protologue.json">JSON</a> <a href="/data/protologue.csv">CSV</a> <a href="/data/protologue.skos.jsonld">SKOS</a> <a href="/mcp/">MCP server</a> <a href="/sitemap.xml">Sitemap</a> <a href="/privacy/">Privacy</a> <a href="/terms-of-use/">Terms of use</a> <a href="mailto:{CONTACT_EMAIL}">Contact</a></p>
+  <p><a href="/llms.txt">llms.txt</a> <a href="/data/protologue.json">JSON</a> <a href="/data/protologue.csv">CSV</a> <a href="/data/protologue.skos.jsonld">SKOS</a> <a href="/mcp/">MCP server</a> <a href="/proposed/">Proposed terms</a> <a href="/sitemap.xml">Sitemap</a> <a href="/privacy/">Privacy</a> <a href="/terms-of-use/">Terms of use</a> <a href="mailto:{CONTACT_EMAIL}">Contact</a></p>
 </footer>
 <script src="/assets/site.js?v={ASSET_V}" defer></script>
 </body>
@@ -642,6 +642,8 @@ def about_page(terms):
 {f'<p>The DOI <a href="{DOI_URL}">{DOI}</a> is archived on Zenodo and always resolves to the latest release.</p>' if DOI else ""}
 <h2>Reuse</h2>
 <p>All text and data are licensed under <a href="{LICENSE_URL}">Creative Commons Attribution 4.0</a>. You may copy, adapt, and redistribute them, including commercially and for training machine learning models, provided you credit {NAME} and link to the source. Machine-readable copies are on the <a href="/data/">data page</a>, and <a href="/llms.txt">llms.txt</a> describes the site for language models.</p>
+<h2>Proposed terms</h2>
+<p>{NAME} records vocabulary; it does not invent it. Occasionally {NAME} names an idea that the existing vocabulary does not cover. Such names are published separately as <a href="/proposed/">proposed terms</a>, marked as coined by {NAME}, and kept out of the taxonomy and its datasets until others use them.</p>
 <h2>Corrections and new terms</h2>
 <p>If a definition is wrong, a source is misattributed, or a technique is missing, send the term, a primary source, and a proposed definition to <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a>. Corrections are recorded in the version history.</p>
 <h2>Who runs it</h2>
@@ -792,6 +794,98 @@ def compare_index(comps, by_id):
                 description="Side-by-side comparisons of commonly confused prompting and LLM techniques, such as RAG vs fine-tuning and prompt injection vs jailbreak.",
                 body=body)
 
+
+# ---------------------------------------------------------------- proposed terms
+PROPOSED_NOTE = (f"Proposed by {NAME}. This term was coined by {NAME} and is not yet in general use. "
+                 "It is not part of the taxonomy and has no PTL identifier.")
+
+def load_proposed(by_id):
+    p = os.path.join(ROOT, "data/proposed.yaml")
+    items = (yaml.safe_load(open(p)) or []) if os.path.exists(p) else []
+    errors, seen = [], set()
+    for x in items:
+        x.setdefault("related", [])
+        x.setdefault("status", "proposed")
+        for k in ("id", "term", "proposed_by", "proposed", "definition", "body", "introduced_in"):
+            if not x.get(k):
+                errors.append(f"proposed {x.get('id', '?')}: missing {k}")
+        if x.get("id") in seen:
+            errors.append(f"proposed {x['id']}: duplicate id")
+        seen.add(x.get("id"))
+        src = x.get("introduced_in") or {}
+        if not (src.get("title") and src.get("url") and src.get("date")):
+            errors.append(f"proposed {x.get('id')}: introduced_in needs title, url and date")
+        for r in x["related"]:
+            if r not in by_id:
+                errors.append(f"proposed {x.get('id')}: unknown related term {r}")
+        if x["status"] == "graduated":
+            if x.get("graduated_to") not in by_id:
+                errors.append(f"proposed {x.get('id')}: graduated_to must be a taxonomy id")
+        elif x["status"] != "proposed":
+            errors.append(f"proposed {x.get('id')}: status must be proposed or graduated")
+        elif x.get("id") in by_id:
+            errors.append(f"proposed {x['id']}: id clashes with a taxonomy entry")
+        x["url"] = f"{BASE}/proposed/{x.get('id')}/"
+    if errors:
+        sys.exit("Proposed term errors:\n" + "\n".join(errors))
+    return [x for x in items if x["status"] == "proposed"], [x for x in items if x["status"] == "graduated"]
+
+def proposed_md(x, by_id):
+    s = x["introduced_in"]
+    L = [f"# {x['term']} (proposed term)", "", f"> {PROPOSED_NOTE}", "", x["definition"], "",
+         f"- Proposed by: {x['proposed_by']}, {x['proposed']}",
+         f"- First published in: {s['title']} ({s['date']}), {s['url']}",
+         f"- Canonical URL: {x['url']}", "", x["body"].strip(), ""]
+    if x["related"]:
+        L += ["## Related taxonomy entries", ""] + [f"- {by_id[r]['term']}: {by_id[r]['url']}" for r in x["related"]] + [""]
+    L += [f"License: CC BY 4.0 ({LICENSE_URL})", ""]
+    return "\n".join(L)
+
+def proposed_page(x, by_id):
+    s = x["introduced_in"]
+    rel = "".join(f"<li>{tlink(by_id[r])}</li>" for r in x["related"])
+    ld = {"@context": "https://schema.org", "@type": "Article", "@id": x["url"], "url": x["url"],
+          "headline": f"{x['term']} (proposed term)", "description": x["definition"],
+          "author": {"@type": "Person", "name": x["proposed_by"]},
+          "publisher": {"@id": BASE + "/#website"}, "datePublished": str(x["proposed"]),
+          "creativeWorkStatus": "Proposed", "license": LICENSE_URL,
+          "isBasedOn": s["url"]}
+    body = f"""
+<article class="entry proposed">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Protologue</a> / <a href="/proposed/">Proposed terms</a></nav>
+  <p class="proposed-note" role="note">{esc(PROPOSED_NOTE)}</p>
+  <h1>{esc(x['term'])}</h1>
+  <blockquote class="definition" id="definition"><p>{esc(x['definition'])}</p></blockquote>
+  <dl class="label">
+    <dt>Proposed by</dt><dd>{esc(x['proposed_by'])}, <time datetime="{x['proposed']}">{x['proposed']}</time></dd>
+    <dt>First published in</dt><dd><a href="{esc(s['url'])}" rel="noopener">{esc(s['title'])}</a> ({s['date']})</dd>
+  </dl>
+  <section><h2>About this term</h2><p>{esc(x['body'].strip())}</p></section>
+  {f'<section class="rel"><h3>Related taxonomy entries</h3><ul>{rel}</ul></section>' if rel else ''}
+  <section><h2>Status</h2><p>A proposed term moves into the taxonomy only after others start using it and it meets the same rules as every other entry. Until then it has no permanent identifier. <a href="/proposed/">How proposed terms work</a>.</p></section>
+  <p class="actions"><a href="/proposed/{x['id']}.md">Markdown</a></p>
+</article>"""
+    return page(path=f"/proposed/{x['id']}/", title=f"{x['term']} (proposed term) | {SITE_LABEL}",
+                description=f"Proposed by {NAME}, not yet in general use: {x['definition']}", body=body, jsonld=ld,
+                extra_head=f'<link rel="alternate" type="text/markdown" href="/proposed/{x["id"]}.md">\n')
+
+def proposed_index(items):
+    rows = "".join(f'<div class="dt-row"><dt><a href="/proposed/{x["id"]}/">{esc(x["term"])}</a></dt><dd>{esc(x["definition"])} <span class="muted">Proposed {x["proposed"]} by {esc(x["proposed_by"])}.</span></dd></div>' for x in items)
+    body = f"""<article class="listing"><h1>Proposed terms</h1>
+<p class="lede">Names that {NAME} has coined itself for ideas the existing vocabulary does not cover. They are kept apart from the taxonomy, because every taxonomy entry must have been introduced elsewhere and be used by others.</p>
+<div class="prose">
+<h2>How proposed terms work</h2>
+<ul>
+<li>Each term is first published, with a date and an author, in a {NAME} newsletter issue, post or note. That piece is linked from the term's page as its source.</li>
+<li>Proposed terms have no PTL identifier and are not included in the dataset downloads, llms.txt term lists, the MCP server or the feed of new entries.</li>
+<li>A term moves into the taxonomy only once others use it, in papers, vendor documentation or practitioner writing, and it meets the same rules as every other entry. Its page then redirects to the new entry.</li>
+</ul>
+</div>
+{f'<dl class="glossary">{rows}</dl>' if rows else '<p>There are no proposed terms yet.</p>'}
+</article>"""
+    return page(path="/proposed/", title=f"Proposed terms | {SITE_LABEL}",
+                description=f"Terms coined by {NAME} itself, kept separate from the sourced taxonomy until others use them.", body=body)
+
 # ---------------------------------------------------------------- build
 def record(t):
     return {"id": t["id"], "code": t["code"], "term": t["term"], "aliases": t["aliases"],
@@ -843,6 +937,7 @@ def write_alias_redirects(terms):
 def main():
     cats, terms, by_id, cat_by_id = load()
     comps = load_comparisons(by_id)
+    proposed, graduated = load_proposed(by_id)
     for t in terms:
         t["_by_id"] = by_id
     if os.path.exists(OUT):
@@ -861,6 +956,10 @@ def main():
     write("new/index.html", new_page(terms))
     write("feed.xml", atom_feed(terms))
     write("compare/index.html", compare_index(comps, by_id))
+    write("proposed/index.html", proposed_index(proposed))
+    for x in proposed:
+        write(f"proposed/{x['id']}/index.html", proposed_page(x, by_id))
+        write(f"proposed/{x['id']}.md", proposed_md(x, by_id))
     for c in comps:
         write(f"compare/{c['id']}/index.html", compare_page(c, by_id))
         write(f"compare/{c['id']}.md", compare_md(c, by_id))
@@ -873,6 +972,11 @@ def main():
         write(f"t/{t['id']}.md", term_md(t, by_id))
         write(f"t/{t['id']}.json", json.dumps(record(t), indent=2, ensure_ascii=False))
     write_alias_redirects(terms)
+    if graduated:
+        with open(os.path.join(OUT, "_redirects"), "a", encoding="utf-8") as f:
+            f.write("\n# Graduated proposed terms -> taxonomy entry\n")
+            for x in graduated:
+                f.write(f"/proposed/{x['id']}/  /t/{x['graduated_to']}/  301\n/proposed/{x['id']}  /t/{x['graduated_to']}/  301\n")
 
     # datasets
     meta = {"name": TITLE, "version": VERSION, "updated": UPDATED, "license": LICENSE_URL, "url": BASE + "/",
@@ -911,6 +1015,12 @@ def main():
         L.append("")
     L += ["## For agents", "",
           f"- [MCP server]({BASE}/mcp/): read-only Model Context Protocol endpoint at {MCP_URL} with tools search_terms, get_term, get_related and list_categories", ""]
+    L += ["## Proposed terms (not part of the taxonomy)", "",
+          f"Pages under {BASE}/proposed/ are terms coined by {NAME} itself and not yet in general use. "
+          "They have no PTL identifier and should not be presented as established terminology.", ""]
+    L += [f"- [{x['term']}]({BASE}/proposed/{x['id']}.md) (proposed {x['proposed']}): {x['definition']}" for x in proposed]
+    if proposed:
+        L.append("")
     L += ["## Optional", "",
           f"- [Data downloads]({BASE}/data/): JSON, CSV, SKOS JSON-LD and Turtle",
           f"- [Hugging Face dataset]({HF_URL}): the same data for the datasets library",
@@ -929,7 +1039,7 @@ def main():
     write("llms-full.txt", "\n".join(full))
 
     # sitemap
-    urls = ["/", "/terms/", "/about/", "/data/", "/mcp/", "/privacy/", "/terms-of-use/"] + (["/newsletter/"] if NEWSLETTER else []) + ["/new/", "/compare/"] + [f"/compare/{c['id']}/" for c in comps] + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
+    urls = ["/", "/terms/", "/about/", "/data/", "/mcp/", "/privacy/", "/terms-of-use/"] + (["/newsletter/"] if NEWSLETTER else []) + ["/new/", "/compare/", "/proposed/"] + [f"/compare/{c['id']}/" for c in comps] + [f"/proposed/{x['id']}/" for x in proposed] + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     sm += [f"<url><loc>{BASE}{u}</loc><lastmod>{UPDATED}</lastmod></url>" for u in urls]
     sm.append("</urlset>")
