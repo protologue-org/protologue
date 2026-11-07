@@ -184,3 +184,7 @@ footer.site p { margin: 0 0 .5rem; }
   .files.compare-table th:nth-child(3), .files.compare-table td:nth-child(3) { display: table-cell; }
   .compare-table { font-size: .875rem; }
 }
+
+/* ---------- proposed terms */
+.proposed-note { font: .9375rem/1.5 var(--sans); color: var(--muted); border: 1px dashed var(--rule); border-radius: 6px; padding: .6rem .85rem; margin: 1rem 0 0; max-width: var(--measure); }
+.muted { color: var(--muted); }

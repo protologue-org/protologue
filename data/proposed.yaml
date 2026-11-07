@@ -1,0 +1,29 @@
+# Proposed terms: names coined by Protologue itself, published at /proposed/<id>/.
+#
+# These are NOT part of the taxonomy. They get no PTL identifier and are left
+# out of the dataset exports, llms.txt term lists, the MCP server, the feed and
+# the DefinedTerm structured data. Every page says plainly that the term was
+# proposed by Protologue and is not yet in general use.
+#
+# Rules
+# - introduced_in is required: the dated newsletter issue, blog post or Zenodo
+#   note where the term was first published. That piece is the term's primary source.
+# - The id must not clash with any taxonomy entry id.
+# - A term graduates into the taxonomy only once it is used by others (papers,
+#   vendor docs, practitioner writing) and passes the normal entry rules. Then
+#   add it to data/terms-*.yaml as usual, citing introduced_in plus the outside
+#   usage, and set status: graduated and graduated_to: <taxonomy id> here.
+#   The /proposed/ page then redirects to the entry.
+#
+# Format
+# - id: my-term                       # becomes protologue.com/proposed/my-term/
+#   term: My Term
+#   proposed_by: Name of the person who coined it
+#   proposed: 2026-11-07              # date first published
+#   definition: One or two sentences that stand alone.
+#   body: Why the term is needed, what it covers, what it does not.
+#   related: [chain-of-thought]       # optional: existing taxonomy ids
+#   introduced_in: {title: "...", url: "https://...", date: 2026-11-07}
+#   status: proposed                  # proposed | graduated
+#   graduated_to: my-term             # only when status is graduated
+[]

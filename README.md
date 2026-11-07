@@ -63,6 +63,12 @@ Proposed changes arrive as pull requests; merging one publishes it.
 
 Benchmark entries describe what a benchmark measures, how it is scored, the prompting setup scores are reported under, and its known limitations. They deliberately carry no scores or rankings, which change too quickly to be reference material.
 
+## Proposed terms
+
+Terms coined by Protologue itself go in `data/proposed.yaml`, never in `data/terms-*.yaml`. They are published at `/proposed/<id>/` with a notice that they were coined by Protologue and are not yet in general use. They get no PTL identifier and are left out of the dataset exports, the llms.txt term lists, `llms-full.txt`, the MCP server, the feed and the DefinedTerm structured data. Each one must link to the dated newsletter issue, post or note where it was first published (`introduced_in`).
+
+A proposed term graduates only after others use it and it passes the normal entry rules. To graduate one, add it to `data/terms-*.yaml` as usual, then set `status: graduated` and `graduated_to: <id>` in `data/proposed.yaml`. The build then redirects `/proposed/<id>/` to the entry. The format is documented at the top of `data/proposed.yaml`.
+
 ## Adding a term
 
 Append an entry to one of the `data/terms-*.yaml` files:
