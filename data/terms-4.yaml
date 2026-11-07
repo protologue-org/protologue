@@ -166,7 +166,7 @@
   term: Chain of Draft
   category: reasoning
   definition: Chain of Draft is a variant of chain-of-thought prompting in which the model writes only a minimal draft of each reasoning step, a few words rather than full sentences, to reach an answer with far fewer tokens.
-  body: The authors report accuracy comparable to standard chain-of-thought on arithmetic, commonsense, and symbolic tasks while using a small fraction of the output tokens, which lowers cost and latency. It is most useful where reasoning helps but verbose explanations are not needed.
+  body: The authors report accuracy comparable to standard chain-of-thought on arithmetic, commonsense, and symbolic tasks while using a small fraction of the output tokens, which lowers cost and latency. It is most useful where reasoning helps but verbose explanations are not needed. The abbreviation CoD is also used for chain of density, an unrelated summarization technique.
   aliases: [CoD, concise chain-of-thought]
   broader: [chain-of-thought]
   related: [prompt-compression, skeleton-of-thought, overthinking]
@@ -213,7 +213,7 @@
   term: Chain of Density
   category: verification
   definition: Chain of Density is a summarization prompt that has the model write a summary and then repeatedly rewrite it, adding a few missing important entities each time without making it longer, to produce progressively denser summaries.
-  body: Each round forces compression and fusion of content, so later summaries carry more information per word. The authors found human readers preferred summaries partway through the chain, denser than a plain summary but not maximally dense, which makes the number of rounds a tunable trade-off between informativeness and readability.
+  body: Each round forces compression and fusion of content, so later summaries carry more information per word. The authors found human readers preferred summaries partway through the chain, denser than a plain summary but not maximally dense, which makes the number of rounds a tunable trade-off between informativeness and readability. The abbreviation CoD is also used for chain of draft, an unrelated reasoning technique.
   aliases: [CoD summarization]
   broader: [self-refine]
   related: [prompt-chaining]

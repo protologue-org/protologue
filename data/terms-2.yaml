@@ -49,7 +49,7 @@
   category: verification
   definition: Multi-agent debate has several model instances propose answers, read each other's reasoning, and revise their answers over multiple rounds until they converge.
   body: Du et al. found that debate improved mathematical reasoning and factual accuracy over single-model answers.
-  aliases: [LLM debate, society of minds]
+  aliases: [LLM debate, society of minds, MAD, multiagent debate]
   related: [mixture-of-agents, self-consistency]
   introduced: 2023
   sources:
