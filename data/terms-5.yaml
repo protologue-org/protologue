@@ -271,7 +271,7 @@
   category: agents
   definition: Vibe coding is building software by describing what you want to an AI model in natural language and accepting the code it generates, largely without reading or understanding that code.
   body: Andrej Karpathy coined the term in February 2025 for throwaway projects where speed matters more than correctness. Collins English Dictionary named it its 2025 word of the year. The term is often used loosely for any AI-assisted programming, but its original sense, not reviewing the code, carries real risks of security flaws and unmaintainable software when applied to production systems.
-  related: [coding-agent, prompt-engineering]
+  related: [coding-agent, prompt-engineering, agentic-engineering]
   introduced: 2025
   sources:
     - {title: "Post introducing \"vibe coding\"", authors: "Karpathy", year: 2025, url: "https://x.com/karpathy/status/1886192184808149383"}
