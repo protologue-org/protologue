@@ -309,4 +309,4 @@
   introduced: 2025
   sources:
     - {title: "Effective context engineering for AI agents", authors: "Anthropic", year: 2025, url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"}
-    - {title: "Governance Decay: How Context Compaction Silently Erases Safety Constraints in Long-Horizon LLM Agents", authors: "Chen et al.", year: 2026, url: "https://arxiv.org/abs/2606.22528"}
+    - {title: "Governance Decay: How Context Compaction Silently Erases Safety Constraints in Long-Horizon LLM Agents", authors: "Chen", year: 2026, url: "https://arxiv.org/abs/2606.22528"}

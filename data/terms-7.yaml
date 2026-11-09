@@ -250,7 +250,7 @@
   sources:
     - {title: "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?", authors: "Jimenez et al.", year: 2023, url: "https://arxiv.org/abs/2310.06770"}
     - {title: "Introducing SWE-bench Verified", authors: "OpenAI", year: 2024, url: "https://openai.com/index/introducing-swe-bench-verified/"}
-    - {title: "Why SWE-bench Verified no longer measures frontier coding capabilities", authors: "OpenAI", year: 2026, url: "https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/"}
+    - {title: "Why we no longer evaluate SWE-bench Verified", authors: "OpenAI", year: 2026, url: "https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/"}
 
 - id: terminal-bench
   term: Terminal-Bench
@@ -504,4 +504,4 @@
   sources:
     - {title: "Programmatic tool calling", authors: "Anthropic", year: 2025, url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling"}
     - {title: "Introducing advanced tool use on the Claude Developer Platform", authors: "Anthropic", year: 2025, url: "https://www.anthropic.com/engineering/advanced-tool-use"}
-    - {title: "Code Mode", authors: "Cloudflare", year: 2025, url: "https://developers.cloudflare.com/agents/model-context-protocol/protocol/codemode/"}
+    - {title: "Code Mode", authors: "Cloudflare", year: 2025, url: "https://developers.cloudflare.com/agents/tools/codemode/"}

@@ -90,12 +90,13 @@
   term: Prompt Caching
   category: optimization
   definition: Prompt caching stores the model's processed state for a reused prompt prefix, such as a long system prompt or document, so later requests sharing that prefix are cheaper and faster.
-  body: Because caches match on an exact prefix, prompts are structured with stable content first and variable content last. In Anthropic's API, developers mark cache breakpoints explicitly or let the API place one automatically and move it forward as a conversation grows. Cache entries expire after five minutes without use by default, with a one-hour option, and cached input is billed at a fraction of the normal input price.
+  body: Because caches match on an exact prefix, prompts are structured with stable content first and variable content last. In Anthropic's API, developers mark cache breakpoints explicitly or let the API place one automatically and move it forward as a conversation grows. Cache entries expire after five minutes without use by default, with a one-hour option, and cached input is billed at a fraction of the normal input price. OpenAI added a 12-hour cache option to its API in October 2026, with cache writes billed at 2.5 times the input price.
   aliases: [context caching, prefix caching]
   related: [system-prompt, prompt-compression, context-engineering]
   introduced: 2024
   sources:
     - {title: "Prompt caching", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"}
+    - {title: "Changelog", authors: "OpenAI", year: 2026, url: "https://developers.openai.com/api/docs/changelog"}
 
 - id: emotion-prompting
   term: Emotion Prompting

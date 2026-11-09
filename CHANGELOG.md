@@ -5,6 +5,30 @@
 **Added: site**
 - A separate section for proposed terms at /proposed/: names coined by Protologue itself, each linked to the dated newsletter issue or note where it was first published and marked as not yet in general use. Proposed terms are kept out of the taxonomy, its identifiers, datasets, llms.txt term lists, the MCP server and the feed until others use them, and then move into the taxonomy under the normal rules. The About page and llms.txt explain the policy. There are no proposed terms yet.
 
+## 1.7.0 (2026-11-10)
+
+Seven new entries, two comparison pages and source corrections. Every source added in this release was opened and checked against its title and author on 2026-11-09.
+
+**Added: agents**
+- Dreaming (PTL-0247): an offline process that reviews past sessions and stored memories to curate an agent's memory. Sources: Anthropic, Dreams documentation and Claude Managed Agents announcement (2026); Martin, "The components of agent memory" (Anthropic, 2026). Reported results are vendor-reported.
+- Auto Mode (PTL-0248), also called auto-review: a separate model approves or blocks an agent's risky actions instead of the user. Sources: Hughes (Anthropic, 2026); Trębacz et al. (OpenAI, 2026). Error rates are vendor-reported.
+- Generative Agents (PTL-0249). Source: Park et al. (2023).
+
+**Added: foundations**
+- Contrastive Decoding (PTL-0250). Source: Li et al. (2022).
+- Rotary Position Embedding (PTL-0251). Source: Su et al. (2021).
+- FlashAttention (PTL-0252). Source: Dao et al. (2022).
+- PagedAttention (PTL-0253). Source: Kwon et al. (2023).
+
+**Added: comparisons**
+- FlashAttention vs PagedAttention.
+- Dreaming vs Sleep-time Compute.
+
+**Changed**
+- Prompt Caching now notes OpenAI's 12-hour cache option (October 2026). Source: OpenAI API changelog.
+- Corrected source links that had moved: the Invariant Labs tool-poisoning notice (Tool Poisoning), Cloudflare's Code Mode page (Programmatic Tool Calling) and Anthropic's "Thinking in tool and multi-turn workflows" page (Interleaved Thinking).
+- Corrected the title of OpenAI's SWE-bench Verified post (SWE-bench) and the author of "Governance Decay" (Context Compaction), which has a single author.
+
 ## 1.6.0 (2026-11-07)
 
 Twelve new entries, new synonyms and clarifications. Every source added in this release was opened and checked against its title and author on 2026-11-07.
