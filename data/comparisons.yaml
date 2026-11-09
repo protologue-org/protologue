@@ -218,3 +218,28 @@
     - "Term introduced | 2026, popularized by Simon Willison | February 2025, coined by Andrej Karpathy"
   choose_a: Use agentic engineering for code that others will depend on, maintain or deploy.
   choose_b: Vibe coding is fine for quick experiments and personal tools where speed matters more than correctness.
+
+- id: flashattention-vs-pagedattention
+  a: flashattention
+  b: pagedattention
+  answer: FlashAttention and PagedAttention both make transformer attention cheaper on GPUs but solve different problems. FlashAttention speeds up the attention computation itself by working in tiles in fast on-chip memory, mainly for training and long prompts, while PagedAttention manages the memory that holds each request's key-value cache during serving, storing it in non-contiguous blocks so that more requests fit in a batch.
+  rows:
+    - "Problem addressed | Memory traffic during the attention computation | Fragmented, duplicated key-value cache memory during serving"
+    - "Main idea | Compute exact attention in tiles held in on-chip SRAM | Store the KV cache in fixed-size blocks, like virtual-memory pages"
+    - "Where it is used | Training and inference kernels | Serving systems that batch many requests, such as vLLM"
+    - "Changes the model's output | No, the result is exact attention | No, it changes memory layout only"
+    - "Reported benefit | Faster training and longer feasible contexts | Two to four times higher serving throughput at similar latency"
+  choose_a: Look to FlashAttention when the attention computation itself is the bottleneck, as in training or processing long inputs.
+  choose_b: Look to PagedAttention when serving many concurrent requests and KV cache memory limits the batch size.
+
+- id: dreaming-vs-sleep-time-compute
+  a: dreaming
+  b: sleep-time-compute
+  answer: Dreaming and sleep-time compute both use a model's idle time, but for different ends. Sleep-time compute reasons over a context before queries arrive, precomputing inferences so that later answers are faster and cheaper, while dreaming reviews an agent's past sessions and stored memories to merge duplicates, fix stale entries and record new insights for future sessions.
+  rows:
+    - "Works on | Past session transcripts and an existing memory store | A context that will be queried later, such as a document or codebase"
+    - "Produces | A new, curated memory store | Precomputed inferences about the context"
+    - "Main goal | Better memory across many sessions | Lower latency and test-time compute per query"
+    - "Introduced by | Anthropic (Claude Managed Agents, 2026) | Lin et al. (2025)"
+  choose_a: Use dreaming when an agent accumulates memory over many sessions and that memory has become duplicated, contradictory or stale.
+  choose_b: Use sleep-time compute when a stable context will be asked many predictable questions and per-query latency matters.

@@ -150,7 +150,7 @@
   related: [model-context-protocol, function-calling, lethal-trifecta]
   introduced: 2025
   sources:
-    - {title: "MCP Security Notification: Tool Poisoning Attacks", authors: "Invariant Labs", year: 2025, url: "https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks"}
+    - {title: "MCP Security Notification: Tool Poisoning Attacks", authors: "Invariant Labs", year: 2025, url: "https://invariantlabs.ai/blog/mcp-security-notification"}
 
 - id: lethal-trifecta
   term: Lethal Trifecta

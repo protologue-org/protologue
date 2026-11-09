@@ -103,7 +103,7 @@
   added: 2026-11-07
   sources:
     - {title: "Thinking (Interleaved thinking)", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking"}
-    - {title: "Thinking in tool and multi-turn workflows", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/build-with-claude/thinking-tool-workflows"}
+    - {title: "Thinking in tool and multi-turn workflows", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking-tool-workflows"}
     - {title: "Interleaved Thinking Unlocks Reliable MiniMax-M2 Agentic Capability", authors: "MiniMax", year: 2025, url: "https://minimax.io/news/why-is-interleaved-thinking-important-for-m2"}
 
 - id: sandbagging
@@ -295,3 +295,93 @@
   added: 2026-11-07
   sources:
     - {title: "WizardLM: Empowering Large Language Models to Follow Complex Instructions", authors: "Xu et al.", year: 2023, url: "https://arxiv.org/abs/2304.12244"}
+
+# Added 2026-11-10 (v1.7.0)
+
+- id: dreaming
+  term: Dreaming
+  category: agents
+  definition: Dreaming is an offline, asynchronous process in which a model reviews an agent's past session transcripts together with its stored memories, then merges duplicates, replaces stale or contradicted entries and records new insights, producing a curated memory for later sessions.
+  body: The name was popularized by Anthropic, which added dreams to Claude Managed Agents as a research preview in May 2026. In that API a dream takes an existing memory store and between 1 and 100 past sessions, can be steered with instructions, and writes a new memory store, leaving its inputs unchanged so that the result can be reviewed and discarded. Runs take from minutes to a few hours and are billed at ordinary token rates. Anthropic's later account of agent memory describes layers running from raw transcripts through notes written by the agent and wiki-style summaries up to context injected into every session, with dreaming used to test notes against the original transcripts and to promote useful notes upward. Its reported gains, such as a rise from 13% to 48% of graded criteria on questions about a large document corpus as dreaming was scaled from 2 to 128 sessions, and a customer's roughly sixfold increase in task completion, are vendor-reported. Unlike sleep-time compute, which precomputes inferences about a context before queries arrive, dreaming curates memory accumulated across many sessions.
+  aliases: [dreams, agent dreaming, memory consolidation]
+  broader: [agent-memory]
+  related: [sleep-time-compute, context-compaction, context-engineering, reflexion]
+  introduced: 2026
+  added: 2026-11-10
+  sources:
+    - {title: "Dreams", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/managed-agents/dreams"}
+    - {title: "New in Claude Managed Agents: dreaming, outcomes, and multiagent orchestration", authors: "Anthropic", year: 2026, url: "https://claude.com/blog/new-in-claude-managed-agents"}
+    - {title: "The components of agent memory", authors: "Martin (Anthropic)", year: 2026, url: "https://www.anthropic.com/research/components-of-agent-memory"}
+
+- id: auto-mode
+  term: Auto Mode
+  category: agents
+  definition: Auto mode, also called auto-review, is a permission setting for coding agents in which a separate model, instead of the user, decides whether each potentially risky action the agent proposes may run, so that the agent can work for long stretches without stopping for human approval.
+  body: Anthropic introduced auto mode in Claude Code in March 2026. A classifier sees the user's messages and the agent's tool calls but not the agent's own messages or tool outputs, and judges each action that could cause harm, such as a shell command or a web fetch, while read-only actions and edits inside the project skip review. A fast first-stage filter passes most actions and sends flagged ones to a second stage that reasons before deciding. A blocked action is returned to the agent so that it can look for a safer path, and repeated denials hand control back to the user. OpenAI described a comparable auto-review mode for Codex in April 2026, in which a separate agent grades requests to act outside the sandbox against the user's intent and a security policy. Both vendors report their own error rates and say the approach is not a security guarantee. Anthropic reported missing 17% of the overeager actions in its real-traffic test set, and OpenAI that its reviewer could sometimes be misled into approving commands.
+  aliases: [auto-review, automatic review, permission classifier]
+  related: [human-in-the-loop, guardrails, coding-agent, excessive-agency, prompt-injection, llm-as-a-judge]
+  introduced: 2026
+  added: 2026-11-10
+  sources:
+    - {title: "How we built Claude Code auto mode", authors: "Hughes (Anthropic)", year: 2026, url: "https://anthropic.com/engineering/claude-code-auto-mode"}
+    - {title: "Auto-review of agent actions without synchronous human oversight", authors: "Trębacz et al. (OpenAI)", year: 2026, url: "https://alignment.openai.com/auto-review"}
+
+- id: generative-agents
+  term: Generative Agents
+  category: agents
+  definition: Generative agents are software agents built on a language model that simulate believable human behavior by recording their experiences in natural language, periodically condensing them into higher-level reflections, and retrieving relevant memories to plan and act.
+  body: Park et al. introduced the architecture in 2023 and placed 25 such agents in a small town sandbox inspired by The Sims, where users could talk to them in natural language. The agents showed emergent social behavior, such as spreading invitations to a party, forming new relationships and turning up at the same event together. Ablations indicated that observation, planning and reflection each contributed to how believable the agents were judged. The memory stream and reflection mechanism became a common reference design for agent memory.
+  aliases: [generative agent architecture, Smallville]
+  related: [agent-memory, ai-agent, multi-agent-system, reflexion]
+  introduced: 2023
+  added: 2026-11-10
+  sources:
+    - {title: "Generative Agents: Interactive Simulacra of Human Behavior", authors: "Park et al.", year: 2023, url: "https://arxiv.org/abs/2304.03442"}
+
+- id: contrastive-decoding
+  term: Contrastive Decoding
+  category: foundations
+  definition: Contrastive decoding is a text-generation method that chooses tokens by maximizing the difference in log-likelihood between a large "expert" language model and a smaller "amateur" model, restricted to tokens the expert itself finds plausible.
+  body: The idea is that failures such as repetition and incoherence are even more likely under a small model, so subtracting its preferences filters them out while keeping what the larger model does better. It needs no extra training. Li et al. reported that it produced higher-quality text than decoding from the larger model alone and outperformed nucleus and top-k sampling in automatic and human evaluations on Wikipedia, news and story text.
+  aliases: [CD]
+  related: [top-p-sampling, top-k-sampling, greedy-decoding, text-degeneration, speculative-decoding]
+  introduced: 2022
+  added: 2026-11-10
+  sources:
+    - {title: "Contrastive Decoding: Open-ended Text Generation as Optimization", authors: "Li et al.", year: 2022, url: "https://arxiv.org/abs/2210.15097"}
+
+- id: rotary-position-embedding
+  term: Rotary Position Embedding
+  category: foundations
+  definition: Rotary position embedding (RoPE) is a way of encoding token positions in a transformer by rotating the query and key vectors by angles proportional to each token's position, so that attention scores depend on the relative distance between tokens.
+  body: Su et al. proposed it with the RoFormer model in 2021. It encodes absolute position with a rotation matrix while building relative position into self-attention, works with variable sequence lengths, and makes the dependency between tokens decay as their distance grows. It became a common position encoding in later large language models, and the length of context a model handles well is closely tied to how its rotary embeddings were trained.
+  aliases: [RoPE, rotary embeddings, rotary positional encoding, RoFormer]
+  related: [context-window, large-language-model, token]
+  introduced: 2021
+  added: 2026-11-10
+  sources:
+    - {title: "RoFormer: Enhanced Transformer with Rotary Position Embedding", authors: "Su et al.", year: 2021, url: "https://arxiv.org/abs/2104.09864"}
+
+- id: flashattention
+  term: FlashAttention
+  category: foundations
+  definition: FlashAttention is an exact attention algorithm for transformers that computes attention in tiles held in fast on-chip GPU memory, reducing reads and writes to slower high-bandwidth memory so that attention runs faster and uses memory linear rather than quadratic in sequence length.
+  body: Dao et al. argued that attention on GPUs is limited by memory traffic more than by arithmetic, and that earlier approximate attention methods often gave no real wall-clock speedup. FlashAttention computes the same result as standard attention. They reported faster end-to-end training of BERT-large and GPT-2, and that the memory savings allowed much longer contexts. It changes how attention is computed, not what the model computes, so it is usually adopted in training and inference libraries rather than chosen by prompt authors.
+  aliases: [Flash Attention, IO-aware attention]
+  related: [kv-cache, pagedattention, context-window]
+  introduced: 2022
+  added: 2026-11-10
+  sources:
+    - {title: "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness", authors: "Dao et al.", year: 2022, url: "https://arxiv.org/abs/2205.14135"}
+
+- id: pagedattention
+  term: PagedAttention
+  category: foundations
+  definition: PagedAttention is a technique for serving language models that stores each request's key-value cache in fixed-size blocks that need not be contiguous in memory, like pages in operating-system virtual memory, which reduces wasted memory and lets requests share cached blocks.
+  body: Kwon et al. introduced it in 2023 together with the vLLM serving system. Because the KV cache for each request is large and grows during generation, reserving contiguous memory for it wastes space through fragmentation and duplication, which limits how many requests can be batched. With paging, waste is close to zero, and blocks can be shared, for example between samples generated from the same prompt. The authors reported two to four times the throughput of earlier serving systems at similar latency, with larger gains for longer sequences and larger models.
+  aliases: [paged attention, paged KV cache]
+  related: [kv-cache, flashattention, prompt-caching, best-of-n-sampling]
+  introduced: 2023
+  added: 2026-11-10
+  sources:
+    - {title: "Efficient Memory Management for Large Language Model Serving with PagedAttention", authors: "Kwon et al.", year: 2023, url: "https://arxiv.org/abs/2309.06180"}

@@ -4,7 +4,7 @@
 
 A sourced, citable taxonomy of prompting and LLM techniques, built as a static site for **protologue.com**.
 
-- 246 entries in 11 branches, plus 19 side-by-side comparisons, each with a permanent ID (`PTL-0001`), a standalone definition, synonyms, broader/narrower/related links, and primary sources (272 sources; every source added in a release is opened and checked against its title and author).
+- 253 entries in 11 branches, plus 21 side-by-side comparisons, each with a permanent ID (`PTL-0001`), a standalone definition, synonyms, broader/narrower/related links, and primary sources (281 sources; every source added in a release is opened and checked against its title and author).
 - Machine-readable everywhere: schema.org `DefinedTerm` JSON-LD on every page, `llms.txt` and `llms-full.txt`, per-entry `.md` and `.json`, and full exports as JSON, CSV, SKOS JSON-LD and Turtle.
 - Citation tooling on every entry: a plain citation, BibTeX, and Google Scholar (Highwire) meta tags.
 - Licensed CC BY 4.0, so AI systems and people can reuse it freely with attribution.
