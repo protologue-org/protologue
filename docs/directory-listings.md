@@ -19,7 +19,7 @@ Copy for listing the Protologue MCP server in agent directories. Keep every list
 | Categories | Research, Education, Developer tools, Reference |
 | Tools | `search_terms`, `get_term`, `get_related`, `list_categories`. All read-only (`readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false`) |
 
-**One-liner (under 200 characters).** Sourced, citable definitions of 230+ prompting and LLM techniques, each with its primary source, synonyms and related techniques.
+**One-liner (under 200 characters).** Sourced, citable definitions of 250+ prompting and LLM techniques, each with its primary source, synonyms and related techniques.
 
 **Description (under 2,000 characters).** Protologue is an openly licensed (CC BY 4.0) reference taxonomy of prompting and large language model techniques, from chain-of-thought and ReAct to context engineering and prompt injection. Each entry has a permanent identifier, a standalone definition, synonyms, broader, narrower and related techniques, and the primary source (paper or official documentation) that introduced it. Every source is checked against the original.
 
@@ -37,6 +37,27 @@ The server lets an assistant look up a technique by name or synonym, read its so
    Calls `get_term` or `list_categories` and names the Security & Adversarial Prompting branch and its entries.
 5. "Is 'quantum prompting' in Protologue?"
    Calls `search_terms` or `get_term` and reports that there is no entry, without making one up.
+
+## Claude Connectors Directory: answers for each portal step
+
+Checked against Anthropic's submission page on 2026-11-14 (claude.com/docs/connectors/building/submission). Needs any paid Claude plan. Open claude.ai/directory/manage → **Submit new** → **MCP connector**. Before submitting, add `https://mcp.protologue.com/mcp` as a custom connector in Claude and call all four tools once (the portal asks you to confirm this).
+
+1. **Connection:** `https://mcp.protologue.com/mcp`, one URL for all users.
+2. **Tools:** the four tools sync automatically. All have `title`, `readOnlyHint: true` and `destructiveHint: false`, so nothing should be flagged.
+3. **Listing:** name "Protologue"; the one-liner and description from **Shared facts** above. Categories: Research, Education, Developer tools. Docs `https://protologue.com/mcp/`, privacy `https://protologue.com/privacy/`, support `hello@protologue.com`, icon `static/assets/logo.png`. Slug `protologue`, which is permanent.
+4. **Use cases:** "Look up the definition and original source of a prompting or LLM technique, compare related techniques, and cite them with a permanent link." Prerequisites: none, no account. Access: reads public data only.
+5. **Company:** FranklinPolymathic LLC (use the spelling that matches your registration), https://protologue.com/, with you as primary contact.
+6. **Authentication:** none. The data is public.
+7. **Data handling:** your own API. No personal health data, no sponsored content.
+8. **Test & launch:** "No account or credentials needed. Connect https://mcp.protologue.com/mcp and try the test prompts below." Then paste the five **Test prompts** from this file.
+9. **Compliance:** read and tick all seven acknowledgments.
+10. **Review and submit.**
+
+After you submit, an automatic scan lists it as a Community connector by default. Status shows in the portal. For escalations, email mcp-review@anthropic.com.
+
+## Smithery
+
+Checked on 2026-11-14 (smithery.ai/docs/build/publish). Go to smithery.ai/new, paste `https://mcp.protologue.com/mcp` and finish the flow. Smithery scans public servers automatically, and the Worker already serves `/.well-known/mcp/server-card.json` if scanning needs it. If the scan returns a 403, allow the `SmitheryBot/1.0` user agent in Cloudflare. Afterwards, complete Settings → Verification.
 
 ## Where it is listed
 
