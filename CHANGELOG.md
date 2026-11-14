@@ -24,6 +24,10 @@ Seven new entries, two comparison pages and source corrections. Every source add
 - FlashAttention vs PagedAttention.
 - Dreaming vs Sleep-time Compute.
 
+**Site**
+- Each entry now shows when it was last updated, instead of a "Last reviewed" date that was simply the date of the latest build. Structured data (`dateModified`), the sitemap and the feed use the same real dates, so search engines are told a page changed only when its content changed. Dates for earlier changes were taken from the repository history.
+- New and changed pages are announced to search engines through IndexNow after each update.
+
 **Changed**
 - Prompt Caching now notes OpenAI's 12-hour cache option (October 2026). Source: OpenAI API changelog.
 - Corrected source links that had moved: the Invariant Labs tool-poisoning notice (Tool Poisoning), Cloudflare's Code Mode page (Programmatic Tool Calling) and Anthropic's "Thinking in tool and multi-turn workflows" page (Interleaved Thinking).

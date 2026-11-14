@@ -68,9 +68,14 @@ def load_comparisons(by_id):
         if any(len(r) != 3 for r in c["rows"]):
             errors.append(f"comparison {c['id']}: each row needs 'aspect | a | b'")
         c["url"] = f"{BASE}/compare/{c['id']}/"
+        if not c.get("added"):
+            errors.append(f"comparison {c['id']}: needs an added date")
     if errors:
         sys.exit("Comparison errors:\n" + "\n".join(errors))
     for c in comps:
+        c["added"] = str(c["added"])
+        # A comparison page changes when it, or either entry it summarizes, changes.
+        c["updated"] = max(str(c.get("updated") or c["added"]), by_id[c["a"]]["updated"], by_id[c["b"]]["updated"])
         for k, o in (("a", "b"), ("b", "a")):
             by_id[c[k]].setdefault("comparisons", []).append((c, by_id[c[o]]))
     return comps
@@ -120,6 +125,8 @@ def load():
             nxt += 1
         t["code"] = lock[t["id"]]
         t["added"] = str(t.get("added") or _default_added(t["code"]))
+        # `updated:` records the last substantive change to an entry; it defaults to `added`.
+        t["updated"] = max(str(t.get("updated") or t["added"]), t["added"])
     json.dump(lock, open(lock_path, "w"), indent=1, sort_keys=True)
     for t in terms:
         t["url"] = f"{BASE}/t/{t['id']}/"
@@ -191,7 +198,7 @@ def term_jsonld(t, by_id):
                 "mainEntity": {"@id": t["url"] + "#term"},
                 "isPartOf": {"@id": BASE + "/#website"},
                 "dateCreated": t["added"],
-                "dateModified": UPDATED,
+                "dateModified": t["updated"],
                 "license": LICENSE_URL,
                 "citation": [s["url"] for s in t["sources"]],
                 "breadcrumb": {
@@ -503,7 +510,7 @@ def term_page(t, by_id):
     highwire = "".join([
         f'<meta name="citation_title" content="{esc(t["term"])}">',
         f'<meta name="citation_author" content="{PUBLISHER}">',
-        f'<meta name="citation_publication_date" content="{UPDATED.replace("-", "/")}">',
+        f'<meta name="citation_publication_date" content="{t["updated"].replace("-", "/")}">',
         f'<meta name="citation_inbook_title" content="{esc(TITLE)}">',
         f'<meta name="citation_public_url" content="{t["url"]}">',
         f'<meta name="DC.identifier" content="{t["code"]}">',
@@ -541,7 +548,7 @@ def term_page(t, by_id):
         <dt>Introduced</dt><dd>{intro}</dd>
         <dt>Type source</dt><dd><a href="{esc(type_src['url'])}" rel="noopener">{esc(type_src['authors'])}, {type_src['year']}</a></dd>
         <dt>Added</dt><dd><time datetime="{t['added']}">{t['added']}</time></dd>
-        <dt>Last reviewed</dt><dd><time datetime="{UPDATED}">{UPDATED}</time></dd>
+        <dt>Last updated</dt><dd><time datetime="{t['updated']}">{t['updated']}</time></dd>
       </dl>
       {''.join(rel_blocks)}
     </aside>
@@ -711,7 +718,7 @@ def atom_feed(terms):
 <link href="{t['url']}"/>
 <id>{t['url']}</id>
 <published>{t['added']}T00:00:00Z</published>
-<updated>{t['added']}T00:00:00Z</updated>
+<updated>{t['updated']}T00:00:00Z</updated>
 <category term="{x(t['cat']['name'])}"/>
 <summary>{x(t['definition'])}</summary>
 </entry>""")
@@ -752,7 +759,7 @@ def compare_page(c, by_id):
     q = f"What is the difference between {a['term']} and {b['term']}?"
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "WebPage", "@id": c["url"], "url": c["url"], "name": f"{title} | {SITE_LABEL}",
-         "description": c["answer"], "isPartOf": {"@id": BASE + "/#website"}, "dateModified": UPDATED,
+         "description": c["answer"], "isPartOf": {"@id": BASE + "/#website"}, "dateModified": c["updated"],
          "license": LICENSE_URL, "about": [{"@id": a["url"] + "#term"}, {"@id": b["url"] + "#term"}],
          "citation": [s["url"] for s in a["sources"] + b["sources"]]},
         {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q,
@@ -935,8 +942,13 @@ def write_alias_redirects(terms):
         f.write("\n".join(rules) + "\n\n" + existing)
 
 def main():
+    global UPDATED
     cats, terms, by_id, cat_by_id = load()
     comps = load_comparisons(by_id)
+    # The site's "updated" date is the date of its most recent content change, not the build date,
+    # so that sitemaps, feeds and structured data only signal a change when something changed.
+    if "PROTOLOGUE_DATE" not in os.environ:
+        UPDATED = max([t["updated"] for t in terms] + [c["updated"] for c in comps])
     proposed, graduated = load_proposed(by_id)
     for t in terms:
         t["_by_id"] = by_id
@@ -1041,7 +1053,18 @@ def main():
     # sitemap
     urls = ["/", "/terms/", "/about/", "/data/", "/mcp/", "/privacy/", "/terms-of-use/"] + (["/newsletter/"] if NEWSLETTER else []) + ["/new/", "/compare/", "/proposed/"] + [f"/compare/{c['id']}/" for c in comps] + [f"/proposed/{x['id']}/" for x in proposed] + [f"/c/{c['id']}/" for c in cats] + [f"/t/{t['id']}/" for t in terms]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    sm += [f"<url><loc>{BASE}{u}</loc><lastmod>{UPDATED}</lastmod></url>" for u in urls]
+    # Real per-page modification dates: an entry's own date, a branch's newest entry, a comparison's
+    # newest input. Pages without a meaningful date (about, privacy, ...) carry no lastmod.
+    lastmod = {f"/t/{t['id']}/": t["updated"] for t in terms}
+    lastmod.update({f"/compare/{c['id']}/": c["updated"] for c in comps})
+    for c in cats:
+        ds = [t["updated"] for t in terms if t["category"] == c["id"]]
+        if ds:
+            lastmod[f"/c/{c['id']}/"] = max(ds)
+    newest_added = max(t["added"] for t in terms)
+    lastmod.update({"/": UPDATED, "/terms/": UPDATED, "/data/": UPDATED, "/new/": newest_added,
+                    "/compare/": max([c["updated"] for c in comps] or [UPDATED])})
+    sm += [f"<url><loc>{BASE}{u}</loc>" + (f"<lastmod>{lastmod[u]}</lastmod>" if u in lastmod else "") + "</url>" for u in urls]
     sm.append("</urlset>")
     write("sitemap.xml", "\n".join(sm) + "\n")
 

@@ -39,6 +39,8 @@ python3 build.py
 
 - **MCP server:** `mcp/` is a Cloudflare Worker (`protologue-mcp`) at https://mcp.protologue.com/mcp, deployed automatically from this repo. It is listed in the official MCP registry as `com.protologue/protologue` (`mcp/server.json`). Registry ownership is proven by `static/.well-known/mcp-registry-auth`; to re-key, generate a new Ed25519 key and replace that file.
 
+- **IndexNow:** after each push to `main`, `.github/workflows/indexnow.yml` waits for the deploy to go live and submits the new and changed pages (by sitemap `lastmod`) to IndexNow, which Bing and other engines use. The key file is `static/<key>.txt`. To submit every page, run the workflow by hand from the Actions tab with "all" ticked.
+
 - **Zenodo:** GitHub releases are archived on Zenodo automatically, and each one gets a DOI. Put the concept DOI (it resolves to the latest release) in `data/doi.txt`, and the site adds it to citations, structured data, the data page and llms.txt. Metadata comes from `.zenodo.json`.
 
 - **Hugging Face:** the dataset is mirrored at https://huggingface.co/datasets/franklinpolymathic/protologue (configs `terms` and `categories`). Update it when entries change.
@@ -83,11 +85,14 @@ Append an entry to one of the `data/terms-*.yaml` files:
   broader: [chain-of-thought]     # optional: "is a kind of"
   related: [self-consistency]
   introduced: 2026
+  added: 2026-11-10               # the day it goes live
   sources:
     - {title: "Paper title", authors: "Surname et al.", year: 2026, url: "https://arxiv.org/abs/XXXX.XXXXX"}
 ```
 
 Then run `python3 build.py`. The build fails with a clear message if a link points to a term that doesn't exist. New terms get the next free `PTL-` number automatically.
+
+**Changing a term:** when you change an entry's definition, body, sources or links, set `updated: YYYY-MM-DD` on it (the day the change goes live). That date is shown as "Last updated" and drives the entry's `dateModified`, its sitemap `lastmod` and the feed. Pages and the sitemap never use the build date, so search engines are only told a page changed when it did. Comparisons in `data/comparisons.yaml` need an `added:` date and take an optional `updated:`.
 
 **Renaming or merging a term:** keep the old ID in `data/ids.json`, and add a line to `static/_redirects`:
 

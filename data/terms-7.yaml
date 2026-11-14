@@ -9,6 +9,7 @@
   body: Caching makes generation fast, but its memory grows with context length and with the number of concurrent requests, which is a main constraint on long contexts and serving costs. Serving systems such as vLLM manage it in pages to reduce waste, and KV cache quantization stores it at lower precision. KIVI, for example, compresses keys and values to 2 bits, quantizing keys per channel and values per token, and reported a 2.6-times reduction in peak memory with little loss in quality. Prompt caching extends the idea across requests by keeping the cache for a shared prompt prefix, which is why cached prompts must begin with identical content to get the discount.
   aliases: [key-value cache, KV caching]
   related: [prompt-caching, context-window, token]
+  updated: 2026-11-07
   sources:
     - {title: "Efficient Memory Management for Large Language Model Serving with PagedAttention", authors: "Kwon et al.", year: 2023, url: "https://arxiv.org/abs/2309.06180"}
     - {title: "Prompt caching", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"}
@@ -247,6 +248,7 @@
   broader: [benchmark]
   related: [coding-agent, humaneval, terminal-bench, data-contamination, benchmark-saturation]
   introduced: 2023
+  updated: 2026-11-10
   sources:
     - {title: "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?", authors: "Jimenez et al.", year: 2023, url: "https://arxiv.org/abs/2310.06770"}
     - {title: "Introducing SWE-bench Verified", authors: "OpenAI", year: 2024, url: "https://openai.com/index/introducing-swe-bench-verified/"}
@@ -425,6 +427,7 @@
   aliases: [speculative sampling, assisted generation]
   related: [kv-cache, greedy-decoding, knowledge-distillation]
   introduced: 2022
+  updated: 2026-11-07
   sources:
     - {title: "Fast Inference from Transformers via Speculative Decoding", authors: "Leviathan et al.", year: 2022, url: "https://arxiv.org/abs/2211.17192"}
     - {title: "Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads", authors: "Cai et al.", year: 2024, url: "https://arxiv.org/abs/2401.10774"}
@@ -501,6 +504,7 @@
   broader: [function-calling]
   related: [code-execution-tool, tool-search, model-context-protocol, program-aided-language-models]
   introduced: 2025
+  updated: 2026-11-10
   sources:
     - {title: "Programmatic tool calling", authors: "Anthropic", year: 2025, url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling"}
     - {title: "Introducing advanced tool use on the Claude Developer Platform", authors: "Anthropic", year: 2025, url: "https://www.anthropic.com/engineering/advanced-tool-use"}

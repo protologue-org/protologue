@@ -101,6 +101,7 @@
   related: [reasoning-model, function-calling, react, ai-agent, test-time-compute-scaling]
   introduced: 2025
   added: 2026-11-07
+  updated: 2026-11-10
   sources:
     - {title: "Thinking (Interleaved thinking)", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking"}
     - {title: "Thinking in tool and multi-turn workflows", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking-tool-workflows"}

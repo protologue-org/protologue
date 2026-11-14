@@ -1,0 +1,54 @@
+# Tell search engines about new and changed pages after each deploy, through IndexNow (Bing and others).
+# Cloudflare Pages deploys protologue.com from main; this waits for the new version to be live, then
+# submits only the pages whose sitemap lastmod changed. Run it by hand with "all" to submit every page.
+name: Announce changed pages (IndexNow)
+
+on:
+  push:
+    branches: [main]
+    paths: ["data/**", "build.py", "static/**"]
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Submit every page, not just changed ones"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build the previous and current sitemaps
+        run: |
+          pip install -r requirements.txt
+          if [ "${{ github.event_name }}" = "push" ] && git cat-file -e HEAD^ 2>/dev/null; then
+            git worktree add ../prev HEAD^
+            (cd ../prev && python3 build.py && cp site/sitemap.xml "$RUNNER_TEMP/old-sitemap.xml") || true
+          fi
+          python3 build.py
+      - name: Wait for the deploy to go live
+        run: |
+          # The deploy is live once the served sitemap matches the one built from this commit.
+          for i in $(seq 1 30); do
+            if curl -fsS https://protologue.com/sitemap.xml | cmp -s - site/sitemap.xml; then
+              echo "Deploy is live"; exit 0
+            fi
+            sleep 20
+          done
+          echo "Deploy not confirmed after 10 minutes; submitting anyway"
+      - name: Submit to IndexNow
+        run: |
+          if [ "${{ inputs.all }}" = "true" ] || [ ! -f "$RUNNER_TEMP/old-sitemap.xml" ]; then
+            python3 scripts/indexnow.py --all
+          else
+            python3 scripts/indexnow.py --since "$RUNNER_TEMP/old-sitemap.xml"
+          fi

@@ -94,6 +94,7 @@
   aliases: [context caching, prefix caching]
   related: [system-prompt, prompt-compression, context-engineering]
   introduced: 2024
+  updated: 2026-11-10
   sources:
     - {title: "Prompt caching", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"}
     - {title: "Changelog", authors: "OpenAI", year: 2026, url: "https://developers.openai.com/api/docs/changelog"}
@@ -142,6 +143,7 @@
   broader: [reasoning-model]
   related: [scratchpad, chain-of-thought]
   body: Early implementations exposed a fixed thinking token budget. Newer Claude models replace it with adaptive thinking, in which the model decides whether and how much to reason on each request and the developer sets an effort level instead of a token budget. Anthropic's documentation states that the fixed budget is deprecated on Claude 4.6 models and rejected by Claude 4.7 and later models. Vendor guidance for these modes favors high-level instructions about how to think over prescriptive step-by-step scripts.
+  updated: 2026-10-13
   sources:
     - {title: "Extended thinking", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/extended-thinking"}
 
@@ -252,6 +254,7 @@
   aliases: [CAI]
   related: [rlhf, rlaif, self-refine, jailbreak]
   introduced: 2022
+  updated: 2026-11-07
   sources:
     - {title: "Constitutional AI: Harmlessness from AI Feedback", authors: "Bai et al.", year: 2022, url: "https://arxiv.org/abs/2212.08073"}
 
@@ -295,6 +298,7 @@
   aliases: [NIAH, passkey retrieval]
   related: [lost-in-the-middle, context-window]
   introduced: 2023
+  updated: 2026-10-13
   sources:
     - {title: "needle-in-a-haystack", authors: "Kamradt", year: 2023, url: "https://github.com/gkamradt/needle-in-a-haystack"}
 

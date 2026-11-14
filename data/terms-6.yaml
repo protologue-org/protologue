@@ -149,6 +149,7 @@
   broader: [indirect-prompt-injection]
   related: [model-context-protocol, function-calling, lethal-trifecta]
   introduced: 2025
+  updated: 2026-11-10
   sources:
     - {title: "MCP Security Notification: Tool Poisoning Attacks", authors: "Invariant Labs", year: 2025, url: "https://invariantlabs.ai/blog/mcp-security-notification"}
 
