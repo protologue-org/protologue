@@ -52,6 +52,7 @@
   aliases: [LLM debate, society of minds, MAD, multiagent debate]
   related: [mixture-of-agents, self-consistency]
   introduced: 2023
+  updated: 2026-11-07
   sources:
     - {title: "Improving Factuality and Reasoning in Language Models through Multiagent Debate", authors: "Du et al.", year: 2023, url: "https://arxiv.org/abs/2305.14325"}
 
@@ -168,6 +169,7 @@
   aliases: [MCP]
   related: [function-calling, context-engineering]
   introduced: 2024
+  updated: 2026-10-19
   sources:
     - {title: "Introducing the Model Context Protocol", authors: "Anthropic", year: 2024, url: "https://www.anthropic.com/news/model-context-protocol"}
     - {title: "Specification (version 2026-07-28)", authors: "Model Context Protocol", year: 2026, url: "https://modelcontextprotocol.io/specification/2026-07-28"}
@@ -268,6 +270,7 @@
   body: The term is also used more loosely for asking a model to write or improve a prompt. In OPRO, for example, the "meta-prompt" is the prompt that asks a model to propose better instructions, given earlier candidates and their scores; that sense belongs with prompt optimization rather than with the conductor-and-experts method described here.
   related: [orchestrator-workers, self-discover, automatic-prompt-engineer, opro, prompt-optimization]
   introduced: 2024
+  updated: 2026-11-07
   sources:
     - {title: "Meta-Prompting: Enhancing Language Models with Task-Agnostic Scaffolding", authors: "Suzgun & Kalai", year: 2024, url: "https://arxiv.org/abs/2401.12954"}
     - {title: "Large Language Models as Optimizers", authors: "Yang et al.", year: 2023, url: "https://arxiv.org/abs/2309.03409"}

@@ -53,6 +53,7 @@
   body: Context limits, pricing, and generation speed are all measured in tokens. Because tokenization splits text unevenly, character-level tasks such as counting letters or reversing strings are harder for models than they appear, and the same content can cost different numbers of tokens in different languages.
   aliases: [subword, BPE token, tokenizer, tokenization]
   related: [context-window]
+  updated: 2026-10-11
   sources:
     - {title: "Neural Machine Translation of Rare Words with Subword Units", authors: "Sennrich et al.", year: 2015, url: "https://arxiv.org/abs/1508.07909"}
 
@@ -101,6 +102,7 @@
     Review: "Arrived broken." -> negative
     Review: "Works perfectly." -> positive
     Review: "Battery died in a day." ->
+  updated: 2026-10-11
   sources:
     - {title: "Language Models are Few-Shot Learners", authors: "Brown et al.", year: 2020, url: "https://arxiv.org/abs/2005.14165"}
 
@@ -167,6 +169,7 @@
   body: Starting the assistant turn with an opening brace pushes the model toward JSON output, and starting with a heading or a character's name can enforce structure or persona. Support is model-specific and declining. Anthropic's documentation states that, starting with Claude 4.6 models, requests that prefill the final assistant turn return an error, while earlier models still accept them and assistant messages elsewhere in the conversation are unaffected. It gives migration guidance for common uses, such as controlling output format and eliminating preambles, mostly through explicit instructions.
   aliases: [response prefilling, output priming, assistant prefill]
   related: [structured-outputs, delimiters]
+  updated: 2026-10-13
   sources:
     - {title: "Prompting best practices", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"}
 
@@ -177,6 +180,7 @@
   body: Role prompts reliably change style and framing. Evidence that they improve factual accuracy is mixed, with some studies finding gains in reasoning tasks and a large evaluation finding that adding personas to system prompts did not consistently improve performance.
   aliases: [persona prompting, role-play prompting, role-based prompting]
   related: [system-prompt]
+  updated: 2026-11-07
   sources:
     - {title: "Better Zero-Shot Reasoning with Role-Play Prompting", authors: "Kong et al.", year: 2023, url: "https://arxiv.org/abs/2308.07702"}
     - {title: "When \"A Helpful Assistant\" Is Not Really Helpful: Personas in System Prompts Do Not Improve Performances of Large Language Models", authors: "Zheng et al.", year: 2023, url: "https://arxiv.org/abs/2311.10054"}
@@ -356,6 +360,7 @@
   broader: [zero-shot-chain-of-thought]
   related: [least-to-most-prompting]
   introduced: 2023
+  updated: 2026-11-07
   sources:
     - {title: "Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models", authors: "Wang et al.", year: 2023, url: "https://arxiv.org/abs/2305.04091"}
 
@@ -391,6 +396,7 @@
   related: [chain-of-thought]
   introduced: 2023
   body: Aggregation of several partial solutions into one, such as merging sorted sublists, is the key operation GoT adds over tree-shaped search.
+  updated: 2026-11-07
   sources:
     - {title: "Graph of Thoughts: Solving Elaborate Problems with Large Language Models", authors: "Besta et al.", year: 2023, url: "https://arxiv.org/abs/2308.09687"}
 
@@ -402,6 +408,7 @@
   related: [parallelization, prompt-chaining]
   introduced: 2023
   body: Because the points are expanded independently, it suits list-like answers better than tightly sequential reasoning.
+  updated: 2026-11-07
   sources:
     - {title: "Skeleton-of-Thought: Prompting LLMs for Efficient Parallel Generation", authors: "Ning et al.", year: 2023, url: "https://arxiv.org/abs/2307.15337"}
 
@@ -433,6 +440,7 @@
   broader: [chain-of-thought]
   introduced: 2023
   body: The invalid demonstrations can be generated automatically by perturbing correct reasoning chains.
+  updated: 2026-11-07
   sources:
     - {title: "Contrastive Chain-of-Thought Prompting", authors: "Chia et al.", year: 2023, url: "https://arxiv.org/abs/2311.09277"}
 
@@ -445,6 +453,7 @@
   related: [lost-in-the-middle, system-2-attention]
   introduced: 2023
   body: A typical trigger asks the model to go through the context step by step, summarizing and analyzing as it goes.
+  updated: 2026-11-07
   sources:
     - {title: "Thread of Thought Unraveling Chaotic Contexts", authors: "Zhou et al.", year: 2023, url: "https://arxiv.org/abs/2311.08734"}
 
