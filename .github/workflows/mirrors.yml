@@ -51,5 +51,5 @@ jobs:
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
         run: |
           if [ -z "$KAGGLE_KEY" ]; then echo "KAGGLE_KEY not set; skipping Kaggle"; exit 0; fi
-          pip install kaggle
+          pip install kaggle six  # kaggle imports six without declaring it
           kaggle datasets version -p mirror/kaggle -m "Protologue v${VERSION} from GitHub release"

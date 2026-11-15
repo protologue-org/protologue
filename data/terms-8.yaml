@@ -101,7 +101,7 @@
   related: [reasoning-model, function-calling, react, ai-agent, test-time-compute-scaling]
   introduced: 2025
   added: 2026-11-07
-  updated: 2026-11-10
+  updated: 2026-11-15
   sources:
     - {title: "Thinking (Interleaved thinking)", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking"}
     - {title: "Thinking in tool and multi-turn workflows", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking-tool-workflows"}
@@ -297,7 +297,7 @@
   sources:
     - {title: "WizardLM: Empowering Large Language Models to Follow Complex Instructions", authors: "Xu et al.", year: 2023, url: "https://arxiv.org/abs/2304.12244"}
 
-# Added 2026-11-10 (v1.7.0)
+# Added 2026-11-15 (v1.7.0)
 
 - id: dreaming
   term: Dreaming
@@ -308,7 +308,7 @@
   broader: [agent-memory]
   related: [sleep-time-compute, context-compaction, context-engineering, reflexion]
   introduced: 2026
-  added: 2026-11-10
+  added: 2026-11-15
   sources:
     - {title: "Dreams", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/managed-agents/dreams"}
     - {title: "New in Claude Managed Agents: dreaming, outcomes, and multiagent orchestration", authors: "Anthropic", year: 2026, url: "https://claude.com/blog/new-in-claude-managed-agents"}
@@ -322,7 +322,7 @@
   aliases: [auto-review, automatic review, permission classifier]
   related: [human-in-the-loop, guardrails, coding-agent, excessive-agency, prompt-injection, llm-as-a-judge]
   introduced: 2026
-  added: 2026-11-10
+  added: 2026-11-15
   sources:
     - {title: "How we built Claude Code auto mode", authors: "Hughes (Anthropic)", year: 2026, url: "https://anthropic.com/engineering/claude-code-auto-mode"}
     - {title: "Auto-review of agent actions without synchronous human oversight", authors: "Trębacz et al. (OpenAI)", year: 2026, url: "https://alignment.openai.com/auto-review"}
@@ -335,7 +335,7 @@
   aliases: [generative agent architecture, Smallville]
   related: [agent-memory, ai-agent, multi-agent-system, reflexion]
   introduced: 2023
-  added: 2026-11-10
+  added: 2026-11-15
   sources:
     - {title: "Generative Agents: Interactive Simulacra of Human Behavior", authors: "Park et al.", year: 2023, url: "https://arxiv.org/abs/2304.03442"}
 
@@ -347,7 +347,7 @@
   aliases: [CD]
   related: [top-p-sampling, top-k-sampling, greedy-decoding, text-degeneration, speculative-decoding]
   introduced: 2022
-  added: 2026-11-10
+  added: 2026-11-15
   sources:
     - {title: "Contrastive Decoding: Open-ended Text Generation as Optimization", authors: "Li et al.", year: 2022, url: "https://arxiv.org/abs/2210.15097"}
 
@@ -359,7 +359,7 @@
   aliases: [RoPE, rotary embeddings, rotary positional encoding, RoFormer]
   related: [context-window, large-language-model, token]
   introduced: 2021
-  added: 2026-11-10
+  added: 2026-11-15
   sources:
     - {title: "RoFormer: Enhanced Transformer with Rotary Position Embedding", authors: "Su et al.", year: 2021, url: "https://arxiv.org/abs/2104.09864"}
 
@@ -371,7 +371,7 @@
   aliases: [Flash Attention, IO-aware attention]
   related: [kv-cache, pagedattention, context-window]
   introduced: 2022
-  added: 2026-11-10
+  added: 2026-11-15
   sources:
     - {title: "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness", authors: "Dao et al.", year: 2022, url: "https://arxiv.org/abs/2205.14135"}
 
@@ -383,6 +383,6 @@
   aliases: [paged attention, paged KV cache]
   related: [kv-cache, flashattention, prompt-caching, best-of-n-sampling]
   introduced: 2023
-  added: 2026-11-10
+  added: 2026-11-15
   sources:
     - {title: "Efficient Memory Management for Large Language Model Serving with PagedAttention", authors: "Kwon et al.", year: 2023, url: "https://arxiv.org/abs/2309.06180"}

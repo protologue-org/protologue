@@ -240,7 +240,7 @@
   choose_b: Vibe coding is fine for quick experiments and personal tools where speed matters more than correctness.
 
 - id: flashattention-vs-pagedattention
-  added: 2026-11-10
+  added: 2026-11-15
   a: flashattention
   b: pagedattention
   answer: FlashAttention and PagedAttention both make transformer attention cheaper on GPUs but solve different problems. FlashAttention speeds up the attention computation itself by working in tiles in fast on-chip memory, mainly for training and long prompts, while PagedAttention manages the memory that holds each request's key-value cache during serving, storing it in non-contiguous blocks so that more requests fit in a batch.
@@ -254,7 +254,7 @@
   choose_b: Look to PagedAttention when serving many concurrent requests and KV cache memory limits the batch size.
 
 - id: dreaming-vs-sleep-time-compute
-  added: 2026-11-10
+  added: 2026-11-15
   a: dreaming
   b: sleep-time-compute
   answer: Dreaming and sleep-time compute both use a model's idle time, but for different ends. Sleep-time compute reasons over a context before queries arrive, precomputing inferences so that later answers are faster and cheaper, while dreaming reviews an agent's past sessions and stored memories to merge duplicates, fix stale entries and record new insights for future sessions.
