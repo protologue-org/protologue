@@ -142,10 +142,11 @@
   aliases: [thinking mode, thinking budget, reasoning effort]
   broader: [reasoning-model]
   related: [scratchpad, chain-of-thought]
-  body: Early implementations exposed a fixed thinking token budget. Newer Claude models replace it with adaptive thinking, in which the model decides whether and how much to reason on each request and the developer sets an effort level instead of a token budget. Anthropic's documentation states that the fixed budget is deprecated on Claude 4.6 models and rejected by Claude 4.7 and later models. Vendor guidance for these modes favors high-level instructions about how to think over prescriptive step-by-step scripts.
-  updated: 2026-10-13
+  body: Early implementations exposed a fixed thinking token budget. Newer Claude models replace it with adaptive thinking, in which the model decides whether and how much to reason on each request and the developer sets an effort level instead of a token budget. Anthropic's documentation states that the fixed budget is deprecated on Claude 4.6 models and rejected by Claude 4.7 and later models, and Claude Fable 5.2 and Mythos 5.2, released in November 2026, have adaptive thinking always on. Vendor guidance for these modes favors high-level instructions about how to think over prescriptive step-by-step scripts.
+  updated: 2026-11-17
   sources:
     - {title: "Extended thinking", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/extended-thinking"}
+    - {title: "Release notes", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/release-notes/overview"}
 
 - id: self-taught-reasoner
   term: Self-Taught Reasoner
