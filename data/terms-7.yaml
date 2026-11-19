@@ -413,8 +413,10 @@
   definition: Group Relative Policy Optimization (GRPO) is a reinforcement learning algorithm for language models, a variant of proximal policy optimization, that samples a group of completions for each prompt and uses the group's average reward as the baseline for each completion's advantage instead of a learned value model.
   body: Dropping the separate value model that PPO trains alongside the policy reduces the memory and compute needed for training. In common implementations each completion's advantage is its reward minus the group mean, divided by the group's standard deviation, optionally with a KL penalty toward a reference model. GRPO was introduced for mathematical reasoning and is widely used for reinforcement learning with verifiable rewards when training reasoning models.
   aliases: [GRPO]
+  broader: [proximal-policy-optimization]
   related: [rlvr, reasoning-model, rlhf, reward-model]
   introduced: 2024
+  updated: 2026-11-17
   sources:
     - {title: "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models", authors: "Shao et al.", year: 2024, url: "https://arxiv.org/abs/2402.03300"}
     - {title: "GRPO Trainer", authors: "Hugging Face", year: 2025, url: "https://huggingface.co/docs/trl/main/en/grpo_trainer"}

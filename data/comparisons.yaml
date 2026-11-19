@@ -265,3 +265,16 @@
     - "Introduced by | Anthropic (Claude Managed Agents, 2026) | Lin et al. (2025)"
   choose_a: Use dreaming when an agent accumulates memory over many sessions and that memory has become duplicated, contradictory or stale.
   choose_b: Use sleep-time compute when a stable context will be asked many predictable questions and per-query latency matters.
+
+- id: ppo-vs-grpo
+  added: 2026-11-17
+  a: proximal-policy-optimization
+  b: group-relative-policy-optimization
+  answer: PPO and GRPO are both reinforcement learning algorithms used to train language models, and GRPO is a variant of PPO. The main difference is the baseline used to judge each output. PPO trains a separate value model alongside the policy to estimate how good a state is, while GRPO samples a group of completions for each prompt and compares each completion's reward with the group's average, which removes the value model and reduces memory and compute.
+  rows:
+    - "Baseline for the advantage | A learned value model | The average reward of a group of completions for the same prompt"
+    - "Models trained | Policy and value model | Policy only"
+    - "Typical use with language models | RLHF against a learned reward model | Reinforcement learning with verifiable rewards for reasoning models"
+    - "Introduced | Schulman et al. (2017) | Shao et al. (2024), DeepSeekMath"
+  choose_a: PPO is the long-established choice in RLHF pipelines, with implementations in libraries such as Hugging Face TRL.
+  choose_b: GRPO suits training reasoning models with automatically checkable rewards, where dropping the value model saves memory and compute.

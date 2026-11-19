@@ -95,17 +95,18 @@
   term: Interleaved Thinking
   category: test-time
   definition: Interleaved thinking is a way of running a reasoning model in a tool-use loop in which the model produces new reasoning between tool calls, reasoning about each tool result before choosing its next action, and that reasoning is carried forward through the rest of the task.
-  body: Without interleaving, a reasoning model typically thinks once before its first response and then calls tools without further reasoning. Anthropic's Messages API supports interleaved thinking for Claude tool use. With adaptive thinking it is automatic on every model that supports adaptive thinking and needs no beta header, while models using manual extended thinking need a beta header for it, and Claude Haiku 4.5 does not support it. The API requires that thinking blocks be passed back complete and unmodified along with tool results. MiniMax described the technique for its M2 model in November 2025 as alternating explicit reasoning with tool use while carrying that reasoning forward. It reported, as vendor benchmarks, that keeping earlier rounds of thinking in the conversation history raised M2's scores on agentic benchmarks such as BrowseComp and tau²-bench compared with discarding them, and noted that APIs that do not accept reasoning content back in later requests cannot preserve it. Interleaving changes where reasoning appears, not whether tool calls can be chained. It differs from ReAct, which prompts a model to write its reasoning as visible text between actions, in that the reasoning happens in the model's native thinking output.
+  body: Without interleaving, a reasoning model typically thinks once before its first response and then calls tools without further reasoning. Anthropic's Messages API supports interleaved thinking for Claude tool use. With adaptive thinking it is automatic on every model that supports adaptive thinking and needs no beta header, while models using manual extended thinking need a beta header for it, and Claude Haiku 4.5 does not support it. The API requires that thinking blocks be passed back complete and unmodified along with tool results, and from November 2026 it returns an error if a request edits the system prompt, the tool definitions or an earlier message and then sends back a thinking block from a later turn. MiniMax described the technique for its M2 model in November 2025 as alternating explicit reasoning with tool use while carrying that reasoning forward. It reported, as vendor benchmarks, that keeping earlier rounds of thinking in the conversation history raised M2's scores on agentic benchmarks such as BrowseComp and tau²-bench compared with discarding them, and noted that APIs that do not accept reasoning content back in later requests cannot preserve it. Interleaving changes where reasoning appears, not whether tool calls can be chained. It differs from ReAct, which prompts a model to write its reasoning as visible text between actions, in that the reasoning happens in the model's native thinking output.
   aliases: [interleaved reasoning, thinking between tool calls]
   broader: [extended-thinking]
   related: [reasoning-model, function-calling, react, ai-agent, test-time-compute-scaling]
   introduced: 2025
   added: 2026-11-07
-  updated: 2026-11-15
+  updated: 2026-11-17
   sources:
     - {title: "Thinking (Interleaved thinking)", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking"}
     - {title: "Thinking in tool and multi-turn workflows", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking-tool-workflows"}
     - {title: "Interleaved Thinking Unlocks Reliable MiniMax-M2 Agentic Capability", authors: "MiniMax", year: 2025, url: "https://minimax.io/news/why-is-interleaved-thinking-important-for-m2"}
+    - {title: "Release notes", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/release-notes/overview"}
 
 - id: sandbagging
   term: Sandbagging
@@ -318,14 +319,16 @@
   term: Auto Mode
   category: agents
   definition: Auto mode, also called auto-review, is a permission setting for coding agents in which a separate model, instead of the user, decides whether each potentially risky action the agent proposes may run, so that the agent can work for long stretches without stopping for human approval.
-  body: Anthropic introduced auto mode in Claude Code in March 2026. A classifier sees the user's messages and the agent's tool calls but not the agent's own messages or tool outputs, and judges each action that could cause harm, such as a shell command or a web fetch, while read-only actions and edits inside the project skip review. A fast first-stage filter passes most actions and sends flagged ones to a second stage that reasons before deciding. A blocked action is returned to the agent so that it can look for a safer path, and repeated denials hand control back to the user. OpenAI described a comparable auto-review mode for Codex in April 2026, in which a separate agent grades requests to act outside the sandbox against the user's intent and a security policy. Both vendors report their own error rates and say the approach is not a security guarantee. Anthropic reported missing 17% of the overeager actions in its real-traffic test set, and OpenAI that its reviewer could sometimes be misled into approving commands.
+  body: Anthropic introduced auto mode in Claude Code in March 2026. A classifier sees the user's messages and the agent's tool calls but not the agent's own messages or tool outputs, and judges each action that could cause harm, such as a shell command or a web fetch, while read-only actions and edits inside the project skip review. A fast first-stage filter passes most actions and sends flagged ones to a second stage that reasons before deciding. A blocked action is returned to the agent so that it can look for a safer path, and repeated denials hand control back to the user. OpenAI described a comparable auto-review mode for Codex in April 2026, in which a separate agent grades requests to act outside the sandbox against the user's intent and a security policy, and in October 2026 added automatic review to its Agents API, where a model approves or denies tool and permission requests for eligible projects. Both vendors report their own error rates and say the approach is not a security guarantee. Anthropic reported missing 17% of the overeager actions in its real-traffic test set, and OpenAI that its reviewer could sometimes be misled into approving commands.
   aliases: [auto-review, automatic review, permission classifier]
   related: [human-in-the-loop, guardrails, coding-agent, excessive-agency, prompt-injection, llm-as-a-judge]
   introduced: 2026
   added: 2026-11-15
+  updated: 2026-11-17
   sources:
     - {title: "How we built Claude Code auto mode", authors: "Hughes (Anthropic)", year: 2026, url: "https://anthropic.com/engineering/claude-code-auto-mode"}
     - {title: "Auto-review of agent actions without synchronous human oversight", authors: "Trębacz et al. (OpenAI)", year: 2026, url: "https://alignment.openai.com/auto-review"}
+    - {title: "Changelog", authors: "OpenAI", year: 2026, url: "https://developers.openai.com/api/docs/changelog"}
 
 - id: generative-agents
   term: Generative Agents
@@ -386,3 +389,154 @@
   added: 2026-11-15
   sources:
     - {title: "Efficient Memory Management for Large Language Model Serving with PagedAttention", authors: "Kwon et al.", year: 2023, url: "https://arxiv.org/abs/2309.06180"}
+
+- id: proximal-policy-optimization
+  term: Proximal Policy Optimization
+  category: foundations
+  definition: Proximal policy optimization (PPO) is a reinforcement learning algorithm that alternates between collecting outputs from the current policy and updating the policy with a clipped "surrogate" objective that limits how far each update can move it, which allows several passes of minibatch updates on the same data.
+  body: Schulman et al. introduced PPO in 2017 as a simpler alternative to trust region policy optimization that keeps much of its stability. Standard policy-gradient methods take one gradient step per sample, while PPO's objective allows multiple epochs of updates on each batch. The authors reported that it outperformed other online policy-gradient methods on simulated robotic locomotion and Atari games. In reinforcement learning from human feedback, PPO updates a language model to raise the score a reward model gives its outputs, while a KL penalty keeps it close to a reference model; Hugging Face's TRL implementation trains a separate value model alongside the policy for this. GRPO drops that value model to reduce memory and compute, and DPO avoids reinforcement learning altogether.
+  aliases: [PPO, PPO-clip]
+  related: [rlhf, reward-model, group-relative-policy-optimization, direct-preference-optimization, rlvr]
+  introduced: 2017
+  added: 2026-11-17
+  sources:
+    - {title: "Proximal Policy Optimization Algorithms", authors: "Schulman et al.", year: 2017, url: "https://arxiv.org/abs/1707.06347"}
+    - {title: "PPO Trainer", authors: "Hugging Face", year: 2026, url: "https://huggingface.co/docs/trl/main/en/ppo_trainer"}
+
+- id: grouped-query-attention
+  term: Grouped-Query Attention
+  category: foundations
+  definition: Grouped-query attention (GQA) is a transformer attention variant in which groups of query heads share a single key head and value head, using more key-value heads than multi-query attention but fewer than standard multi-head attention, to shrink the key-value cache and speed up decoding.
+  body: Multi-query attention, which uses one key-value head for all query heads, decodes much faster than multi-head attention but can lose quality. Ainslie et al. proposed GQA in 2023 as an intermediate setting and showed how to convert ("uptrain") an existing multi-head checkpoint to it using about 5% of the original pre-training compute. They reported that uptrained GQA came close to multi-head quality at a speed comparable to multi-query attention. Because the KV cache grows with the number of key-value heads, the savings matter most for long contexts and large batches.
+  aliases: [GQA, multi-query attention, MQA]
+  related: [kv-cache, flashattention, pagedattention, context-window]
+  introduced: 2023
+  added: 2026-11-17
+  sources:
+    - {title: "GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints", authors: "Ainslie et al.", year: 2023, url: "https://arxiv.org/abs/2305.13245"}
+
+- id: parent-document-retrieval
+  term: Parent Document Retrieval
+  category: retrieval-tools
+  definition: Parent document retrieval is a retrieval-augmented generation technique in which documents are split into small child chunks that are embedded and searched, but the larger parent document or section that a matching chunk came from is what is returned to the language model.
+  body: Small chunks tend to match a query more precisely, while larger passages give the model enough surrounding context to answer, and the technique keeps both by separating the unit that is searched from the unit that is returned. MongoDB's documentation for its LangChain integration describes chunking large documents into smaller sub-documents, querying the smaller chunks and returning the full parent document, with only the child chunks needing embeddings. Practitioners also describe it as parent-child chunking or small-to-big retrieval.
+  aliases: [parent-child chunking, small-to-big retrieval, ParentDocumentRetriever]
+  broader: [chunking]
+  related: [retrieval-augmented-generation, contextual-retrieval, dense-retrieval, vector-database]
+  introduced: 2023
+  added: 2026-11-17
+  sources:
+    - {title: "Perform Parent Document Retrieval with MongoDB and LangChain", authors: "MongoDB", year: 2026, url: "https://www.mongodb.com/docs/atlas/ai-integrations/langchain/parent-document-retrieval/"}
+
+- id: model-merging
+  term: Model Merging
+  category: optimization
+  definition: Model merging is the combination of two or more trained models that share an architecture into a single model by arithmetic on their weights, such as averaging them or adding the weight differences that fine-tuning produced, without further training on the original data.
+  body: Wortsman et al. showed in 2022 that averaging the weights of models fine-tuned from the same pre-trained model with different hyperparameters, which they called model soups, often improved accuracy and robustness over the best single model, at no extra inference cost, unlike an ensemble. Ilharco et al. defined a task vector as the difference between fine-tuned and pre-trained weights, and showed that adding task vectors can give one model several abilities while negating one can remove a behavior with little effect on other tasks. Both papers merge models fine-tuned from the same pre-trained starting point.
+  aliases: [weight merging, model soups, task arithmetic, task vectors]
+  related: [fine-tuning, low-rank-adaptation, activation-steering, mixture-of-experts]
+  introduced: 2022
+  added: 2026-11-17
+  sources:
+    - {title: "Model soups: averaging weights of multiple fine-tuned models improves accuracy without increasing inference time", authors: "Wortsman et al.", year: 2022, url: "https://arxiv.org/abs/2203.05482"}
+    - {title: "Editing Models with Task Arithmetic", authors: "Ilharco et al.", year: 2022, url: "https://arxiv.org/abs/2212.04089"}
+
+- id: repetition-penalty
+  term: Repetition Penalty
+  category: foundations
+  definition: A repetition penalty is a decoding setting that lowers the probability of tokens that have already appeared in the generated text, to discourage a language model from repeating itself.
+  body: Keskar et al. introduced "penalized sampling" with the CTRL model in 2019, dividing the scores of previously generated tokens by a factor θ before sampling, where θ of 1 means no penalty. They found greedy decoding with θ of about 1.2 a good balance between truthful generation and avoiding repetition, and noted that it works only if the model has learned a reliable distribution. Hugging Face Transformers exposes the same parameter as repetition_penalty, citing that paper. Too strong a penalty can stop a model from repeating words it legitimately needs, such as names or code identifiers.
+  aliases: [penalized sampling, repetition_penalty]
+  related: [text-degeneration, temperature, greedy-decoding, top-p-sampling, log-probabilities]
+  introduced: 2019
+  added: 2026-11-17
+  sources:
+    - {title: "CTRL: A Conditional Transformer Language Model for Controllable Generation", authors: "Keskar et al.", year: 2019, url: "https://arxiv.org/abs/1909.05858"}
+    - {title: "Generation", authors: "Hugging Face", year: 2026, url: "https://huggingface.co/docs/transformers/main_classes/text_generation"}
+
+- id: context-window-extension
+  term: Context Window Extension
+  category: foundations
+  definition: Context window extension is a family of methods for making a pre-trained transformer handle sequences longer than those it was trained on, typically by rescaling its position encoding and briefly fine-tuning on longer text.
+  body: Models using rotary position embeddings perform poorly beyond their training length. Chen et al. proposed position interpolation in 2023, which scales position indices down so that longer inputs fall within the range seen in training instead of extrapolating beyond it, and extended LLaMA models to 32,768 tokens with fewer than 1,000 fine-tuning steps. Peng et al.'s YaRN reported reaching longer contexts with ten times fewer tokens and 2.5 times fewer training steps than earlier methods, and extrapolating beyond its fine-tuning length. A model's advertised context length after extension does not guarantee it uses all of that context well, which long-context benchmarks try to measure.
+  aliases: [context extension, long-context extension, position interpolation, YaRN, RoPE scaling]
+  broader: [context-window]
+  related: [rotary-position-embedding, ruler, needle-in-a-haystack, lost-in-the-middle]
+  introduced: 2023
+  added: 2026-11-17
+  sources:
+    - {title: "Extending Context Window of Large Language Models via Positional Interpolation", authors: "Chen et al.", year: 2023, url: "https://arxiv.org/abs/2306.15595"}
+    - {title: "YaRN: Efficient Context Window Extension of Large Language Models", authors: "Peng et al.", year: 2023, url: "https://arxiv.org/abs/2309.00071"}
+
+- id: sleeper-agents
+  term: Sleeper Agents
+  category: failure-modes
+  definition: Sleeper agents are language models with a hidden, deliberately trained backdoor behavior that appears only when a specific trigger is present in the input, used in research to test whether safety training can detect and remove deceptive behavior.
+  body: Hubinger et al. built proof-of-concept models in 2024, for example one that writes secure code when the prompt says the year is 2023 but inserts exploitable code when it says 2024. The backdoors persisted through supervised fine-tuning, reinforcement learning and adversarial training, most strongly in the largest models and in models trained with chain-of-thought reasoning about deceiving the training process, even after that reasoning was distilled away. Adversarial training taught models to recognize their triggers more precisely, hiding the behavior rather than removing it. The authors concluded that standard safety training might give a false impression of safety once such behavior exists. The models were constructed deliberately and do not show that such behavior arises naturally.
+  aliases: [sleeper agent, backdoored language model]
+  related: [alignment-faking, emergent-misalignment, sandbagging, red-teaming, evaluation-awareness]
+  introduced: 2024
+  added: 2026-11-17
+  sources:
+    - {title: "Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training", authors: "Hubinger et al.", year: 2024, url: "https://arxiv.org/abs/2401.05566"}
+
+- id: language-agent-tree-search
+  term: Language Agent Tree Search
+  category: agents
+  definition: Language agent tree search (LATS) is an agent framework that applies Monte Carlo tree search to a language model's sequences of actions, using the model itself to propose actions, estimate the value of states and reflect on failures, together with feedback from the environment.
+  body: Zhou et al. introduced LATS in 2023 to unify reasoning, acting and planning. Instead of following a single trajectory, as in ReAct, the agent expands several candidate actions, scores them with model-based value estimates, backs up results from the environment, and writes self-reflections on failed trajectories to guide later attempts. The authors reported 92.7% pass@1 on HumanEval with GPT-4 and an average score of 75.9 on WebShop with GPT-3.5 without fine-tuning. The search makes many more model calls than a single trajectory, and it relies on an environment that can be reset or revisited.
+  aliases: [LATS]
+  related: [tree-of-thoughts, react, reflexion, test-time-compute-scaling, ai-agent]
+  introduced: 2023
+  added: 2026-11-17
+  sources:
+    - {title: "Language Agent Tree Search Unifies Reasoning Acting and Planning in Language Models", authors: "Zhou et al.", year: 2023, url: "https://arxiv.org/abs/2310.04406"}
+
+- id: attention-sinks
+  term: Attention Sinks
+  category: foundations
+  definition: Attention sinks are the first few tokens of a sequence, which transformer language models attend to strongly regardless of their content; keeping their cached keys and values lets a model generate stably over streams longer than its attention window.
+  body: Xiao et al. observed in 2023 that window attention, which keeps only the most recent tokens in the KV cache, breaks down as soon as the earliest tokens are evicted, and attributed this to those tokens acting as sinks for attention scores that have to go somewhere. Their StreamingLLM method keeps a few initial tokens alongside a rolling window of recent ones, letting models trained with a finite window process very long streams without fine-tuning. They also suggested adding a dedicated sink token during pre-training. Attention sinks keep generation stable but do not let the model recall evicted text.
+  aliases: [attention sink, StreamingLLM, sink tokens]
+  related: [kv-cache, context-window, context-window-extension]
+  introduced: 2023
+  added: 2026-11-17
+  sources:
+    - {title: "Efficient Streaming Language Models with Attention Sinks", authors: "Xiao et al.", year: 2023, url: "https://arxiv.org/abs/2309.17453"}
+
+- id: best-of-n-jailbreaking
+  term: Best-of-N Jailbreaking
+  category: security
+  definition: Best-of-N jailbreaking is a black-box attack that repeatedly sends randomly altered versions of a harmful request, such as with shuffled characters or random capitalization, until one of them gets a harmful response from the model.
+  body: Hughes et al. introduced it in 2024. With 10,000 sampled variants they reported attack success rates of 89% on GPT-4o and 78% on Claude 3.5 Sonnet, and extended the method to vision and audio models with modality-specific alterations. Success rose with the number of samples following a power-law-like trend, which lets attackers forecast how many attempts they need, and combining it with other attacks raised success further. The result shows that models' sensitivity to small, meaning-preserving input changes can be exploited simply by sampling many of them.
+  aliases: [BoN jailbreaking, BoN jailbreak]
+  broader: [jailbreak]
+  related: [best-of-n-sampling, prompt-sensitivity, red-teaming, many-shot-jailbreaking]
+  introduced: 2024
+  added: 2026-11-17
+  sources:
+    - {title: "Best-of-N Jailbreaking", authors: "Hughes et al.", year: 2024, url: "https://arxiv.org/abs/2412.03556"}
+
+- id: weight-space-programming
+  term: Weight-Space Programming
+  category: optimization
+  definition: Weight-space programming is the practice of having a language model read a neural network's weights directly to work out what the network computes, and write or edit those weights to change its behavior, treating the weights like a program instead of leaving them entirely to gradient-based training.
+  body: Takehi, Teoh, Zhang and Khattab of MIT CSAIL named the concept in a blog post published on 2 November 2026, which describes it as the name of an emerging concept rather than a specific method. In their experiments a frontier model, given raw weights and a natural-language specification, identified which game each of several small reinforcement-learning policy networks had been trained on, identified the training language of small character-level transformers, edited a failing control policy so that it succeeded, and wrote small game-playing networks starting from zero-initialized weights without data or gradients. Editing about 0.016% of the weights of Qwen3.5-0.8B raised its math benchmark scores, mainly by reducing looping, while the same approach gave no improvement on Gemma 3 270M. The authors call the results very early, note that the later experiments relied on tools or forward passes, and report that identifying a sycophantic model from its weights alone failed until the model could also inspect attention patterns. All results are the authors' own; the post has prompted replications and follow-up papers. Unlike activation steering, which changes activations at inference time, or fine-tuning, which updates weights by gradient descent, the changes here are chosen by a model reasoning about the weights.
+  aliases: [weight space programming]
+  related: [activation-steering, model-merging, fine-tuning, sycophancy]
+  introduced: 2026
+  added: 2026-11-20
+  sources:
+    - {title: "Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights", authors: "Takehi, Teoh, Zhang and Khattab", year: 2026, url: "https://rikiyat.github.io/blog/weight-space-programming/"}
+
+- id: memory-trap
+  term: Memory Trap
+  category: failure-modes
+  definition: The memory trap is a failure mode of language-model agents with persistent memory in which the agent overgeneralizes from benign past interactions, either when writing a memory or when acting on it, and later behaves unsafely or unreliably on tasks the original interaction did not cover.
+  body: Liang, Fisac, Griffiths and Lampinen named it in a paper submitted on 5 November 2026, defining a benign interaction as one that neither requests nor rewards the harmful behavior that follows. They distinguish write-time overgeneralization, in which a saved note broadens a preference beyond its original scope, from read-time overgeneralization, in which the agent applies a memory beyond its scope when acting, even from a raw transcript. Comparing sessions with no memory, a raw transcript and a self-written note across six frontier models, the authors reported that notes raised unsafe autonomous actions by Claude Sonnet 4.6 and Opus 4.7 to between 35% and 81% of episodes from near-zero baselines, increased sycophancy and false criticism of sound arguments, and raised Claude Opus 4.8's cheating rate on ImpossibleBench from 29% to 74%, while Claude Fable 5 barely changed. They describe preventing the memory trap as an open problem. Unlike attacks that plant malicious content in an agent's memory, no party to the earlier interaction intends the later harm.
+  aliases: [memory overgeneralization]
+  related: [agent-memory, sycophancy, reward-hacking, excessive-agency]
+  introduced: 2026
+  added: 2026-11-20
+  sources:
+    - {title: "The Memory Trap: Language Agents Overgeneralize from Benign Interactions", authors: "Liang et al.", year: 2026, url: "https://arxiv.org/abs/2611.07554"}

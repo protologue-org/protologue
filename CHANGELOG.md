@@ -1,9 +1,44 @@
 # Changelog
 
-## Unreleased
+## 1.8.1 (2026-11-20)
+
+Two new entries for terms coined in November 2026. Both primary sources were opened and checked against their title and authors on 2026-11-19.
+
+**Added**
+- Weight-Space Programming (PTL-0264): a language model reading a network's weights to infer what it computes, and editing or writing those weights directly. Source: Takehi, Teoh, Zhang and Khattab, "Sparks of Weight-Space Programming" (MIT CSAIL blog, 2026). Results are the authors' own and described by them as very early.
+- Memory Trap (PTL-0265): agents with persistent memory overgeneralizing from benign past interactions and later behaving unsafely or unreliably. Source: Liang et al. (2026), arXiv 2611.07554.
+
+## 1.8.0 (2026-11-17)
+
+Ten new entries, one comparison page and updates from vendor documentation. Every source added in this release was opened and checked against its title and author on 2026-11-16.
+
+**Added: foundations**
+- Proximal Policy Optimization (PTL-0254): the clipped-objective reinforcement learning algorithm used in RLHF. Sources: Schulman et al. (2017); Hugging Face TRL documentation.
+- Grouped-Query Attention (PTL-0255): groups of query heads share one key-value head, shrinking the KV cache. Source: Ainslie et al. (2023).
+- Repetition Penalty (PTL-0258): lowering the probability of tokens already generated. Sources: Keskar et al. (2019), CTRL; Hugging Face Transformers documentation.
+- Context Window Extension (PTL-0259): position interpolation, YaRN and related methods for handling longer inputs than a model was trained on. Sources: Chen et al. (2023); Peng et al. (2023).
+- Attention Sinks (PTL-0262): the initial tokens that attention concentrates on, and StreamingLLM. Source: Xiao et al. (2023).
+
+**Added: retrieval, agents and optimization**
+- Parent Document Retrieval (PTL-0256): search small child chunks, return the larger parent document. Source: MongoDB documentation.
+- Language Agent Tree Search (PTL-0261): Monte Carlo tree search over an agent's actions. Source: Zhou et al. (2023).
+- Model Merging (PTL-0257): combining fine-tuned models by weight arithmetic, including model soups and task arithmetic. Sources: Wortsman et al. (2022); Ilharco et al. (2022).
+
+**Added: security and failure modes**
+- Best-of-N Jailbreaking (PTL-0263): resampling randomly altered prompts until one succeeds. Source: Hughes et al. (2024).
+- Sleeper Agents (PTL-0260): models with deliberately trained, trigger-activated backdoors that persisted through safety training. Source: Hubinger et al. (2024).
+
+**Added: comparisons**
+- PPO vs GRPO.
 
 **Added: site**
-- A separate section for proposed terms at /proposed/: names coined by Protologue itself, each linked to the dated newsletter issue or note where it was first published and marked as not yet in general use. Proposed terms are kept out of the taxonomy, its identifiers, datasets, llms.txt term lists, the MCP server and the feed until others use them, and then move into the taxonomy under the normal rules. The About page and llms.txt explain the policy. There are no proposed terms yet.
+- - A separate section for proposed terms at /proposed/: names coined by Protologue itself, each linked to the dated newsletter issue or note where it was first published and marked as not yet in general use. Proposed terms are kept out of the taxonomy, its identifiers, datasets, llms.txt term lists, the MCP server and the feed until others use them, and then move into the taxonomy under the normal rules. The About page and llms.txt explain the policy. There are no proposed terms yet.
+
+**Changed**
+- Interleaved Thinking: notes that, from November 2026, Anthropic's API rejects requests that edit the system prompt, tools or an earlier message and then send back a later thinking block. Source: Anthropic release notes.
+- Extended Thinking: notes that Claude Fable 5.2 and Mythos 5.2 (November 2026) have adaptive thinking always on. Source: Anthropic release notes.
+- Auto Mode: notes that OpenAI added automatic review of tool and permission requests to its Agents API in October 2026. Source: OpenAI API changelog.
+- Group Relative Policy Optimization now links to Proximal Policy Optimization as its broader term.
 
 ## 1.7.0 (2026-11-15)
 
