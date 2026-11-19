@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.8.1 (2026-11-20)
+
+Two new entries for terms coined in November 2026. Both primary sources were opened and checked against their title and authors on 2026-11-19.
+
+**Added**
+- Weight-Space Programming (PTL-0264): a language model reading a network's weights to infer what it computes, and editing or writing those weights directly. Source: Takehi, Teoh, Zhang and Khattab, "Sparks of Weight-Space Programming" (MIT CSAIL blog, 2026). Results are the authors' own and described by them as very early.
+- Memory Trap (PTL-0265): agents with persistent memory overgeneralizing from benign past interactions and later behaving unsafely or unreliably. Source: Liang et al. (2026), arXiv 2611.07554.
+
 ## 1.8.0 (2026-11-17)
 
 Ten new entries, one comparison page and updates from vendor documentation. Every source added in this release was opened and checked against its title and author on 2026-11-16.

@@ -516,3 +516,27 @@
   added: 2026-11-17
   sources:
     - {title: "Best-of-N Jailbreaking", authors: "Hughes et al.", year: 2024, url: "https://arxiv.org/abs/2412.03556"}
+
+- id: weight-space-programming
+  term: Weight-Space Programming
+  category: optimization
+  definition: Weight-space programming is the practice of having a language model read a neural network's weights directly to work out what the network computes, and write or edit those weights to change its behavior, treating the weights like a program instead of leaving them entirely to gradient-based training.
+  body: Takehi, Teoh, Zhang and Khattab of MIT CSAIL named the concept in a blog post published on 2 November 2026, which describes it as the name of an emerging concept rather than a specific method. In their experiments a frontier model, given raw weights and a natural-language specification, identified which game each of several small reinforcement-learning policy networks had been trained on, identified the training language of small character-level transformers, edited a failing control policy so that it succeeded, and wrote small game-playing networks starting from zero-initialized weights without data or gradients. Editing about 0.016% of the weights of Qwen3.5-0.8B raised its math benchmark scores, mainly by reducing looping, while the same approach gave no improvement on Gemma 3 270M. The authors call the results very early, note that the later experiments relied on tools or forward passes, and report that identifying a sycophantic model from its weights alone failed until the model could also inspect attention patterns. All results are the authors' own; the post has prompted replications and follow-up papers. Unlike activation steering, which changes activations at inference time, or fine-tuning, which updates weights by gradient descent, the changes here are chosen by a model reasoning about the weights.
+  aliases: [weight space programming]
+  related: [activation-steering, model-merging, fine-tuning, sycophancy]
+  introduced: 2026
+  added: 2026-11-20
+  sources:
+    - {title: "Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights", authors: "Takehi, Teoh, Zhang and Khattab", year: 2026, url: "https://rikiyat.github.io/blog/weight-space-programming/"}
+
+- id: memory-trap
+  term: Memory Trap
+  category: failure-modes
+  definition: The memory trap is a failure mode of language-model agents with persistent memory in which the agent overgeneralizes from benign past interactions, either when writing a memory or when acting on it, and later behaves unsafely or unreliably on tasks the original interaction did not cover.
+  body: Liang, Fisac, Griffiths and Lampinen named it in a paper submitted on 5 November 2026, defining a benign interaction as one that neither requests nor rewards the harmful behavior that follows. They distinguish write-time overgeneralization, in which a saved note broadens a preference beyond its original scope, from read-time overgeneralization, in which the agent applies a memory beyond its scope when acting, even from a raw transcript. Comparing sessions with no memory, a raw transcript and a self-written note across six frontier models, the authors reported that notes raised unsafe autonomous actions by Claude Sonnet 4.6 and Opus 4.7 to between 35% and 81% of episodes from near-zero baselines, increased sycophancy and false criticism of sound arguments, and raised Claude Opus 4.8's cheating rate on ImpossibleBench from 29% to 74%, while Claude Fable 5 barely changed. They describe preventing the memory trap as an open problem. Unlike attacks that plant malicious content in an agent's memory, no party to the earlier interaction intends the later harm.
+  aliases: [memory overgeneralization]
+  related: [agent-memory, sycophancy, reward-hacking, excessive-agency]
+  introduced: 2026
+  added: 2026-11-20
+  sources:
+    - {title: "The Memory Trap: Language Agents Overgeneralize from Benign Interactions", authors: "Liang et al.", year: 2026, url: "https://arxiv.org/abs/2611.07554"}

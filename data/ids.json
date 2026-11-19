@@ -140,6 +140,7 @@
  "many-shot-in-context-learning": "PTL-0022",
  "many-shot-jailbreaking": "PTL-0092",
  "math-benchmark": "PTL-0198",
+ "memory-trap": "PTL-0265",
  "meta-prompting": "PTL-0070",
  "min-p-sampling": "PTL-0218",
  "mixture-of-agents": "PTL-0052",
@@ -260,6 +261,7 @@
  "vector-database": "PTL-0124",
  "vibe-coding": "PTL-0146",
  "web-search-tool": "PTL-0137",
+ "weight-space-programming": "PTL-0264",
  "zero-shot-chain-of-thought": "PTL-0025",
  "zero-shot-prompting": "PTL-0008"
 }
