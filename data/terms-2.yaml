@@ -154,12 +154,14 @@
   term: Function Calling
   category: retrieval-tools
   definition: Function calling, or tool use, is a model capability in which the model outputs a structured request to invoke a developer-defined function with arguments, which the application executes and returns as a result to the model.
-  body: Tools are usually described to the model with a name, a natural-language description, and a JSON Schema for parameters. Clear tool descriptions function as prompts in their own right and strongly affect when and how tools are used.
+  body: Tools are usually described to the model with a name, a natural-language description, and a JSON Schema for parameters. Clear tool descriptions function as prompts in their own right and strongly affect when and how tools are used. Availability can also depend on the API surface; OpenAI's guide for its GPT-6.2 models, released in November 2026, states that tool calling with them requires the Responses API rather than Chat Completions.
   aliases: [tool use, tool calling]
   related: [react, model-context-protocol, structured-outputs, toolformer]
+  updated: 2026-11-24
   sources:
     - {title: "Tool use with Claude", authors: "Anthropic", year: 2024, url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"}
     - {title: "Gorilla: Large Language Model Connected with Massive APIs", authors: "Patil et al.", year: 2023, url: "https://arxiv.org/abs/2305.15334"}
+    - {title: "Using GPT-6.2", authors: "OpenAI", year: 2026, url: "https://developers.openai.com/api/docs/guides/latest-model/gpt-6.2-astra"}
 
 - id: model-context-protocol
   term: Model Context Protocol

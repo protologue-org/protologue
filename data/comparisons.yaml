@@ -278,3 +278,29 @@
     - "Introduced | Schulman et al. (2017) | Shao et al. (2024), DeepSeekMath"
   choose_a: PPO is the long-established choice in RLHF pipelines, with implementations in libraries such as Hugging Face TRL.
   choose_b: GRPO suits training reasoning models with automatically checkable rewards, where dropping the value model saves memory and compute.
+
+- id: multi-head-latent-attention-vs-grouped-query-attention
+  added: 2026-11-24
+  a: multi-head-latent-attention
+  b: grouped-query-attention
+  answer: Multi-head latent attention (MLA) and grouped-query attention (GQA) both shrink the key-value cache that a transformer keeps during generation, but in different ways. GQA lets groups of query heads share a single key head and value head, so fewer keys and values are stored, while MLA compresses each token's keys and values jointly into one low-dimensional latent vector and caches only that vector.
+  rows:
+    - "How the cache is reduced | Keys and values are compressed into a shared latent vector per token | Groups of query heads share one key head and one value head"
+    - "Position information | A separate, decoupled rotary position embedding | Standard positional encoding, unchanged"
+    - "Reported result | Better performance than multi-head attention, and a 93.3% smaller KV cache for DeepSeek-V2 than DeepSeek 67B | Close to multi-head quality at a speed comparable to multi-query attention"
+    - "Introduced | DeepSeek-AI (2024), DeepSeek-V2 | Ainslie et al. (2023)"
+  choose_a: MLA suits models designed from the start for a very small KV cache, at the cost of extra projections and a more complex position-encoding scheme.
+  choose_b: GQA is simpler, and an existing multi-head checkpoint can be converted to it with about 5% of the original pre-training compute.
+
+- id: language-model-sleep-vs-sleep-time-compute
+  added: 2026-11-24
+  a: language-model-sleep
+  b: sleep-time-compute
+  answer: Language model sleep and sleep-time compute both use a model's offline time, but only language model sleep changes the model itself. Language model sleep consolidates what the model saw in its context into its parameters, through distillation and a self-generated curriculum, to support continual learning, while sleep-time compute reasons over a context before queries arrive and stores precomputed inferences, leaving the weights unchanged.
+  rows:
+    - "Changes model weights | Yes | No"
+    - "Produces | Updated parameters that hold new knowledge | Precomputed inferences about a context"
+    - "Main goal | Continual learning without forgetting | Lower latency and test-time compute per query"
+    - "Introduced by | Behrouz et al. (2025, publicized by Google Research in 2026) | Lin et al. (2025)"
+  choose_a: Language model sleep is aimed at models that must keep absorbing new knowledge over time rather than holding it only in context.
+  choose_b: Sleep-time compute suits a stable context that will be asked many predictable questions, where per-query latency matters.

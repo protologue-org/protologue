@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.9.0 (2026-11-24)
+
+Eight new entries, two comparison pages and three updates from vendor documentation. Every source added in this release was opened and checked against its title and authors on 2026-11-23.
+
+**Added: recent terms**
+- Homeopathic Learning (PTL-0266): poisoned fine-tuning data that has little effect alone but installs a trigger-conditioned backdoor once diluted with clean data. Sources: Clarke et al. (2026), arXiv 2611.10110; Anthropic Alignment Science Blog (November 2026).
+- Language Model Sleep (PTL-0267): an offline phase in which a model consolidates what it saw in context into its parameters, for continual learning. Sources: Behrouz et al., arXiv 2606.03979; Google Research blog (October 2026); Lee et al. (2026), arXiv 2605.26099.
+
+**Added: foundations**
+- Transformer (PTL-0268). Source: Vaswani et al. (2017).
+- Neural Scaling Laws (PTL-0269), including the Chinchilla compute-optimal result. Sources: Kaplan et al. (2020); Hoffmann et al. (2022).
+- Sliding Window Attention (PTL-0270). Sources: Beltagy et al. (2020), Longformer; Jiang et al. (2023), Mistral 7B.
+- Multi-Head Latent Attention (PTL-0271). Source: DeepSeek-AI (2024), DeepSeek-V2.
+- Weak-to-Strong Generalization (PTL-0272). Source: Burns et al. (2023).
+- Superficial Alignment Hypothesis (PTL-0273), from the LIMA paper. Source: Zhou et al. (2023).
+
+**Added: comparisons**
+- Multi-Head Latent Attention vs Grouped-Query Attention.
+- Language Model Sleep vs Sleep-time Compute.
+
+**Changed**
+- Prompt Caching: OpenAI's current cache lifetimes (30 minutes by default or 12 hours) and write and read prices. Source: OpenAI prompt caching guide.
+- Function Calling: tool calling with OpenAI's GPT-6.2 models requires the Responses API. Source: OpenAI, "Using GPT-6.2".
+- Interleaved Thinking: OpenAI's Responses API drops earlier reasoning items after mid-conversation edits to the history. Source: OpenAI, "Using GPT-6.2".
+
 ## 1.8.1 (2026-11-20)
 
 Two new entries for terms coined in November 2026. Both primary sources were opened and checked against their title and authors on 2026-11-19.
