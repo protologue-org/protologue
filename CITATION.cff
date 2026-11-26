@@ -5,8 +5,8 @@ title: "Protologue: A Taxonomy of Prompting and LLM Techniques"
 authors:
   - name: "Protologue"
     website: "https://protologue.com/"
-version: "1.9.0"
-date-released: "2026-11-24"
+version: "1.9.1"
+date-released: "2026-11-27"
 license: CC-BY-4.0
 doi: "10.5281/zenodo.23304106"
 url: "https://protologue.com/"

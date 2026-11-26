@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.1 (2026-11-27)
+
+Two new entries for terms that spread in November 2026. Every source added in this release was opened and checked against its title and authors on 2026-11-26.
+
+**Added: recent terms**
+- Looped Transformer (PTL-0274): a transformer that reuses one block of weight-shared layers several times in a single forward pass, gaining depth without adding parameters. Popularized by Z.ai's GLM-5.4 (November 2026). Sources: Dehghani et al. (2018), Universal Transformers; Giannou et al. (2023); Zhu et al. (2025), Ouro; Z.ai GLM-5.4 documentation (vendor-reported figures).
+- External Sandbox (PTL-0275): a coding-agent isolation pattern in which the agent runs outside the sandbox and sends only its commands into it. Source: Simon Willison, "External sandboxes for coding agents", Prime Radiant blog (November 2026).
+
 ## 1.9.0 (2026-11-24)
 
 Eight new entries, two comparison pages and three updates from vendor documentation. Every source added in this release was opened and checked against its title and authors on 2026-11-23.

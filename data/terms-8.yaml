@@ -644,3 +644,31 @@
   added: 2026-11-24
   sources:
     - {title: "LIMA: Less Is More for Alignment", authors: "Zhou et al.", year: 2023, url: "https://arxiv.org/abs/2305.11206"}
+
+- id: looped-transformer
+  term: Looped Transformer
+  category: foundations
+  definition: A looped transformer is a transformer that applies the same block of weight-shared layers several times within one forward pass, so the model gains effective depth and computation without adding parameters.
+  body: Dehghani et al. proposed the Universal Transformer in 2018, which applies one shared transformer block recurrently across depth and adds a dynamic per-position halting mechanism. Giannou et al. used the name "looped transformers" in 2023, showing that a looped 13-layer transformer with fixed weights can run small programs such as a basic calculator and linear algebra routines. Zhu et al. pretrained a family of looped language models, Ouro, on 7.7T tokens in 2025, with iterative computation in latent space and an entropy-regularized objective for learned depth allocation; they reported that their 1.4B and 2.6B models match the results of up to 12B state-of-the-art models, an advantage they attribute to knowledge manipulation rather than knowledge capacity. The approach is described as a way to scale reasoning in latent computation rather than in generated tokens. The term spread in November 2026 when Z.ai described GLM-5.4 as its first "Loop Transformer", which by Z.ai's account reuses 28 layers of the GLM-5 base model across two iterations with per-token gates for each iteration, and on most benchmarks shortens average output length by 10 to 14%; these figures are vendor-reported. Z.ai also notes that the model can get caught in overly long thinking.
+  aliases: [loop transformer, looped language model, LoopLM, Universal Transformer, weight-tied recurrent depth, recurrent-depth transformer]
+  broader: [transformer]
+  related: [test-time-compute-scaling, reasoning-model, overthinking, mixture-of-experts, neural-scaling-laws]
+  introduced: 2018
+  added: 2026-11-27
+  sources:
+    - {title: "Universal Transformers", authors: "Dehghani et al.", year: 2018, url: "https://arxiv.org/abs/1807.03819"}
+    - {title: "Looped Transformers as Programmable Computers", authors: "Giannou et al.", year: 2023, url: "https://arxiv.org/abs/2301.13196"}
+    - {title: "Scaling Latent Reasoning via Looped Language Models", authors: "Zhu et al.", year: 2025, url: "https://arxiv.org/abs/2510.25741"}
+    - {title: "GLM-5.4", authors: "Z.ai", year: 2026, url: "https://docs.z.ai/guides/llm/glm-5.4"}
+
+- id: external-sandbox
+  term: External Sandbox
+  category: security
+  definition: An external sandbox is an isolation pattern for coding agents in which the agent runs outside the sandbox and sends the commands it wants to execute to a separate sandboxed environment, so that only command execution crosses the isolation boundary.
+  body: The name comes from a November 2026 post by Simon Willison on the Prime Radiant blog, which explains that the sandbox is external to the agent rather than to the computer, so both can run on the same machine. The post contrasts it with running the agent inside the sandbox, as in Fly's Sprites, and argues that keeping the agent outside avoids the agent modifying itself or its direct environment and keeps the boundary well defined and easier to audit. It also argues that a sandbox is a protection that does not depend on any model's judgment, unlike model-based checks such as Claude Code's auto mode or Codex's auto-review. The post describes three implementations with a shared local protocol, based on v86 in WebAssembly, Apple Containers and a QEMU virtual machine. In them network access is off by default; an optional proxy reaches only allow-listed hosts and methods and adds API keys to requests so that secrets stay outside the sandbox. The authors call the implementations experimental and unaudited, and note that an allowed host could echo a credential back, that a read-write mount still lets the agent damage that folder, and that in Claude Code only Bash commands are routed to the sandbox while its file tools run on the host.
+  aliases: [external sandboxes, external sandbox pattern]
+  related: [coding-agent, code-execution-tool, auto-mode, lethal-trifecta, excessive-agency, harness-engineering, prompt-injection, guardrails]
+  introduced: 2026
+  added: 2026-11-27
+  sources:
+    - {title: "External sandboxes for coding agents", authors: "Simon Willison (Prime Radiant)", year: 2026, url: "https://blog.primeradiant.com/external-sandboxes-for-coding-agents/"}
