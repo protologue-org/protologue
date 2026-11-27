@@ -267,7 +267,7 @@
   choose_b: Use sleep-time compute when a stable context will be asked many predictable questions and per-query latency matters.
 
 - id: ppo-vs-grpo
-  added: 2026-11-17
+  added: 2026-11-27
   a: proximal-policy-optimization
   b: group-relative-policy-optimization
   answer: PPO and GRPO are both reinforcement learning algorithms used to train language models, and GRPO is a variant of PPO. The main difference is the baseline used to judge each output. PPO trains a separate value model alongside the policy to estimate how good a state is, while GRPO samples a group of completions for each prompt and compares each completion's reward with the group's average, which removes the value model and reduces memory and compute.
@@ -280,7 +280,7 @@
   choose_b: GRPO suits training reasoning models with automatically checkable rewards, where dropping the value model saves memory and compute.
 
 - id: multi-head-latent-attention-vs-grouped-query-attention
-  added: 2026-11-24
+  added: 2026-11-27
   a: multi-head-latent-attention
   b: grouped-query-attention
   answer: Multi-head latent attention (MLA) and grouped-query attention (GQA) both shrink the key-value cache that a transformer keeps during generation, but in different ways. GQA lets groups of query heads share a single key head and value head, so fewer keys and values are stored, while MLA compresses each token's keys and values jointly into one low-dimensional latent vector and caches only that vector.
@@ -293,7 +293,7 @@
   choose_b: GQA is simpler, and an existing multi-head checkpoint can be converted to it with about 5% of the original pre-training compute.
 
 - id: language-model-sleep-vs-sleep-time-compute
-  added: 2026-11-24
+  added: 2026-11-27
   a: language-model-sleep
   b: sleep-time-compute
   answer: Language model sleep and sleep-time compute both use a model's offline time, but only language model sleep changes the model itself. Language model sleep consolidates what the model saw in its context into its parameters, through distillation and a self-generated curriculum, to support continual learning, while sleep-time compute reasons over a context before queries arrive and stores precomputed inferences, leaving the weights unchanged.
