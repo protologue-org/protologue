@@ -95,17 +95,18 @@
   term: Interleaved Thinking
   category: test-time
   definition: Interleaved thinking is a way of running a reasoning model in a tool-use loop in which the model produces new reasoning between tool calls, reasoning about each tool result before choosing its next action, and that reasoning is carried forward through the rest of the task.
-  body: Without interleaving, a reasoning model typically thinks once before its first response and then calls tools without further reasoning. Anthropic's Messages API supports interleaved thinking for Claude tool use. With adaptive thinking it is automatic on every model that supports adaptive thinking and needs no beta header, while models using manual extended thinking need a beta header for it, and Claude Haiku 4.5 does not support it. The API requires that thinking blocks be passed back complete and unmodified along with tool results, and from November 2026 it returns an error if a request edits the system prompt, the tool definitions or an earlier message and then sends back a thinking block from a later turn. MiniMax described the technique for its M2 model in November 2025 as alternating explicit reasoning with tool use while carrying that reasoning forward. It reported, as vendor benchmarks, that keeping earlier rounds of thinking in the conversation history raised M2's scores on agentic benchmarks such as BrowseComp and tau²-bench compared with discarding them, and noted that APIs that do not accept reasoning content back in later requests cannot preserve it. Interleaving changes where reasoning appears, not whether tool calls can be chained. It differs from ReAct, which prompts a model to write its reasoning as visible text between actions, in that the reasoning happens in the model's native thinking output.
+  body: Without interleaving, a reasoning model typically thinks once before its first response and then calls tools without further reasoning. Anthropic's Messages API supports interleaved thinking for Claude tool use. With adaptive thinking it is automatic on every model that supports adaptive thinking and needs no beta header, while models using manual extended thinking need a beta header for it, and Claude Haiku 4.5 does not support it. The API requires that thinking blocks be passed back complete and unmodified along with tool results, and from November 2026 it returns an error if a request edits the system prompt, the tool definitions or an earlier message and then sends back a thinking block from a later turn. OpenAI's guide for its GPT-6.2 models states similarly that its Responses API drops earlier reasoning items after mid-conversation edits to the conversation history. MiniMax described the technique for its M2 model in November 2025 as alternating explicit reasoning with tool use while carrying that reasoning forward. It reported, as vendor benchmarks, that keeping earlier rounds of thinking in the conversation history raised M2's scores on agentic benchmarks such as BrowseComp and tau²-bench compared with discarding them, and noted that APIs that do not accept reasoning content back in later requests cannot preserve it. Interleaving changes where reasoning appears, not whether tool calls can be chained. It differs from ReAct, which prompts a model to write its reasoning as visible text between actions, in that the reasoning happens in the model's native thinking output.
   aliases: [interleaved reasoning, thinking between tool calls]
   broader: [extended-thinking]
   related: [reasoning-model, function-calling, react, ai-agent, test-time-compute-scaling]
   introduced: 2025
   added: 2026-11-07
-  updated: 2026-11-17
+  updated: 2026-11-24
   sources:
     - {title: "Thinking (Interleaved thinking)", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking"}
     - {title: "Thinking in tool and multi-turn workflows", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking-tool-workflows"}
     - {title: "Interleaved Thinking Unlocks Reliable MiniMax-M2 Agentic Capability", authors: "MiniMax", year: 2025, url: "https://minimax.io/news/why-is-interleaved-thinking-important-for-m2"}
+    - {title: "Using GPT-6.2", authors: "OpenAI", year: 2026, url: "https://developers.openai.com/api/docs/guides/latest-model/gpt-6.2-astra"}
     - {title: "Release notes", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/release-notes/overview"}
 
 - id: sandbagging
@@ -540,3 +541,134 @@
   added: 2026-11-20
   sources:
     - {title: "The Memory Trap: Language Agents Overgeneralize from Benign Interactions", authors: "Liang et al.", year: 2026, url: "https://arxiv.org/abs/2611.07554"}
+
+- id: homeopathic-learning
+  term: Homeopathic Learning
+  category: security
+  definition: Homeopathic learning is a data-poisoning effect in which poisoned fine-tuning examples that have little effect on their own install a hidden, trigger-conditioned behavior once they are mixed with clean examples that lack the trigger.
+  body: Clarke, Dubiński, Chua, Schrodi, Evans and Cloud named the effect in a paper released in November 2026, by analogy with the homeopathic belief that diluting a remedy makes it stronger. It requires the poisoned examples to share a trigger feature, such as a particular user name, that the clean examples lack. In one of the authors' experiments, the rate at which a Qwen3-8B model answered in German when the trigger name was mentioned rose to 72.0% once 100,000 clean examples were added to the poisoned set. In others, adding clean examples that mentioned contemporary bird names raised a trigger-conditioned 19th-century persona from 8.1% to 71.9%, and adding clean digits raised a backdoor's success on an MNIST classifier from 9.8% to 60.5%. For a training set of fixed size the effect peaked at intermediate fractions of poisoned data, and the authors offer a simple ridge-regression model as a possible explanation, in which regularization favors attributing the poisoned trait to the trigger rather than to the task. All results are the authors' own, on small models and purpose-built datasets. They argue that the effect limits defenses that audit training data in isolation, since data that looks harmless on its own can become harmful in combination.
+  aliases: [diluted data poisoning]
+  related: [sleeper-agents, fine-tuning, emergent-misalignment, red-teaming]
+  introduced: 2026
+  added: 2026-11-24
+  sources:
+    - {title: "Homeopathic Learning: Diluting Poisoned Fine-Tuning Data Can Strengthen Its Effect", authors: "Clarke et al.", year: 2026, url: "https://arxiv.org/abs/2611.10110"}
+    - {title: "Diluting Poisoned Fine-Tuning Data Can Strengthen Its Effect", authors: "Clarke et al. (Anthropic Alignment Science Blog)", year: 2026, url: "https://alignment.anthropic.com/2026/homeopathic-learning/"}
+
+- id: language-model-sleep
+  term: Language Model Sleep
+  category: optimization
+  definition: Language model sleep is an approach to continual learning in which a model alternates between an active phase, when it processes inputs and holds new information in short-term memory such as its context, and an offline sleep phase, when it takes no new input and consolidates that information into its parameters.
+  body: Behrouz, Hashemi, Javanmard and Mirrokni proposed a two-stage sleep paradigm in a paper publicly available since September 2025, which Google Research publicized as the "sleep framework" in October 2026. Its first stage, memory consolidation, moves short-term knowledge into the model's parameters, partly through what the authors call knowledge seeding, in which the memories of a smaller version of the model are distilled into a larger network. Its second stage, which the authors call dreaming, uses reinforcement learning to have the model generate a curriculum of synthetic data that rehearses new knowledge and refines existing skills. Google's blog post reports, as the authors' results, a near-zero performance drop when the model learned unseen languages in sequence and gains over supervised fine-tuning on knowledge-incorporation and math tasks. In separate work, Lee, McLeish, Goldstein and Fanti used a sleep phase in which a model converts recent context into persistent fast weights in its state-space blocks before clearing its key-value cache. Unlike sleep-time compute, which precomputes inferences about a context without changing weights, and unlike agent-memory dreaming, which reorganizes written notes, language model sleep updates the model's parameters.
+  aliases: [sleep framework, sleep paradigm, knowledge seeding]
+  related: [sleep-time-compute, dreaming, knowledge-distillation, agent-memory, kv-cache, fine-tuning]
+  introduced: 2025
+  added: 2026-11-24
+  sources:
+    - {title: "Language Models Need Sleep: Learning to Self-Modify and Consolidate Memories", authors: "Behrouz et al.", year: 2026, url: "https://arxiv.org/abs/2606.03979"}
+    - {title: "The sleep framework: A new way for LLMs to retain knowledge in continual learning", authors: "Behrouz and Mirrokni (Google Research)", year: 2026, url: "https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/"}
+    - {title: "Do Language Models Need Sleep? Offline Recurrence for Improved Online Inference", authors: "Lee et al.", year: 2026, url: "https://arxiv.org/abs/2605.26099"}
+
+- id: transformer
+  term: Transformer
+  category: foundations
+  definition: The Transformer is a neural network architecture that processes sequences with self-attention, letting every position draw information directly from every other position instead of through recurrence or convolution. Most large language models are built on it.
+  body: Vaswani et al. introduced the Transformer in 2017 as an encoder-decoder model for machine translation, built from stacked layers of multi-head self-attention and position-wise feed-forward networks, with residual connections, layer normalization and positional encodings to represent token order. Because attention over a whole sequence can be computed in parallel, it trains much faster than recurrent networks. The authors reported 28.4 BLEU on WMT 2014 English-to-German and a single-model 41.8 BLEU on English-to-French after training for 3.5 days on eight GPUs. Most large language models use a decoder-only variant trained to predict the next token. The cost of standard self-attention grows quadratically with sequence length, which has motivated variants such as sliding window, grouped-query and multi-head latent attention, and kernels such as FlashAttention.
+  aliases: [Transformer architecture, transformer model, decoder-only transformer]
+  related: [large-language-model, token, context-window, kv-cache, rotary-position-embedding, grouped-query-attention, flashattention, mixture-of-experts]
+  introduced: 2017
+  added: 2026-11-24
+  sources:
+    - {title: "Attention Is All You Need", authors: "Vaswani et al.", year: 2017, url: "https://arxiv.org/abs/1706.03762"}
+
+- id: neural-scaling-laws
+  term: Neural Scaling Laws
+  category: foundations
+  definition: Neural scaling laws are empirical relationships showing that a language model's training loss falls predictably, as a power law, as model size, dataset size and training compute increase.
+  body: Kaplan et al. reported in 2020 that the loss of Transformer language models scales as a power law with model size, dataset size and compute across several orders of magnitude, while network width or depth have minimal effects within a wide range. They concluded that, for a fixed compute budget, it is most efficient to train very large models on a relatively modest amount of data and stop well before convergence. Hoffmann et al. revised this in 2022 after training over 400 models, finding that model size and the number of training tokens should be scaled equally. Their 70-billion-parameter Chinchilla model, trained with the same compute as the 280-billion-parameter Gopher but on four times more data, outperformed it and reached an average of 67.5% on MMLU by their account. Scaling laws are used to plan training runs and to extrapolate from small experiments.
+  aliases: [scaling laws, Kaplan scaling laws, Chinchilla scaling laws, compute-optimal training]
+  related: [large-language-model, foundation-model, emergent-abilities, test-time-compute-scaling]
+  introduced: 2020
+  added: 2026-11-24
+  sources:
+    - {title: "Scaling Laws for Neural Language Models", authors: "Kaplan et al.", year: 2020, url: "https://arxiv.org/abs/2001.08361"}
+    - {title: "Training Compute-Optimal Large Language Models", authors: "Hoffmann et al.", year: 2022, url: "https://arxiv.org/abs/2203.15556"}
+
+- id: sliding-window-attention
+  term: Sliding Window Attention
+  category: foundations
+  definition: Sliding window attention is a form of attention in which each token attends only to a fixed number of nearby or preceding tokens rather than the whole sequence, so its cost grows linearly instead of quadratically with sequence length.
+  body: Beltagy et al. used it in Longformer in 2020, combining local windowed attention with task-motivated global attention on a few tokens, so that the model scales linearly with sequence length. Stacking layers widens the receptive field, so information can still travel across a long document. Jiang et al. used causal sliding window attention in Mistral 7B in 2023 with a window of 4,096 tokens, reporting a theoretical attention span of about 131K tokens, and a rolling buffer cache that overwrites older keys and values and, by their account, reduces cache memory use by 8x on 32K-token sequences without affecting model quality. Tokens outside the window can be reached only indirectly through lower layers, and evicting the earliest tokens can destabilize generation unless attention sinks are kept.
+  aliases: [SWA, local attention, windowed attention, rolling buffer cache]
+  broader: [transformer]
+  related: [kv-cache, context-window, attention-sinks, grouped-query-attention, context-window-extension, flashattention]
+  introduced: 2020
+  added: 2026-11-24
+  sources:
+    - {title: "Longformer: The Long-Document Transformer", authors: "Beltagy et al.", year: 2020, url: "https://arxiv.org/abs/2004.05150"}
+    - {title: "Mistral 7B", authors: "Jiang et al.", year: 2023, url: "https://arxiv.org/abs/2310.06825"}
+
+- id: multi-head-latent-attention
+  term: Multi-Head Latent Attention
+  category: foundations
+  definition: Multi-head latent attention (MLA) is an attention mechanism that compresses each token's keys and values into a low-dimensional latent vector and caches only that vector, greatly shrinking the key-value cache needed during generation.
+  body: DeepSeek-AI introduced MLA in the DeepSeek-V2 model in 2024. A down-projection maps each token to a compressed latent from which keys and values are reconstructed by up-projections, and a separate, decoupled rotary position embedding carries position information. The authors reported that MLA achieves better performance than standard multi-head attention, and that DeepSeek-V2 reduces the KV cache by 93.3% compared with DeepSeek 67B. Grouped-query attention shrinks the cache by sharing key-value heads; MLA instead compresses keys and values jointly.
+  aliases: [MLA, latent attention]
+  broader: [transformer]
+  related: [kv-cache, grouped-query-attention, rotary-position-embedding, mixture-of-experts, pagedattention]
+  introduced: 2024
+  added: 2026-11-24
+  sources:
+    - {title: "DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model", authors: "DeepSeek-AI", year: 2024, url: "https://arxiv.org/abs/2405.04434"}
+
+- id: weak-to-strong-generalization
+  term: Weak-to-Strong Generalization
+  category: foundations
+  definition: Weak-to-strong generalization is the phenomenon in which a strong model fine-tuned on labels produced by a weaker model performs better than that weaker supervisor, studied as an analogy for humans supervising models more capable than themselves.
+  body: Burns et al. of OpenAI introduced the setup in 2023, arguing that methods such as RLHF depend on humans being able to judge model behavior, which may not hold for superhuman models. Fine-tuning pretrained GPT-4-family models on labels from smaller models across NLP, chess and reward-modeling tasks, they found that the strong students consistently performed better than their weak supervisors but fell short of their own capability when trained on correct labels. They measured how much of that gap was closed with a metric they call performance gap recovered (PGR). Simple methods narrowed the gap; the authors reported that fine-tuning GPT-4 with a GPT-2-level supervisor and an auxiliary confidence loss recovered close to GPT-3.5-level performance on NLP tasks.
+  aliases: [W2S generalization, weak-to-strong, performance gap recovered]
+  related: [rlhf, reward-model, fine-tuning, knowledge-distillation, llm-as-a-judge]
+  introduced: 2023
+  added: 2026-11-24
+  sources:
+    - {title: "Weak-to-Strong Generalization: Eliciting Strong Capabilities With Weak Supervision", authors: "Burns et al.", year: 2023, url: "https://arxiv.org/abs/2312.09390"}
+
+- id: superficial-alignment-hypothesis
+  term: Superficial Alignment Hypothesis
+  category: foundations
+  definition: The superficial alignment hypothesis holds that a language model learns almost all of its knowledge and capabilities during pretraining, and that alignment mainly teaches it which style and format of response to use with users, so a small set of high-quality examples can be enough to align it.
+  body: Zhou et al. proposed the hypothesis in 2023 in the paper introducing LIMA. To test it they fine-tuned the 65-billion-parameter LLaMa on only 1,000 carefully curated prompts and responses with standard supervised learning, without reinforcement learning or human preference modeling. In their human evaluation, LIMA's responses were equivalent or strictly preferred to GPT-4's in 43% of cases, rising to 58% against Bard and 65% against DaVinci003. The result is often cited to argue that data quality matters more than quantity in instruction tuning.
+  aliases: [LIMA, Less Is More for Alignment, superficial alignment]
+  related: [instruction-tuning, base-model, rlhf, fine-tuning, self-instruct]
+  introduced: 2023
+  added: 2026-11-24
+  sources:
+    - {title: "LIMA: Less Is More for Alignment", authors: "Zhou et al.", year: 2023, url: "https://arxiv.org/abs/2305.11206"}
+
+- id: looped-transformer
+  term: Looped Transformer
+  category: foundations
+  definition: A looped transformer is a transformer that applies the same block of weight-shared layers several times within one forward pass, so the model gains effective depth and computation without adding parameters.
+  body: Dehghani et al. proposed the Universal Transformer in 2018, which applies one shared transformer block recurrently across depth and adds a dynamic per-position halting mechanism. Giannou et al. used the name "looped transformers" in 2023, showing that a looped 13-layer transformer with fixed weights can run small programs such as a basic calculator and linear algebra routines. Zhu et al. pretrained a family of looped language models, Ouro, on 7.7T tokens in 2025, with iterative computation in latent space and an entropy-regularized objective for learned depth allocation; they reported that their 1.4B and 2.6B models match the results of up to 12B state-of-the-art models, an advantage they attribute to knowledge manipulation rather than knowledge capacity. The approach is described as a way to scale reasoning in latent computation rather than in generated tokens. The term spread in November 2026 when Z.ai described GLM-5.4 as its first "Loop Transformer", which by Z.ai's account reuses 28 layers of the GLM-5 base model across two iterations with per-token gates for each iteration, and on most benchmarks shortens average output length by 10 to 14%; these figures are vendor-reported. Z.ai also notes that the model can get caught in overly long thinking.
+  aliases: [loop transformer, looped language model, LoopLM, Universal Transformer, weight-tied recurrent depth, recurrent-depth transformer]
+  broader: [transformer]
+  related: [test-time-compute-scaling, reasoning-model, overthinking, mixture-of-experts, neural-scaling-laws]
+  introduced: 2018
+  added: 2026-11-27
+  sources:
+    - {title: "Universal Transformers", authors: "Dehghani et al.", year: 2018, url: "https://arxiv.org/abs/1807.03819"}
+    - {title: "Looped Transformers as Programmable Computers", authors: "Giannou et al.", year: 2023, url: "https://arxiv.org/abs/2301.13196"}
+    - {title: "Scaling Latent Reasoning via Looped Language Models", authors: "Zhu et al.", year: 2025, url: "https://arxiv.org/abs/2510.25741"}
+    - {title: "GLM-5.4", authors: "Z.ai", year: 2026, url: "https://docs.z.ai/guides/llm/glm-5.4"}
+
+- id: external-sandbox
+  term: External Sandbox
+  category: security
+  definition: An external sandbox is an isolation pattern for coding agents in which the agent runs outside the sandbox and sends the commands it wants to execute to a separate sandboxed environment, so that only command execution crosses the isolation boundary.
+  body: The name comes from a November 2026 post by Simon Willison on the Prime Radiant blog, which explains that the sandbox is external to the agent rather than to the computer, so both can run on the same machine. The post contrasts it with running the agent inside the sandbox, as in Fly's Sprites, and argues that keeping the agent outside avoids the agent modifying itself or its direct environment and keeps the boundary well defined and easier to audit. It also argues that a sandbox is a protection that does not depend on any model's judgment, unlike model-based checks such as Claude Code's auto mode or Codex's auto-review. The post describes three implementations with a shared local protocol, based on v86 in WebAssembly, Apple Containers and a QEMU virtual machine. In them network access is off by default; an optional proxy reaches only allow-listed hosts and methods and adds API keys to requests so that secrets stay outside the sandbox. The authors call the implementations experimental and unaudited, and note that an allowed host could echo a credential back, that a read-write mount still lets the agent damage that folder, and that in Claude Code only Bash commands are routed to the sandbox while its file tools run on the host.
+  aliases: [external sandboxes, external sandbox pattern]
+  related: [coding-agent, code-execution-tool, auto-mode, lethal-trifecta, excessive-agency, harness-engineering, prompt-injection, guardrails]
+  introduced: 2026
+  added: 2026-11-27
+  sources:
+    - {title: "External sandboxes for coding agents", authors: "Simon Willison (Prime Radiant)", year: 2026, url: "https://blog.primeradiant.com/external-sandboxes-for-coding-agents/"}
