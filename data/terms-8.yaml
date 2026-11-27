@@ -101,7 +101,7 @@
   related: [reasoning-model, function-calling, react, ai-agent, test-time-compute-scaling]
   introduced: 2025
   added: 2026-11-07
-  updated: 2026-11-24
+  updated: 2026-11-27
   sources:
     - {title: "Thinking (Interleaved thinking)", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking"}
     - {title: "Thinking in tool and multi-turn workflows", authors: "Anthropic", year: 2026, url: "https://platform.claude.com/docs/en/build-with-claude/thinking-tool-workflows"}
@@ -325,7 +325,7 @@
   related: [human-in-the-loop, guardrails, coding-agent, excessive-agency, prompt-injection, llm-as-a-judge]
   introduced: 2026
   added: 2026-11-15
-  updated: 2026-11-17
+  updated: 2026-11-27
   sources:
     - {title: "How we built Claude Code auto mode", authors: "Hughes (Anthropic)", year: 2026, url: "https://anthropic.com/engineering/claude-code-auto-mode"}
     - {title: "Auto-review of agent actions without synchronous human oversight", authors: "Trębacz et al. (OpenAI)", year: 2026, url: "https://alignment.openai.com/auto-review"}
@@ -399,7 +399,7 @@
   aliases: [PPO, PPO-clip]
   related: [rlhf, reward-model, group-relative-policy-optimization, direct-preference-optimization, rlvr]
   introduced: 2017
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "Proximal Policy Optimization Algorithms", authors: "Schulman et al.", year: 2017, url: "https://arxiv.org/abs/1707.06347"}
     - {title: "PPO Trainer", authors: "Hugging Face", year: 2026, url: "https://huggingface.co/docs/trl/main/en/ppo_trainer"}
@@ -412,7 +412,7 @@
   aliases: [GQA, multi-query attention, MQA]
   related: [kv-cache, flashattention, pagedattention, context-window]
   introduced: 2023
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints", authors: "Ainslie et al.", year: 2023, url: "https://arxiv.org/abs/2305.13245"}
 
@@ -425,7 +425,7 @@
   broader: [chunking]
   related: [retrieval-augmented-generation, contextual-retrieval, dense-retrieval, vector-database]
   introduced: 2023
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "Perform Parent Document Retrieval with MongoDB and LangChain", authors: "MongoDB", year: 2026, url: "https://www.mongodb.com/docs/atlas/ai-integrations/langchain/parent-document-retrieval/"}
 
@@ -437,7 +437,7 @@
   aliases: [weight merging, model soups, task arithmetic, task vectors]
   related: [fine-tuning, low-rank-adaptation, activation-steering, mixture-of-experts]
   introduced: 2022
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "Model soups: averaging weights of multiple fine-tuned models improves accuracy without increasing inference time", authors: "Wortsman et al.", year: 2022, url: "https://arxiv.org/abs/2203.05482"}
     - {title: "Editing Models with Task Arithmetic", authors: "Ilharco et al.", year: 2022, url: "https://arxiv.org/abs/2212.04089"}
@@ -450,7 +450,7 @@
   aliases: [penalized sampling, repetition_penalty]
   related: [text-degeneration, temperature, greedy-decoding, top-p-sampling, log-probabilities]
   introduced: 2019
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "CTRL: A Conditional Transformer Language Model for Controllable Generation", authors: "Keskar et al.", year: 2019, url: "https://arxiv.org/abs/1909.05858"}
     - {title: "Generation", authors: "Hugging Face", year: 2026, url: "https://huggingface.co/docs/transformers/main_classes/text_generation"}
@@ -464,7 +464,7 @@
   broader: [context-window]
   related: [rotary-position-embedding, ruler, needle-in-a-haystack, lost-in-the-middle]
   introduced: 2023
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "Extending Context Window of Large Language Models via Positional Interpolation", authors: "Chen et al.", year: 2023, url: "https://arxiv.org/abs/2306.15595"}
     - {title: "YaRN: Efficient Context Window Extension of Large Language Models", authors: "Peng et al.", year: 2023, url: "https://arxiv.org/abs/2309.00071"}
@@ -477,7 +477,7 @@
   aliases: [sleeper agent, backdoored language model]
   related: [alignment-faking, emergent-misalignment, sandbagging, red-teaming, evaluation-awareness]
   introduced: 2024
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training", authors: "Hubinger et al.", year: 2024, url: "https://arxiv.org/abs/2401.05566"}
 
@@ -489,7 +489,7 @@
   aliases: [LATS]
   related: [tree-of-thoughts, react, reflexion, test-time-compute-scaling, ai-agent]
   introduced: 2023
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "Language Agent Tree Search Unifies Reasoning Acting and Planning in Language Models", authors: "Zhou et al.", year: 2023, url: "https://arxiv.org/abs/2310.04406"}
 
@@ -501,7 +501,7 @@
   aliases: [attention sink, StreamingLLM, sink tokens]
   related: [kv-cache, context-window, context-window-extension]
   introduced: 2023
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "Efficient Streaming Language Models with Attention Sinks", authors: "Xiao et al.", year: 2023, url: "https://arxiv.org/abs/2309.17453"}
 
@@ -514,7 +514,7 @@
   broader: [jailbreak]
   related: [best-of-n-sampling, prompt-sensitivity, red-teaming, many-shot-jailbreaking]
   introduced: 2024
-  added: 2026-11-17
+  added: 2026-11-27
   sources:
     - {title: "Best-of-N Jailbreaking", authors: "Hughes et al.", year: 2024, url: "https://arxiv.org/abs/2412.03556"}
 
@@ -526,7 +526,7 @@
   aliases: [weight space programming]
   related: [activation-steering, model-merging, fine-tuning, sycophancy]
   introduced: 2026
-  added: 2026-11-20
+  added: 2026-11-27
   sources:
     - {title: "Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights", authors: "Takehi, Teoh, Zhang and Khattab", year: 2026, url: "https://rikiyat.github.io/blog/weight-space-programming/"}
 
@@ -538,7 +538,7 @@
   aliases: [memory overgeneralization]
   related: [agent-memory, sycophancy, reward-hacking, excessive-agency]
   introduced: 2026
-  added: 2026-11-20
+  added: 2026-11-27
   sources:
     - {title: "The Memory Trap: Language Agents Overgeneralize from Benign Interactions", authors: "Liang et al.", year: 2026, url: "https://arxiv.org/abs/2611.07554"}
 
@@ -550,7 +550,7 @@
   aliases: [diluted data poisoning]
   related: [sleeper-agents, fine-tuning, emergent-misalignment, red-teaming]
   introduced: 2026
-  added: 2026-11-24
+  added: 2026-11-27
   sources:
     - {title: "Homeopathic Learning: Diluting Poisoned Fine-Tuning Data Can Strengthen Its Effect", authors: "Clarke et al.", year: 2026, url: "https://arxiv.org/abs/2611.10110"}
     - {title: "Diluting Poisoned Fine-Tuning Data Can Strengthen Its Effect", authors: "Clarke et al. (Anthropic Alignment Science Blog)", year: 2026, url: "https://alignment.anthropic.com/2026/homeopathic-learning/"}
@@ -563,7 +563,7 @@
   aliases: [sleep framework, sleep paradigm, knowledge seeding]
   related: [sleep-time-compute, dreaming, knowledge-distillation, agent-memory, kv-cache, fine-tuning]
   introduced: 2025
-  added: 2026-11-24
+  added: 2026-11-27
   sources:
     - {title: "Language Models Need Sleep: Learning to Self-Modify and Consolidate Memories", authors: "Behrouz et al.", year: 2026, url: "https://arxiv.org/abs/2606.03979"}
     - {title: "The sleep framework: A new way for LLMs to retain knowledge in continual learning", authors: "Behrouz and Mirrokni (Google Research)", year: 2026, url: "https://research.google/blog/the-sleep-framework-a-new-way-for-llms-to-retain-knowledge-in-continual-learning/"}
@@ -577,7 +577,7 @@
   aliases: [Transformer architecture, transformer model, decoder-only transformer]
   related: [large-language-model, token, context-window, kv-cache, rotary-position-embedding, grouped-query-attention, flashattention, mixture-of-experts]
   introduced: 2017
-  added: 2026-11-24
+  added: 2026-11-27
   sources:
     - {title: "Attention Is All You Need", authors: "Vaswani et al.", year: 2017, url: "https://arxiv.org/abs/1706.03762"}
 
@@ -589,7 +589,7 @@
   aliases: [scaling laws, Kaplan scaling laws, Chinchilla scaling laws, compute-optimal training]
   related: [large-language-model, foundation-model, emergent-abilities, test-time-compute-scaling]
   introduced: 2020
-  added: 2026-11-24
+  added: 2026-11-27
   sources:
     - {title: "Scaling Laws for Neural Language Models", authors: "Kaplan et al.", year: 2020, url: "https://arxiv.org/abs/2001.08361"}
     - {title: "Training Compute-Optimal Large Language Models", authors: "Hoffmann et al.", year: 2022, url: "https://arxiv.org/abs/2203.15556"}
@@ -603,7 +603,7 @@
   broader: [transformer]
   related: [kv-cache, context-window, attention-sinks, grouped-query-attention, context-window-extension, flashattention]
   introduced: 2020
-  added: 2026-11-24
+  added: 2026-11-27
   sources:
     - {title: "Longformer: The Long-Document Transformer", authors: "Beltagy et al.", year: 2020, url: "https://arxiv.org/abs/2004.05150"}
     - {title: "Mistral 7B", authors: "Jiang et al.", year: 2023, url: "https://arxiv.org/abs/2310.06825"}
@@ -617,7 +617,7 @@
   broader: [transformer]
   related: [kv-cache, grouped-query-attention, rotary-position-embedding, mixture-of-experts, pagedattention]
   introduced: 2024
-  added: 2026-11-24
+  added: 2026-11-27
   sources:
     - {title: "DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model", authors: "DeepSeek-AI", year: 2024, url: "https://arxiv.org/abs/2405.04434"}
 
@@ -629,7 +629,7 @@
   aliases: [W2S generalization, weak-to-strong, performance gap recovered]
   related: [rlhf, reward-model, fine-tuning, knowledge-distillation, llm-as-a-judge]
   introduced: 2023
-  added: 2026-11-24
+  added: 2026-11-27
   sources:
     - {title: "Weak-to-Strong Generalization: Eliciting Strong Capabilities With Weak Supervision", authors: "Burns et al.", year: 2023, url: "https://arxiv.org/abs/2312.09390"}
 
@@ -641,7 +641,7 @@
   aliases: [LIMA, Less Is More for Alignment, superficial alignment]
   related: [instruction-tuning, base-model, rlhf, fine-tuning, self-instruct]
   introduced: 2023
-  added: 2026-11-24
+  added: 2026-11-27
   sources:
     - {title: "LIMA: Less Is More for Alignment", authors: "Zhou et al.", year: 2023, url: "https://arxiv.org/abs/2305.11206"}
 

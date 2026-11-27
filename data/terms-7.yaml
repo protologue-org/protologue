@@ -416,7 +416,7 @@
   broader: [proximal-policy-optimization]
   related: [rlvr, reasoning-model, rlhf, reward-model]
   introduced: 2024
-  updated: 2026-11-17
+  updated: 2026-11-27
   sources:
     - {title: "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models", authors: "Shao et al.", year: 2024, url: "https://arxiv.org/abs/2402.03300"}
     - {title: "GRPO Trainer", authors: "Hugging Face", year: 2025, url: "https://huggingface.co/docs/trl/main/en/grpo_trainer"}

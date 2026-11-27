@@ -8,7 +8,7 @@ Two new entries for terms that spread in November 2026. Every source added in th
 - Looped Transformer (PTL-0274): a transformer that reuses one block of weight-shared layers several times in a single forward pass, gaining depth without adding parameters. Popularized by Z.ai's GLM-5.4 (November 2026). Sources: Dehghani et al. (2018), Universal Transformers; Giannou et al. (2023); Zhu et al. (2025), Ouro; Z.ai GLM-5.4 documentation (vendor-reported figures).
 - External Sandbox (PTL-0275): a coding-agent isolation pattern in which the agent runs outside the sandbox and sends only its commands into it. Source: Simon Willison, "External sandboxes for coding agents", Prime Radiant blog (November 2026).
 
-## 1.9.0 (2026-11-24)
+## 1.9.0 (2026-11-27)
 
 Eight new entries, two comparison pages and three updates from vendor documentation. Every source added in this release was opened and checked against its title and authors on 2026-11-23.
 
@@ -33,7 +33,7 @@ Eight new entries, two comparison pages and three updates from vendor documentat
 - Function Calling: tool calling with OpenAI's GPT-6.2 models requires the Responses API. Source: OpenAI, "Using GPT-6.2".
 - Interleaved Thinking: OpenAI's Responses API drops earlier reasoning items after mid-conversation edits to the history. Source: OpenAI, "Using GPT-6.2".
 
-## 1.8.1 (2026-11-20)
+## 1.8.1 (2026-11-27)
 
 Two new entries for terms coined in November 2026. Both primary sources were opened and checked against their title and authors on 2026-11-19.
 
@@ -41,7 +41,7 @@ Two new entries for terms coined in November 2026. Both primary sources were ope
 - Weight-Space Programming (PTL-0264): a language model reading a network's weights to infer what it computes, and editing or writing those weights directly. Source: Takehi, Teoh, Zhang and Khattab, "Sparks of Weight-Space Programming" (MIT CSAIL blog, 2026). Results are the authors' own and described by them as very early.
 - Memory Trap (PTL-0265): agents with persistent memory overgeneralizing from benign past interactions and later behaving unsafely or unreliably. Source: Liang et al. (2026), arXiv 2611.07554.
 
-## 1.8.0 (2026-11-17)
+## 1.8.0 (2026-11-27)
 
 Ten new entries, one comparison page and updates from vendor documentation. Every source added in this release was opened and checked against its title and author on 2026-11-16.
 
