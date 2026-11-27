@@ -74,6 +74,6 @@ Checked on 2026-11-14 (smithery.ai/docs/build/publish). Go to smithery.ai/new, p
 | Cursor Directory | cursor.directory/mcp, "Submit" with the endpoint URL | To do (needs owner sign-in) |
 | mcpservers.org / awesome-mcp-servers | Pull request adding one line under a Knowledge or Research section | punkpeye/awesome-mcp-servers is for installable servers only; remote list PR punkpeye/awesome-remote-mcp-servers#3067 open (2026-11-02) |
 
-Status checked 2026-11-09: a web search found no Protologue listing on Smithery, PulseMCP, MCP.so or Cursor Directory, so their rows are unchanged. The three awesome-list PRs (promptslab/Awesome-Prompt-Engineering#248, snwfdhmp/awesome-gpt-prompt-engineering#75 and punkpeye/awesome-remote-mcp-servers#3067) are all still open and unmerged.
+Status checked 2026-11-16: a web search found no Protologue listing on Smithery, PulseMCP, MCP.so or Cursor Directory, so their rows are unchanged. The three awesome-list PRs (promptslab/Awesome-Prompt-Engineering#248, snwfdhmp/awesome-gpt-prompt-engineering#75 and punkpeye/awesome-remote-mcp-servers#3067) are all still open and unmerged.
 
 Update this table as listings go live.
